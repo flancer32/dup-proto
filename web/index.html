@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="DUPLO Connected (proto)">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DUPLO (proto)</title>
+    <link rel="manifest" href="./pwa.webmanifest">
+    <link rel="stylesheet" href="./styles_boot.css" type="text/css">
+
+    <script>
+        async function bootstrap() {
+            // DEFINE INNER FUNCTIONS
+            /**
+             * Import code, create and setup Dependency Injection container for frontend.
+             *
+             * @returns {Promise<TeqFw_Di_Shared_Container>}
+             */
+            async function initDiContainer() {
+                const baseUrl = `${location.origin}${location.pathname}`;
+                // create and setup DI Container
+                const modContainer = await import('./src/@teqfw/di/Shared/Container.mjs');
+                /** @type {TeqFw_Di_Shared_Container} */
+                const container = new modContainer.default();
+                const res = await fetch('./api/@teqfw/web/load/namespaces');
+                const json = await res.json();
+                // setup namespaces mapping
+                if (json?.data?.items && Array.isArray(json.data.items))
+                    for (const item of json.data.items)
+                        container.addSourceMapping(item.ns, (new URL(item.path, baseUrl)).toString(), true, item.ext);
+                // setup replaces
+                if (json?.data?.replaces && Array.isArray(json.data.replaces))
+                    for (const item of json.data.replaces)
+                        container.addModuleReplacement(item.orig, item.alter);
+                return container;
+            }
+
+            // MAIN FUNCTIONALITY
+            try {
+                // initialize objects loader (Dependency Injection container)
+                const container = await initDiContainer();
+                // create Vue application and mount it to the page
+                /** @type {Fl32_Dup_Front_App} */
+                const app = await container.get('Fl32_Dup_Front_App$');
+                await app.init();
+                app.mount('BODY > DIV');
+            } catch (e) {
+                console.error("Error in bootstrap: " + e + "\n" + e.stack);
+            }
+        }
+
+        if ("serviceWorker" in navigator) {
+            self.addEventListener("load", async () => {
+                const worker = navigator.serviceWorker;
+                if (worker.controller === null) {
+                    try {
+                        const reg = await worker.register("sw.js");
+                        if (reg.active) {
+                            console.log("SW is registered and is active.", reg);
+                            await bootstrap();
+                        } else {
+                            console.log("SW is registered but is not activated yet.", reg);
+                            // wait for `controllerchange` (see `clients.claim()` in SW code on `activate` event)
+                            worker.addEventListener("controllerchange", async () => {
+                                // SW just installed (page's first load).
+                                await bootstrap();
+                            });
+                        }
+                    } catch (e) {
+                        console.error("SW registration is failed: " + e + "\n" + e.stack)
+                    }
+                } else {
+                    // SW already installed before (repeated loading of the page).
+                    console.log("SW is already running for this app.");
+                    await bootstrap();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div>
+    <app-root>
+        <div class="launchpad">TeqFW App is loading...</div>
+    </app-root>
+</div>
+<!-- These scripts are not ESM ready for loading with ES6 'import'. Use old style loading.  -->
+<script type="application/javascript" src="./src/vue/vue.global.prod.js"></script>
+<script type="application/javascript" src="./src/vue-router/vue-router.global.prod.js"></script>
+<script type="application/javascript" src="./src/i18n/i18next.min.js"></script>
+<script type="application/javascript" src="./src/i18n-bld/i18nextBrowserLanguageDetector.js"></script>
+<script type="application/javascript" src="./src/quasar/quasar.umd.prod.js"></script>
+<script type="application/javascript" src="./src/quasar/icon-set/svg-material-icons.umd.prod.js"></script>
+
+<!-- These styles are loaded after landing page is displayed -->
+<link rel="stylesheet" href="./web/@teqfw/ui-quasar/styles.css">
+<link rel="stylesheet" href="./src/quasar/quasar.prod.css">
+<link rel="stylesheet" href="./styles.css">
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+/* These styles are used on landing page and should be as small as possible */
+BODY {
+    background-color: #FDCD6D;
+    /*color: #2E3409;*/
+}
+
+.launchpad {
+    display: grid;
+    height: 100vh;
+    align-items: center;
+    justify-items: center;
+}

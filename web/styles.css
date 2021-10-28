@@ -1,0 +1,4 @@
+/* Overwrite Quasar UI styles */
+:root {
+    --q-primary: #9C6902;
+}

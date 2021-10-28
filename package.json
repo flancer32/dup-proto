@@ -1,0 +1,51 @@
+{
+  "name": "@flancer32/duplo-proto",
+  "version": "0.1.0",
+  "description": "DUPLO connected (proto)",
+  "homepage": "https://proto.duplo.wiredgeese.com/",
+  "bugs": {
+    "url": "https://github.com/flancer32/duplo-proto/issues",
+    "email": "alex@flancer32.com"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Alex Gusev",
+    "email": "alex@flancer64.com",
+    "url": "https://github.com/flancer64"
+  },
+  "repository": "github:flancer32/duplo-proto",
+  "scripts": {
+    "db-reset": "node ./bin/tequila.mjs app-db-reset",
+    "db-upgrade": "node ./bin/tequila.mjs app-db-upgrade",
+    "help": "node ./bin/tequila.mjs -h",
+    "http1-start": "node ./bin/tequila.mjs web-server-start",
+    "http1-stop": "node ./bin/tequila.mjs web-server-stop",
+    "rebuild": "rm -fr node_modules package-lock.json && npm install",
+    "start": "node ./bin/tequila.mjs http2-server-start",
+    "startup-logs": "node ./bin/tequila.mjs core-startup-logs alexg",
+    "stop": "node ./bin/tequila.mjs http2-server-stop",
+    "test": "./node_modules/mocha/bin/mocha --require esm --recursive './test/**/*.test.js'",
+    "version": "node ./bin/tequila.mjs core-version"
+  },
+  "dependencies": {
+    "@teqfw/email": "github:teqfw/email",
+    "@teqfw/http2": "*",
+    "@teqfw/i18n": "*",
+    "@teqfw/test": "*",
+    "@teqfw/ui-quasar": "*",
+    "@teqfw/web-push": "*",
+    "mysql2": "*",
+    "sqlite3": "*",
+    "web-push": "^3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7",
+    "@babel/eslint-parser": "^7",
+    "@babel/eslint-plugin": "^7",
+    "@babel/plugin-proposal-class-properties": "^7",
+    "@babel/preset-env": "^7",
+    "eslint": "^7",
+    "esm": "^3",
+    "jest": "*"
+  }
+}

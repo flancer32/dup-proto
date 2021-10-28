@@ -1,0 +1,11 @@
+{
+  "@teqfw/core": {
+    "devMode": false
+  },
+  "@teqfw/web": {
+    "server": {
+      "port": 9999
+    },
+    "urlBase": "duplo.wiredgeese.com"
+  }
+}
