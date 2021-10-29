@@ -25,6 +25,8 @@ export default class Fl32_Dup_Front_App {
         const _layoutBase = spec['Fl32_Dup_Front_Layout_Base$'];
         /** @type {Fl32_Dup_Front_Layout_Chat} */
         const _layoutChat = spec['Fl32_Dup_Front_Layout_Chat$'];
+        /** @type {Fl32_Dup_Front_Layout_Empty} */
+        const _layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
 
@@ -89,6 +91,10 @@ export default class Fl32_Dup_Front_App {
                     path: DEF.ROUTE_CHAT,
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
                 });
+                router.addRoute({
+                    path: DEF.ROUTE_USER_CREATE,
+                    component: () => container.get('Fl32_Dup_Front_Widget_User_Create_Route$')
+                });
 
                 app.use(router);
             }
@@ -106,6 +112,7 @@ export default class Fl32_Dup_Front_App {
             // ... and add global available components
             _root.component('LayoutBase', _layoutBase);
             _root.component('LayoutChat', _layoutChat);
+            _root.component('LayoutEmpty', _layoutEmpty);
 
             // other initialization
             await _config.init({}); // this app has no separate 'doors' (entry points)

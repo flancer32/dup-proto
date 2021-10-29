@@ -1,0 +1,15 @@
+{
+  "btn": {
+    "ok": "OK"
+  },
+  "wg": {
+    "user": {
+      "create": {
+        "title": "Registration",
+        "nick": {
+          "label": "Enter your nickname"
+        }
+      }
+    }
+  }
+}
