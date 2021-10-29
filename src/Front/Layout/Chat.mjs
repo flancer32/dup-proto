@@ -1,17 +1,17 @@
 /**
- * Base layout widget.
+ * Chat layout widget.
  *
- * @namespace Fl32_Dup_Front_Layout_Base
+ * @namespace Fl32_Dup_Front_Layout_Chat
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Layout_Base';
+const NS = 'Fl32_Dup_Front_Layout_Chat';
 
 // MODULE'S FUNCTIONS
 /**
  * Factory to create template for new Vue component instances.
  *
- * @memberOf Fl32_Dup_Front_Layout_Base
- * @returns {Fl32_Dup_Front_Layout_Base.vueCompTmpl}
+ * @memberOf Fl32_Dup_Front_Layout_Chat
+ * @returns {Fl32_Dup_Front_Layout_Chat.vueCompTmpl}
  */
 export default function Factory(spec) {
     // EXTRACT DEPS
@@ -27,7 +27,7 @@ export default function Factory(spec) {
 
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
-            <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
+<!--            <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>-->
 
             <q-toolbar-title>
 
@@ -37,9 +37,9 @@ export default function Factory(spec) {
         </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
-        <!-- drawer content -->
-    </q-drawer>
+<!--    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>-->
+<!--        &lt;!&ndash; drawer content &ndash;&gt;-->
+<!--    </q-drawer>-->
 
 <!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
 <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
@@ -63,7 +63,7 @@ export default function Factory(spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Layout_Base
+     * @memberOf Fl32_Dup_Front_Layout_Chat
      */
     return {
         teq: {package: DEF.SHARED.NAME},

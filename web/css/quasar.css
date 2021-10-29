@@ -1,0 +1,27 @@
+/* Overwrite Quasar UI styles */
+:root {
+    --q-dark: var(--color-darkest);
+    --q-primary: var(--color-darker);
+    /*--q-accent: #9C27B0;*/
+    /*--q-info: #31CCEC;*/
+    /*--q-negative: #C10015;*/
+    /*--q-positive: #21BA45;*/
+    /*--q-secondary: #26A69A;*/
+    /*--q-warning: #F2C037;*/
+}
+
+.text-white {
+    color: var(--color-lightest) !important;
+}
+
+.q-drawer {
+    background: var(--color-lightest);
+}
+
+.q-img__content > div {
+    background: var(--q-primary);
+}
+
+/*.q-img__content > div {*/
+/*    background: var(--color-base);*/
+/*}*/

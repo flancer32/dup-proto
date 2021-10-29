@@ -2,6 +2,10 @@
  * Plugin constants (hardcoded configuration) for frontend code.
  */
 export default class Fl32_Dup_Front_Defaults {
+
+    ROUTE_HOME = '/';
+    ROUTE_CHAT = '/chat';
+
     /** @type {Fl32_Dup_Shared_Defaults} */
     SHARED;
 

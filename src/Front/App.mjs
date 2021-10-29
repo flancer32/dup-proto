@@ -23,6 +23,8 @@ export default class Fl32_Dup_Front_App {
         const VueLib = spec['TeqFw_Vue_Front_Lib$'];
         /** @type {Fl32_Dup_Front_Layout_Base} */
         const _layoutBase = spec['Fl32_Dup_Front_Layout_Base$'];
+        /** @type {Fl32_Dup_Front_Layout_Chat} */
+        const _layoutChat = spec['Fl32_Dup_Front_Layout_Chat$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
 
@@ -79,11 +81,15 @@ export default class Fl32_Dup_Front_App {
                     routes: [],
                 });
                 // setup application routes (load es6-module on demand with DI-container)
-                // router.addRoute({
-                //     path: DEF.ROUTE_HOME,
-                //     component: () => container.get('Fl32_Dup_Front_Route_Home$')
-                // });
-                //
+                router.addRoute({
+                    path: DEF.ROUTE_HOME,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
+                });
+                router.addRoute({
+                    path: DEF.ROUTE_CHAT,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
+                });
+
                 app.use(router);
             }
 
@@ -99,6 +105,7 @@ export default class Fl32_Dup_Front_App {
             });
             // ... and add global available components
             _root.component('LayoutBase', _layoutBase);
+            _root.component('LayoutChat', _layoutChat);
 
             // other initialization
             await _config.init({}); // this app has no separate 'doors' (entry points)

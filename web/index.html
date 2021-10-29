@@ -11,13 +11,15 @@
     <script>
         async function bootstrap() {
             // DEFINE INNER FUNCTIONS
+
             /**
              * Import code, create and setup Dependency Injection container for frontend.
              *
              * @returns {Promise<TeqFw_Di_Shared_Container>}
              */
             async function initDiContainer() {
-                const baseUrl = `${location.origin}${location.pathname}`;
+                const urlWithPath = `${location.origin}${location.pathname}`;
+                const baseUrl = urlWithPath.endsWith('/') ? urlWithPath.slice(0, -1) : urlWithPath;
                 // create and setup DI Container
                 const modContainer = await import('./src/@teqfw/di/Shared/Container.mjs');
                 /** @type {TeqFw_Di_Shared_Container} */
@@ -27,7 +29,7 @@
                 // setup namespaces mapping
                 if (json?.data?.items && Array.isArray(json.data.items))
                     for (const item of json.data.items)
-                        container.addSourceMapping(item.ns, (new URL(item.path, baseUrl)).toString(), true, item.ext);
+                        container.addSourceMapping(item.ns, baseUrl + item.path, true, item.ext);
                 // setup replaces
                 if (json?.data?.replaces && Array.isArray(json.data.replaces))
                     for (const item of json.data.replaces)
@@ -49,12 +51,15 @@
             }
         }
 
-        if ("serviceWorker" in navigator) {
+        if ("serviceWorker" in navigator) { // if browser supports service workers
+            // ... then add event handler to run script after window will be loaded
+            // (https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event)
             self.addEventListener("load", async () => {
                 const worker = navigator.serviceWorker;
                 if (worker.controller === null) {
+                    // ... to load "sw.js" script and register service worker in navigator
                     try {
-                        const reg = await worker.register("sw.js");
+                        const reg = await worker.register("sw.js", {type: "module"});
                         if (reg.active) {
                             console.log("SW is registered and is active.", reg);
                             await bootstrap();
@@ -74,6 +79,7 @@
                     console.log("SW is already running for this app.");
                     await bootstrap();
                 }
+
             });
         }
     </script>

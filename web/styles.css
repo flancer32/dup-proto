@@ -1,4 +1,2 @@
-/* Overwrite Quasar UI styles */
-:root {
-    --q-primary: #9C6902;
-}
+@import "css/vars.css";
+@import "css/quasar.css";
