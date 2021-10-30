@@ -2,6 +2,8 @@
  * Plugin constants (hardcoded configuration) for backend code.
  */
 export default class Fl32_Dup_Back_Defaults {
+    CLI_PREFIX = 'app';
+
     /** @type {Fl32_Dup_Shared_Defaults} */
     SHARED;
 

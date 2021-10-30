@@ -15,7 +15,8 @@
   },
   "repository": "github:flancer32/duplo-proto",
   "scripts": {
-    "db-reset": "node ./bin/tequila.mjs app-db-reset",
+    "db-init": "node ./bin/tequila.mjs app-db-init",
+    "db-reset": "node ./bin/tequila.mjs app-db-init -t",
     "db-upgrade": "node ./bin/tequila.mjs app-db-upgrade",
     "help": "node ./bin/tequila.mjs -h",
     "http1-start": "node ./bin/tequila.mjs web-server-start",

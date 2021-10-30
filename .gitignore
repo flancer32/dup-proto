@@ -1,3 +1,4 @@
+/**/*.sqlite
 /**/local.json
 /**/node_modules/
 /**/own_modules/

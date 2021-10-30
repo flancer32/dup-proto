@@ -1,4 +1,22 @@
 {
+  "@flancer32/duplo-proto": {
+    "db": {
+      "client": "mysql2|pg",
+      "connection": {
+        "database": "duplo",
+        "host": "127.0.0.1",
+        "password": "...",
+        "user": "..."
+      }
+    },
+    "db.sqlite3": {
+      "client": "sqlite3",
+      "connection": {
+        "filename": "/.../duplo-proto/var/db.sqlite"
+      },
+      "useNullAsDefault": true
+    }
+  },
   "@teqfw/core": {
     "devMode": false
   },

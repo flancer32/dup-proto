@@ -1,0 +1,28 @@
+{
+  "package": {
+    "app": {
+      "entity": {
+        "user": {
+          "comment": "User data in this app.",
+          "attr": {
+            "user_ref": {"type": "ref"},
+            "nick": {"type": "string"},
+            "key_pub": {"type": "string"}
+          },
+          "index": {
+            "PK": {"type": "primary", "attrs": ["user_ref"]}
+          },
+          "relation": {
+            "user": {
+              "attrs": ["user_ref"],
+              "ref": {"path": "/user", "attrs": ["id"]}
+            }
+          }
+        }
+      }
+    }
+  },
+  "refs": {
+    "/user": ["id"]
+  }
+}
