@@ -16,7 +16,10 @@ const NS = 'Fl32_Dup_Front_Widget_User_Create_Route';
 export default function Factory(spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {TeqFw_Web_Front_Service_Gate} */
+    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
+    const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -81,6 +84,13 @@ export default function Factory(spec) {
                 finish = performance.now();
                 const deltaAes = finish - start;
                 console.log(`Time: ${deltaRsa} ms; ${deltaAes} ms;`);
+
+                /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Request} */
+                const req = routeLoadKey.createReq();
+                // noinspection JSValidateTypes
+                /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
+                const res = await gate.send(req, routeLoadKey);
+                console.log(`key: ${res.key}`);
             }
         },
         async mounted() { },
