@@ -3,6 +3,9 @@
     "autoload": {
       "ns": "Fl32_Dup",
       "path": "./src"
+    },
+    "replace": {
+      "TeqFw_User_Front_Api_ISession": {"ns": "Fl32_Dup_Front_Model_User_Session", "area": "front"}
     }
   },
   "@teqfw/core": {

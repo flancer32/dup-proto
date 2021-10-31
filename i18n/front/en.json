@@ -1,13 +1,18 @@
 {
   "btn": {
-    "ok": "OK"
+    "ok": "OK",
+    "subscribe": "Subscribe"
   },
   "wg": {
     "user": {
       "create": {
+        "msg": {
+          "complete": "Enter your nick and complete registration.",
+          "subscribe": "You need to subscribe to notifications first."
+        },
         "title": "Registration",
         "nick": {
-          "label": "Enter your nickname"
+          "label": "Your nickname"
         }
       }
     }

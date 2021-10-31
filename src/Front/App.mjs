@@ -29,6 +29,8 @@ export default class Fl32_Dup_Front_App {
         const _layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
+        /** @type {TeqFw_User_Front_Api_ISession} */
+        const _session = spec['TeqFw_User_Front_Api_ISession$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -97,6 +99,7 @@ export default class Fl32_Dup_Front_App {
                 });
 
                 app.use(router);
+                return router;
             }
 
             // MAIN FUNCTIONALITY
@@ -118,7 +121,9 @@ export default class Fl32_Dup_Front_App {
             await _config.init({}); // this app has no separate 'doors' (entry points)
             await initI18n(_root, I18nLib);
             initQuasarUi(_root, QuasarLib);
-            initRouter(_root, VueLib, DEF, container);
+            const router = initRouter(_root, VueLib, DEF, container);
+            _session.setRouteToSignIn(DEF.ROUTE_USER_CREATE);
+            await _session.open({router});
         }
 
         /**

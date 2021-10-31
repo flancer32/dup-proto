@@ -20,26 +20,35 @@ export default function Factory(spec) {
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
     const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
+    /** @type {TeqFw_Web_Front_Store} */
+    const store = spec['TeqFw_Web_Front_Store$'];
+    /** @type {Fl32_Dup_Front_Store_User} */
+    const metaUser = spec['Fl32_Dup_Front_Store_User$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-empty>
-    <q-card class="t-bg-white">
-        <q-card-section>
-            <div class="text-subtitle2" style="min-width:245px">{{$t('wg.user.create.title')}}:</div>
-       </q-card-section>
-       <q-card-section>
-            <q-input class="id-email"
-                :label="$t('wg.user.create.nick.label')"
-                outlined
-                v-model="fldNick"
-            ></q-input>
+    <q-card class="t-bg-white" style="min-width:245px">
+        <q-card-section v-if="!hasSubscription">
+            <div class="text-subtitle2">{{$t('wg.user.create.msg.subscribe')}}</div>
+            <q-card-actions align="center">
+                <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
+            </q-card-actions>
         </q-card-section>
-        <q-card-actions align="center">
-            <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
-        </q-card-actions>
+        <q-card-section v-if="hasSubscription">
+            <div class="text-subtitle2">{{$t('wg.user.create.msg.complete')}}</div>
+            <q-input
+                    :label="$t('wg.user.create.nick.label')"
+                    outlined
+                    v-model="fldNick"
+            ></q-input>
+            <q-card-actions align="center">
+                <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
+            </q-card-actions>
+        </q-card-section>
     </q-card>
 </layout-empty>
+
 `;
     /**
      * Template to create new component instances using Vue.
@@ -53,7 +62,9 @@ export default function Factory(spec) {
         template,
         components: {},
         data() {
-            return {};
+            return {
+                hasSubscription: false
+            };
         },
         methods: {
             async create() {
@@ -85,15 +96,54 @@ export default function Factory(spec) {
                 const deltaAes = finish - start;
                 console.log(`Time: ${deltaRsa} ms; ${deltaAes} ms;`);
 
-                /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Request} */
-                const req = routeLoadKey.createReq();
-                // noinspection JSValidateTypes
-                /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
-                const res = await gate.send(req, routeLoadKey);
-                console.log(`key: ${res.key}`);
+
+            },
+
+            async subscribe() {
+                // DEFINE INNER FUNCTIONS
+                async function subscribePush(key) {
+                    /** @type {PushSubscriptionOptionsInit} */
+                    const opts = {
+                        userVisibleOnly: true,
+                        applicationServerKey: key
+                    };
+                    const sw = await navigator.serviceWorker.ready;
+                    return await sw.pushManager.subscribe(opts);
+
+                }
+
+                // MAIN FUNCTIONALITY
+                try {
+                    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Request} */
+                    const req = routeLoadKey.createReq();
+                    // noinspection JSValidateTypes
+                    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
+                    const res = await gate.send(req, routeLoadKey);
+                    console.log(`key: ${res.key}`);
+                    const pushSubscription = await subscribePush(res.key);
+                    console.log(pushSubscription.subscriptionId);
+                    console.log(pushSubscription.endpoint);
+                    console.log(JSON.stringify(pushSubscription));
+                    this.hasSubscription = true;
+
+                    // save subscription to IDB Store
+                    /** @type {typeof Fl32_Dup_Front_Store_User.ATTR} */
+                    const ATTR = metaUser.getAttributes();
+                    const json = pushSubscription.toJSON();
+                    // noinspection JSCheckFunctionSignatures
+                    const dto = metaUser.createDto({[ATTR.SUBSCRIPTION]: json});
+                    await store.set(metaUser.getEntityName(), dto);
+                } catch (e) {
+                    console.error(e);
+                }
             }
         },
-        async mounted() { },
+        async mounted() {
+            // noinspection JSValidateTypes
+            /** @type {Fl32_Dup_Front_Store_User.Dto} */
+            const dto = await store.get(metaUser.getEntityName());
+            this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+        },
     };
 }
 

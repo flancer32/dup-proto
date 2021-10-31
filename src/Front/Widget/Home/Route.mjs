@@ -16,7 +16,8 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function Factory(spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {TeqFw_User_Front_Api_ISession} */
+    const session = spec['TeqFw_User_Front_Api_ISession$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -39,7 +40,12 @@ export default function Factory(spec) {
             return {};
         },
         methods: {},
-        async mounted() { },
+        async mounted() {
+            const router = this.$router;
+            // router.push(DEF.ROUTE_USER_CREATE);
+            // const authorized = await session.checkUserAuthenticated(router);
+            const bp = true;
+        },
     };
 }
 
