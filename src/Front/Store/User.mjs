@@ -22,6 +22,8 @@ class Dto {
     static name = `${NS}.Dto`;
     /** @type {number} */
     id;
+    /** @type {Fl32_Dup_Front_Dto_Key_Asym.Dto} */
+    key;
     /** @type {Fl32_Dup_Front_Dto_User_Subscription.Dto} */
     subscription;
 }
@@ -32,6 +34,8 @@ export default class Fl32_Dup_Front_Store_User {
         const DEF = spec['TeqFw_Web_Push_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
+        /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
+        const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
         /** @type {Fl32_Dup_Front_Dto_User_Subscription} */
         const dtoSubscript = spec['Fl32_Dup_Front_Dto_User_Subscription$'];
 
@@ -42,6 +46,7 @@ export default class Fl32_Dup_Front_Store_User {
         this.createDto = function (data) {
             const res = new Dto();
             res.id = castInt(data?.id)
+            res.key = dtoKey.createDto(data?.key);
             res.subscription = dtoSubscript.createDto(data?.subscription);
             return res;
         }

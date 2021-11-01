@@ -1,4 +1,5 @@
 /**/*.sqlite
+/**/*.sqlite-journal
 /**/local.json
 /**/node_modules/
 /**/own_modules/

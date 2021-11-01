@@ -20,10 +20,14 @@ export default function Factory(spec) {
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
     const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
+    /** @type {Fl32_Dup_Shared_WApi_User_Create.Factory} */
+    const routeCreate = spec['Fl32_Dup_Shared_WApi_User_Create#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_User} */
     const metaUser = spec['Fl32_Dup_Front_Store_User$'];
+    /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
+    const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -48,7 +52,6 @@ export default function Factory(spec) {
         </q-card-section>
     </q-card>
 </layout-empty>
-
 `;
     /**
      * Template to create new component instances using Vue.
@@ -63,11 +66,19 @@ export default function Factory(spec) {
         components: {},
         data() {
             return {
-                hasSubscription: false
+                fldNick: null,
+                hasSubscription: false,
             };
         },
         methods: {
             async create() {
+
+                function buf2hex(buffer) { // buffer is an ArrayBuffer
+                    return [...new Uint8Array(buffer)]
+                        .map(x => x.toString(16).padStart(2, '0'))
+                        .join('');
+                }
+
                 const crypto = window.crypto.subtle;
                 let start = performance.now();
                 // const rsa = await crypto.generateKey(
@@ -84,19 +95,40 @@ export default function Factory(spec) {
                 const deltaRsa = finish - start;
 
                 start = performance.now();
-                const aes = await crypto.generateKey(
+                const ecdsa = await crypto.generateKey(
                     {
-                        name: "AES-GCM",
-                        length: 256
+                        name: "ECDSA",
+                        namedCurve: "P-256"
                     },
                     true,
-                    ["encrypt", "decrypt"]
+                    ["sign", "verify"]
                 );
                 finish = performance.now();
                 const deltaAes = finish - start;
                 console.log(`Time: ${deltaRsa} ms; ${deltaAes} ms;`);
 
-
+                const keyPub = await crypto.exportKey('raw', ecdsa.publicKey);
+                const keyPriv = await crypto.exportKey('pkcs8', ecdsa.privateKey);
+                const expPub = buf2hex(keyPub);
+                const expPriv = buf2hex(keyPriv);
+                // noinspection JSValidateTypes
+                /** @type {Fl32_Dup_Front_Store_User.Dto} */
+                const dto = await store.get(metaUser.getEntityName());
+                /** @type {Fl32_Dup_Shared_WApi_User_Create.Request} */
+                const req = routeCreate.createReq();
+                req.endpoint = dto.subscription.endpoint;
+                req.nick = this.fldNick;
+                req.keyAuth = dto.subscription.keys.auth;
+                req.keyP256dh = dto.subscription.keys.p256dh;
+                req.keyPub = expPub;
+                // noinspection JSValidateTypes
+                /** @type {Fl32_Dup_Shared_WApi_User_Create.Response} */
+                const res = await gate.send(req, routeCreate);
+                console.log(`userId: ${res.userId}`);
+                dto.key = dtoKey.createDto();
+                dto.key.public = expPub;
+                dto.key.private = expPriv;
+                await store.set(metaUser.getEntityName(), dto);
             },
 
             async subscribe() {
