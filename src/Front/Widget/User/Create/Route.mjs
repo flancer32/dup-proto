@@ -98,6 +98,7 @@ export default function Factory(spec) {
                 const res = await gate.send(req, routeCreate);
                 // save user ID with key into IDB
                 if (res.userId) {
+                    dto.id = res.userId;
                     dto.key = dtoKey.createDto();
                     dto.key.public = keyPub;
                     dto.key.private = keyPriv;

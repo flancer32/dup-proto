@@ -2,19 +2,29 @@
  * @implements TeqFw_User_Front_Api_ISession
  */
 export default class Fl32_Dup_Front_Model_User_Session {
-    constructor() {
+
+    constructor(spec) {
         // EXTRACT DEPS
+        /** @type {TeqFw_Web_Front_Store} */
+        const store = spec['TeqFw_Web_Front_Store$'];
+        /** @type {Fl32_Dup_Front_Store_User} */
+        const metaUser = spec['Fl32_Dup_Front_Store_User$'];
 
         // DEFINE WORKING VARS / PROPS
         let _routeRedirect, _routeSignIn;
 
         // DEFINE INSTANCE METHODS
         this.checkUserAuthenticated = async function (router) {
-            if (
-                (typeof router?.push === 'function') &&
-                (typeof _routeSignIn === 'string')
-            ) {
-                router.push(_routeSignIn);
+            // noinspection JSValidateTypes
+            /** @type {Fl32_Dup_Front_Store_User.Dto} */
+            const dto = await store.get(metaUser.getEntityName());
+            if (!dto?.id) {
+                if (
+                    (typeof router?.push === 'function') &&
+                    (typeof _routeSignIn === 'string')
+                ) {
+                    router.push(_routeSignIn);
+                }
             }
         }
 
