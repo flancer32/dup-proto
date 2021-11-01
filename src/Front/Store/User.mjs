@@ -12,6 +12,8 @@ const ENTITY = '/user';
  */
 const ATTR = {
     ID: 'id',
+    KEY: 'key',
+    NICK: 'nick',
     SUBSCRIPTION: 'subscription',
 };
 
@@ -24,6 +26,8 @@ class Dto {
     id;
     /** @type {Fl32_Dup_Front_Dto_Key_Asym.Dto} */
     key;
+    /** @type {string} */
+    nick;
     /** @type {Fl32_Dup_Front_Dto_User_Subscription.Dto} */
     subscription;
 }
@@ -32,6 +36,8 @@ export default class Fl32_Dup_Front_Store_User {
     constructor(spec) {
         /** @type {TeqFw_Web_Push_Back_Defaults} */
         const DEF = spec['TeqFw_Web_Push_Back_Defaults$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
@@ -47,6 +53,7 @@ export default class Fl32_Dup_Front_Store_User {
             const res = new Dto();
             res.id = castInt(data?.id)
             res.key = dtoKey.createDto(data?.key);
+            res.nick = castString(data?.nick)
             res.subscription = dtoSubscript.createDto(data?.subscription);
             return res;
         }

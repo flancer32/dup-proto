@@ -16,6 +16,8 @@ const NS = 'Fl32_Dup_Front_Widget_User_Create_Route';
 export default function Factory(spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {Fl32_Dup_Front_Model_Key_Manager} */
+    const mgrKey = spec['Fl32_Dup_Front_Model_Key_Manager$'];
     /** @type {TeqFw_Web_Front_Service_Gate} */
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
@@ -39,8 +41,8 @@ export default function Factory(spec) {
                 <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
             </q-card-actions>
         </q-card-section>
-        <q-card-section v-if="hasSubscription">
-            <div class="text-subtitle2">{{$t('wg.user.create.msg.complete')}}</div>
+        <q-card-section v-if="hasSubscription && !isRegistered">
+            <div class="text-subtitle2">{{$t('wg.user.create.msg.nick')}}</div>
             <q-input
                     :label="$t('wg.user.create.nick.label')"
                     outlined
@@ -49,6 +51,9 @@ export default function Factory(spec) {
             <q-card-actions align="center">
                 <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
             </q-card-actions>
+        </q-card-section>
+        <q-card-section v-if="isRegistered">
+            <div class="text-subtitle2">{{$t('wg.user.create.msg.success')}}</div>
         </q-card-section>
     </q-card>
 </layout-empty>
@@ -68,49 +73,16 @@ export default function Factory(spec) {
             return {
                 fldNick: null,
                 hasSubscription: false,
+                isRegistered: false,
             };
         },
         methods: {
             async create() {
-
-                function buf2hex(buffer) { // buffer is an ArrayBuffer
-                    return [...new Uint8Array(buffer)]
-                        .map(x => x.toString(16).padStart(2, '0'))
-                        .join('');
-                }
-
-                const crypto = window.crypto.subtle;
-                let start = performance.now();
-                // const rsa = await crypto.generateKey(
-                //     {
-                //         name: "RSA-OAEP",
-                //         modulusLength: 4096,
-                //         publicExponent: new Uint8Array([1, 0, 1]),
-                //         hash: "SHA-256"
-                //     },
-                //     true,
-                //     ["encrypt", "decrypt"]
-                // );
-                let finish = performance.now();
-                const deltaRsa = finish - start;
-
-                start = performance.now();
-                const ecdsa = await crypto.generateKey(
-                    {
-                        name: "ECDSA",
-                        namedCurve: "P-256"
-                    },
-                    true,
-                    ["sign", "verify"]
-                );
-                finish = performance.now();
-                const deltaAes = finish - start;
-                console.log(`Time: ${deltaRsa} ms; ${deltaAes} ms;`);
-
-                const keyPub = await crypto.exportKey('raw', ecdsa.publicKey);
-                const keyPriv = await crypto.exportKey('pkcs8', ecdsa.privateKey);
-                const expPub = buf2hex(keyPub);
-                const expPriv = buf2hex(keyPriv);
+                // generate keys for asymmetric encryption
+                const keyPair = await mgrKey.generateKeyAsymmetric();
+                const keyPriv = await mgrKey.exportKeyPrivate(keyPair);
+                const keyPub = await mgrKey.exportKeyPublic(keyPair);
+                // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
@@ -120,15 +92,21 @@ export default function Factory(spec) {
                 req.nick = this.fldNick;
                 req.keyAuth = dto.subscription.keys.auth;
                 req.keyP256dh = dto.subscription.keys.p256dh;
-                req.keyPub = expPub;
+                req.keyPub = keyPub;
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Shared_WApi_User_Create.Response} */
                 const res = await gate.send(req, routeCreate);
-                console.log(`userId: ${res.userId}`);
-                dto.key = dtoKey.createDto();
-                dto.key.public = expPub;
-                dto.key.private = expPriv;
-                await store.set(metaUser.getEntityName(), dto);
+                // save user ID with key into IDB
+                if (res.userId) {
+                    dto.key = dtoKey.createDto();
+                    dto.key.public = keyPub;
+                    dto.key.private = keyPriv;
+                    await store.set(metaUser.getEntityName(), dto);
+                    this.isRegistered = true;
+                    setTimeout(() => {
+                        this.$router.push(DEF.ROUTE_HOME);
+                    }, 2000);
+                }
             },
 
             async subscribe() {

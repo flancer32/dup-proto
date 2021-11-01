@@ -7,8 +7,9 @@
     "user": {
       "create": {
         "msg": {
-          "complete": "Enter your nick and complete registration.",
-          "subscribe": "You need to subscribe to notifications first."
+          "nick": "Enter your nick and complete registration.",
+          "subscribe": "You need to subscribe to notifications first.",
+          "success": "You have been successfully registered in the hollow."
         },
         "title": "Registration",
         "nick": {
