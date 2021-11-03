@@ -1,13 +1,25 @@
 {
   "btn": {
+    "clean": "Clean",
+    "disable": "Disable",
+    "enable": "Enable",
     "ok": "OK",
     "subscribe": "Subscribe"
   },
   "navig": {
+    "cfg": "Config",
     "chat": "Chat",
     "home": "Home"
   },
   "wg": {
+    "cfg": {
+      "sw": {
+        "title": "Service Worker Configuration",
+        "cache": {
+          "title": "Cache"
+        }
+      }
+    },
     "user": {
       "create": {
         "msg": {

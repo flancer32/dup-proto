@@ -86,12 +86,16 @@ export default class Fl32_Dup_Front_App {
                 });
                 // setup application routes (load es6-module on demand with DI-container)
                 router.addRoute({
-                    path: DEF.ROUTE_HOME,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
+                    path: DEF.ROUTE_CFG,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Cfg_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CHAT,
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
+                });
+                router.addRoute({
+                    path: DEF.ROUTE_HOME,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_USER_CREATE,

@@ -19,6 +19,8 @@ export default function Factory(spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Vue_Front_Lib} */
     const VueLib = spec['TeqFw_Vue_Front_Lib$'];
+    /** @type {Fl32_Dup_Front_Layout_Navig_Base.vueCompTmpl} */
+    const navigator = spec['Fl32_Dup_Front_Layout_Navig_Base$'];
 
     // DEFINE WORKING VARS & PROPS
     const ref = VueLib.getVue().ref;
@@ -38,31 +40,7 @@ export default function Factory(spec) {
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
-        <q-list bordered padding class="rounded-borders text-primary">
-
-            <q-item to="/"
-                    active-class="bg-primary text-white"
-                    clickable
-                    v-ripple
-            >
-                <q-item-section avatar>
-                    <q-icon name="home"/>
-                </q-item-section>
-                <q-item-section>{{$t('navig.home')}}</q-item-section>
-            </q-item>
-
-            <q-item to="/chat"
-                    active-class="bg-primary text-white"
-                    clickable
-                    v-ripple
-            >
-                <q-item-section avatar>
-                    <q-icon name="chat"/>
-                </q-item-section>
-                <q-item-section>{{$t('navig.chat')}}</q-item-section>
-            </q-item>
-
-        </q-list>
+        <navigator/>
     </q-drawer>
 
     <!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
@@ -93,7 +71,7 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
+        components: {navigator},
         data() {
             return {
                 menuOpen: false

@@ -10,7 +10,6 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Input';
 /**
  * TeqFW DI factory function to get dependencies for the object.
  *
- * @memberOf Fl32_Dup_Front_Widget_Chat_Msg_Input
  * @returns {Fl32_Dup_Front_Widget_Chat_Msg_Input.vueCompTmpl}
  */
 export default function (spec) {
@@ -26,7 +25,6 @@ export default function (spec) {
       v-model="message"
       outlined
       placeholder="Message..."
-      stack-label="false"
       autogrow
     />
     </div>

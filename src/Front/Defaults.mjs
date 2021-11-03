@@ -3,6 +3,7 @@
  */
 export default class Fl32_Dup_Front_Defaults {
 
+    ROUTE_CFG = '/cfg';
     ROUTE_CHAT = '/chat';
     ROUTE_HOME = '/';
     ROUTE_USER_CREATE = '/user/create';

@@ -10,10 +10,9 @@ const NS = 'Fl32_Dup_Front_Widget_User_Create_Route';
 /**
  * Factory to create template for new Vue component instances.
  *
- * @memberOf Fl32_Dup_Front_Widget_User_Create_Route
  * @returns {Fl32_Dup_Front_Widget_User_Create_Route.vueCompTmpl}
  */
-export default function Factory(spec) {
+export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
@@ -168,6 +167,3 @@ export default function Factory(spec) {
         },
     };
 }
-
-// finalize code components for this es6-module
-Object.defineProperty(Factory, 'name', {value: `${NS}.Factory`});
