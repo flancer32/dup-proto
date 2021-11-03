@@ -16,13 +16,16 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function Factory(spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-<div>HOME!</div>
+    <div>HOME!</div>
+    <q-card class="t-bg-white" style="min-width:245px">
+        <q-card-actions align="center">
+            <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="test"></q-btn>
+        </q-card-actions>
+    </q-card>
 </layout-base>
 `;
     /**
@@ -39,12 +42,24 @@ export default function Factory(spec) {
         data() {
             return {};
         },
-        methods: {},
-        async mounted() {
-            const router = this.$router;
-            // router.push(DEF.ROUTE_USER_CREATE);
-            // const authorized = await session.checkUserAuthenticated(router);
-            const bp = true;
+        methods: {
+            test() {
+                const evtSource = new EventSource('./sse/channel');
+                evtSource.onmessage = function (e) {
+                    console.log(`message`);
+                    console.dir(e.data);
+                }
+                evtSource.onerror = function (e) {
+                    console.log(`error`);
+                    console.dir(e);
+                    evtSource.close();
+                }
+                evtSource.onclose = function (e) {
+                    console.log(`close`);
+                    console.dir(e);
+                }
+                console.log(`testing...`);
+            }
         },
     };
 }

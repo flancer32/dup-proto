@@ -14,6 +14,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
         let _routeRedirect, _routeSignIn;
 
         // DEFINE INSTANCE METHODS
+
         this.checkUserAuthenticated = async function (router) {
             // noinspection JSValidateTypes
             /** @type {Fl32_Dup_Front_Store_User.Dto} */
@@ -25,7 +26,9 @@ export default class Fl32_Dup_Front_Model_User_Session {
                 ) {
                     router.push(_routeSignIn);
                 }
+                return false;
             }
+            return true;
         }
 
         this.close = async function () {

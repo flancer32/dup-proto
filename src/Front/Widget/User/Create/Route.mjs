@@ -16,10 +16,12 @@ const NS = 'Fl32_Dup_Front_Widget_User_Create_Route';
 export default function Factory(spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Model_Key_Manager} */
-    const mgrKey = spec['Fl32_Dup_Front_Model_Key_Manager$'];
+    /** @type {TeqFw_User_Front_Api_ISession} */
+    const session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {TeqFw_Web_Front_Service_Gate} */
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {Fl32_Dup_Front_Model_Key_Manager} */
+    const mgrKey = spec['Fl32_Dup_Front_Model_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
     const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
     /** @type {Fl32_Dup_Shared_WApi_User_Create.Factory} */
@@ -149,11 +151,20 @@ export default function Factory(spec) {
                 }
             }
         },
+        /**
+         * Redirect to homepage is user is authenticated.
+         * @return {Promise<void>}
+         */
         async mounted() {
-            // noinspection JSValidateTypes
-            /** @type {Fl32_Dup_Front_Store_User.Dto} */
-            const dto = await store.get(metaUser.getEntityName());
-            this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+            const authorized = await session.checkUserAuthenticated();
+            if (authorized) {
+                this.$router.push(DEF.ROUTE_HOME);
+            } else {
+                // noinspection JSValidateTypes
+                /** @type {Fl32_Dup_Front_Store_User.Dto} */
+                const dto = await store.get(metaUser.getEntityName());
+                this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+            }
         },
     };
 }
