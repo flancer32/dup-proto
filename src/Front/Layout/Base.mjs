@@ -33,17 +33,41 @@ export default function Factory(spec) {
 
             </q-toolbar-title>
 
-<!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
+            <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
-        <!-- drawer content -->
+        <q-list bordered padding class="rounded-borders text-primary">
+
+            <q-item to="/"
+                    active-class="bg-primary text-white"
+                    clickable
+                    v-ripple
+            >
+                <q-item-section avatar>
+                    <q-icon name="home"/>
+                </q-item-section>
+                <q-item-section>{{$t('navig.home')}}</q-item-section>
+            </q-item>
+
+            <q-item to="/chat"
+                    active-class="bg-primary text-white"
+                    clickable
+                    v-ripple
+            >
+                <q-item-section avatar>
+                    <q-icon name="chat"/>
+                </q-item-section>
+                <q-item-section>{{$t('navig.chat')}}</q-item-section>
+            </q-item>
+
+        </q-list>
     </q-drawer>
 
-<!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
-<!--        &lt;!&ndash; drawer content &ndash;&gt;-->
-<!--    </q-drawer>-->
+    <!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
+    <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
+    <!--    </q-drawer>-->
 
     <q-page-container>
         <slot/>

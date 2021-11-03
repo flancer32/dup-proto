@@ -2,3 +2,11 @@
     /*background-color: #FBF3EF;*/
     background-color: #FAF0EA;
 }
+
+.t-bg-lighter {
+    background-color: var(--color-lighter);
+}
+
+.t-bg-lightest {
+    background-color: var(--color-lightest);
+}

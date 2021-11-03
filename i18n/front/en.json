@@ -3,6 +3,10 @@
     "ok": "OK",
     "subscribe": "Subscribe"
   },
+  "navig": {
+    "chat": "Chat",
+    "home": "Home"
+  },
   "wg": {
     "user": {
       "create": {

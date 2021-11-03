@@ -20,7 +20,6 @@ export default function Factory(spec) {
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-    <div>HOME!</div>
     <q-card class="t-bg-white" style="min-width:245px">
         <q-card-actions align="center">
             <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="test"></q-btn>

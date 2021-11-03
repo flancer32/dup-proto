@@ -6,3 +6,7 @@
     --color-lighter: #E6966B;
     --color-lightest: #F4CFBC;
 }
+
+.t-grid-rows, .t-grid-cols {
+    --grid-gap: 5px;
+}

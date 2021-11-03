@@ -1,0 +1,9 @@
+.t-grid-rows {
+    display: grid;
+    grid-auto-flow: row;
+}
+
+.t-grid-cols {
+    display: grid;
+    grid-auto-flow: column;
+}
