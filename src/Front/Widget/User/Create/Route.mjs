@@ -35,7 +35,7 @@ export default function (spec) {
     // DEFINE WORKING VARS
     const template = `
 <layout-empty>
-    <q-card class="t-bg-white" style="min-width:245px">
+    <q-card class="bg-white" style="min-width:245px">
         <q-card-section v-if="!hasSubscription">
             <div class="text-subtitle2">{{$t('wg.user.create.msg.subscribe')}}</div>
             <q-card-actions align="center">

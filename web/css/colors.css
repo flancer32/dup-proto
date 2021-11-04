@@ -1,12 +1,54 @@
-.t-bg-white {
-    /*background-color: #FBF3EF;*/
-    background-color: #FAF0EA;
+
+
+/* Quasar related colors. Prefixes are 'text-' and 'bg-'.*/
+/* Usage in widgets: "<q-chat-message bg-color="base" text-color="lighter" ... />" */
+
+
+/* Basic colors for Monochromatic scheme */
+.bg-base {
+    background: var(--color-base) !important;
 }
 
-.t-bg-lighter {
-    background-color: var(--color-lighter);
+.text-base {
+    color: var(--color-base) !important;
 }
 
-.t-bg-lightest {
-    background-color: var(--color-lightest);
+.bg-darker {
+    background: var(--color-darker) !important;
+}
+
+.text-darker {
+    color: var(--color-darker) !important;
+}
+
+.bg-darkest {
+    background: var(--color-darkest) !important;
+}
+
+.text-darkest {
+    color: var(--color-darkest) !important;
+}
+
+.bg-lighter {
+    background: var(--color-lighter) !important;
+}
+
+.text-lighter {
+    color: var(--color-lighter) !important;
+}
+
+.bg-lightest {
+    background: var(--color-lightest) !important;
+}
+
+.text-lightest {
+    color: var(--color-lightest) !important;
+}
+
+/* Additional colors */
+.bg-white {
+    background-color: #FAF0EA !important;
+}
+.text-white {
+    color: #FAF0EA !important;
 }

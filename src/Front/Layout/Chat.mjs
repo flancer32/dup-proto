@@ -49,11 +49,11 @@ export default function Factory(spec) {
     <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
     <!--    </q-drawer>-->
 
-    <q-page-container>
+    <q-page-container class="absolute-bottom">
         <slot/>
     </q-page-container>
 
-    <q-footer class="t-bg-lightest q-pb-sm">
+    <q-footer class="bg-lightest q-pb-sm">
         <q-toolbar>
             <message-input/>
         </q-toolbar>

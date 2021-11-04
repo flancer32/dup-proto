@@ -15,11 +15,13 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band.vueCompTmpl} */
+    const band = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-chat>
+    <band/>
 </layout-chat>
 `;
     /**
@@ -32,7 +34,7 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
+        components: {band},
         data() {
             return {};
         },
