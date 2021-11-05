@@ -15,13 +15,16 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Band_Item';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {TeqFw_Core_Shared_Util.formatDateTime|function} */
+    const formatDateTime = spec['TeqFw_Core_Shared_Util.formatDateTime'];
 
     // DEFINE WORKING VARS
     const template = `
 <q-chat-message :bg-color="colorBg" :text-color="colorTxt"
     :text="body"
+    :name="item?.author"
     :sent="item?.sent"
+    :stamp="stamp"
 />
 `;
     /**
@@ -39,6 +42,7 @@ export default function (spec) {
             return {};
         },
         props: {
+            /** @type {Fl32_Dup_Front_Dto_Message.Dto} */
             item: null
         },
         computed: {
@@ -46,6 +50,9 @@ export default function (spec) {
                 /** @type {Fl32_Dup_Front_Dto_Message.Dto} */
                 const item = this.item;
                 return (typeof item?.body === 'string') ? [item.body] : [];
+            },
+            stamp() {
+                return (this.item?.date instanceof Date) ? formatDateTime(this.item.date) : null;
             },
             colorBg() {
                 return (this.item?.sent) ? 'base' : 'darker';

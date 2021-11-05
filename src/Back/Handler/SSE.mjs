@@ -2,13 +2,13 @@
  * Experimental SSE (Server Side Events) handler.
  * Try to use function factory instead of class factory.
  *
- * @namespace Fl32_Dup_Back_Handler_Sse
+ * @namespace Fl32_Dup_Back_Handler_SSE
  */
 // MODULE'S IMPORT
 import {constants as H2} from 'http2';
 
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Back_Handler_Sse';
+const NS = 'Fl32_Dup_Back_Handler_SSE';
 
 // MODULE'S FUNCTIONS
 /**
@@ -23,6 +23,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Web_Back_Model_Address} */
     const mAddress = spec['TeqFw_Web_Back_Model_Address$'];
+    /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
+    const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
 
     // DEFINE INNER FUNCTIONS
     /**
@@ -30,7 +32,7 @@ export default function (spec) {
      *
      * @param {TeqFw_Web_Back_Api_Request_IContext} context
      * @returns {Promise<void>}
-     * @memberOf Fl32_Dup_Back_Handler_Sse
+     * @memberOf Fl32_Dup_Back_Handler_SSE
      */
     async function handle(context) {
         /** @type {TeqFw_Web_Back_Api_Request_IContext} */
@@ -44,29 +46,25 @@ export default function (spec) {
                 ctx.setResponseHeader(H2.HTTP2_HEADER_CACHE_CONTROL, 'no-cache');
                 ctx.markRequestProcessed();
 
+
                 /** @type {ServerHttp2Stream|ServerResponse} */
                 const stream = ctx.getStream();
-                // stream.respond({
-                //     [H2.HTTP2_HEADER_STATUS]: H2.HTTP_STATUS_OK,
-                //     [H2.HTTP2_HEADER_CONTENT_TYPE]: 'text/event-stream',
-                //     [H2.HTTP2_HEADER_CACHE_CONTROL]: 'no-cache',
-                // });
-                stream.writeHead(H2.HTTP_STATUS_OK, {
+                stream.respond({
+                    [H2.HTTP2_HEADER_STATUS]: H2.HTTP_STATUS_OK,
                     [H2.HTTP2_HEADER_CONTENT_TYPE]: 'text/event-stream',
                     [H2.HTTP2_HEADER_CACHE_CONTROL]: 'no-cache',
                 });
+                console.log(`HTTP headers are sent.`);
 
-                stream.write('hello guys!')
-                setInterval(() => {
-                    stream.write('id: 3' + '\n');
-                    // response.write('event: ' + 'add' + '\n');
-                    stream.write("data: some data" + '\n\n');
-                    // stream.write('hello again!\n');
-                    // stream.write('\n');
-                    // stream.end('done');
-                }, 2000);
+                function respond(msg) {
+                    stream.write(`data: ${JSON.stringify(msg)}\n\n`);
+                }
+
+                // TODO: add stream closing function
+                regSse.add(respond);
+
+                stream.write(`data: new handler function is added.\n\n`);
                 context.markRequestComplete();
-                console.log(`Processed SSE request.`);
             }
         }
     }

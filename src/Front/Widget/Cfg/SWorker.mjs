@@ -20,7 +20,7 @@ export default function (spec) {
 
     // DEFINE WORKING VARS
     const template = `
-<q-card class="bg-white">
+<q-card class="bg-white q-mt-xs">
     <q-card-section>
         <div class="text-subtitle2">{{$t('wg.cfg.sw.title')}}:</div> 
         <div class="text-subtitle3">{{$t('wg.cfg.sw.cache.title')}}:</div>

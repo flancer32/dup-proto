@@ -3,6 +3,7 @@ export default class Fl32_Dup_Shared_Defaults {
 
     SPACE_SSE = 'sse';
 
+    WAPI_MSG_POST = '/msg/post';
     WAPI_USER_CREATE = '/user/create';
 
     constructor() {

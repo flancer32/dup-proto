@@ -15,7 +15,12 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Input';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {TeqFw_Web_Front_Service_Gate} */
+    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Factory} */
+    const routePost = spec['Fl32_Dup_Shared_WApi_Msg_Post.Factory$'];
+    /** @type {TeqFw_User_Front_Api_ISession} */
+    const modSess = spec['TeqFw_User_Front_Api_ISession$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -50,9 +55,17 @@ export default function (spec) {
             };
         },
         methods: {
-            send() {
+            async send() {
                 // send message to server
-                console.log(this.message);
+                /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Request} */
+                const req = routePost.createReq();
+                req.body = this.message;
+                const user = modSess.getUser();
+                req.userId = user.id;
+                // noinspection JSValidateTypes
+                /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Response} */
+                const res = await gate.send(req, routePost);
+                // console.log(this.message);
                 this.message = null;
             }
         },

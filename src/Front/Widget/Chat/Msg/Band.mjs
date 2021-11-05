@@ -26,21 +26,11 @@ export default function (spec) {
     const template = `
 <div class="q-pa-md row justify-center">
     <div style="width: 100%; max-width: 400px">
-    
-    <message v-for="(item) in band"
-        :item="item"
-    />
-    
-<!--      <q-chat-message bg-color="base" text-color="lightest"-->
-<!--        :text="to"-->
-<!--        sent-->
-<!--      />-->
-<!--      <q-chat-message bg-color="darker" text-color="lighter"-->
-<!--        :text="from"-->
-<!--         stamp="20:23:43"-->
-<!--      />-->
+        <message v-for="(item) in band"
+                 :item="item"
+        />
     </div>
-  </div>
+</div>
 `;
     /**
      * Template to create new component instances using Vue.
@@ -55,8 +45,6 @@ export default function (spec) {
         components: {message},
         data() {
             return {
-                from: ['very long long long long long long long long long long long long long long long long long long long message from server'],
-                to: ['message to server', 'message to server', 'message to server', 'message to server'],
                 band: []
             };
         },
@@ -72,17 +60,8 @@ export default function (spec) {
             const second = dtoMsg.createDto();
             second.body = 'This is second message.';
             second.sent = false;
-            this.band.push(first);
-            this.band.push(second);
-            let count = 0;
-            const interval = setInterval(() => {
-                const item = dtoMsg.createDto();
-                item.body = `This is additional message #${count}.`;
-                item.sent = count % 2 === 0;
-                count++;
-                this.band.push(item);
-                if (count > 10) clearInterval(interval);
-            }, 2000);
+            // this.band.push(first);
+            // this.band.push(second);
         },
     };
 }

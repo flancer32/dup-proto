@@ -15,11 +15,13 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {Fl32_Dup_Front_SSE_Channel} */
+    const sseChannel = spec['Fl32_Dup_Front_SSE_Channel$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-    <q-card class="bg-white" style="min-width:245px">
+    <q-card class="bg-white q-mt-xs" style="min-width:245px">
         <q-card-actions align="center">
             <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="test"></q-btn>
         </q-card-actions>
@@ -42,21 +44,8 @@ export default function (spec) {
         },
         methods: {
             test() {
-                const evtSource = new EventSource('./sse/channel');
-                evtSource.onmessage = function (e) {
-                    console.log(`message`);
-                    console.dir(e.data);
-                }
-                evtSource.onerror = function (e) {
-                    console.log(`error`);
-                    console.dir(e);
-                    evtSource.close();
-                }
-                evtSource.onclose = function (e) {
-                    console.log(`close`);
-                    console.dir(e);
-                }
-                console.log(`testing...`);
+                sseChannel.open();
+                // setTimeout(() => sseChannel.close(), 10000);
             }
         },
     };

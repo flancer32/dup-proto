@@ -57,7 +57,7 @@ export default class Fl32_Dup_Back_WApi_User_Create {
             }
 
             // MAIN FUNCTIONALITY
-            Object.defineProperty(service, 'name', {value: `${NS}.${service.name}`});
+            Object.defineProperty(service, 'name', {value: `${NS}.service`});
             return service;
         }
 
