@@ -9,6 +9,7 @@
   "navig": {
     "cfg": "Config",
     "chat": "Chat",
+    "contacts": "Contacts",
     "home": "Home"
   },
   "wg": {

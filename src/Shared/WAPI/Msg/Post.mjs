@@ -1,40 +1,33 @@
 /**
- * Route data for service to create new user.
+ * Route data for service to post new message.
  *
- * @namespace Fl32_Dup_Shared_WApi_User_Create
+ * @namespace Fl32_Dup_Shared_WAPI_Msg_Post
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Shared_WApi_User_Create';
+const NS = 'Fl32_Dup_Shared_WAPI_Msg_Post';
 
 // MODULE'S CLASSES
 /**
- * @memberOf Fl32_Dup_Shared_WApi_User_Create
+ * @memberOf Fl32_Dup_Shared_WAPI_Msg_Post
  */
 class Request {
     /** @type {string} */
-    endpoint;
-    /** @type {string} */
-    keyAuth;
-    /** @type {string} */
-    keyP256dh;
-    /** @type {string} */
-    keyPub;
-    /** @type {string} */
-    nick;
-}
-
-/**
- * @memberOf Fl32_Dup_Shared_WApi_User_Create
- */
-class Response {
+    body;
     /** @type {number} */
     userId;
 }
 
 /**
+ * @memberOf Fl32_Dup_Shared_WAPI_Msg_Post
+ */
+class Response {
+
+}
+
+/**
  * Factory to create new DTOs and get route address.
  * @implements TeqFw_Web_Back_Api_Service_IRoute
- * @memberOf Fl32_Dup_Shared_WApi_User_Create
+ * @memberOf Fl32_Dup_Shared_WAPI_Msg_Post
  */
 class Factory {
     constructor(spec) {
@@ -47,29 +40,25 @@ class Factory {
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
         // DEFINE INSTANCE METHODS
-        this.getRoute = () => `/${DEF.NAME}${DEF.WAPI_USER_CREATE}`;
+        this.getRoute = () => `/${DEF.NAME}${DEF.WAPI_MSG_POST}`;
 
         /**
          * @param {Request|null} data
-         * @return {Fl32_Dup_Shared_WApi_User_Create.Request}
+         * @return {Fl32_Dup_Shared_WAPI_Msg_Post.Request}
          */
         this.createReq = function (data = null) {
             const res = new Request();
-            res.endpoint = castString(data?.endpoint);
-            res.keyAuth = castString(data?.keyAuth);
-            res.keyP256dh = castString(data?.keyP256dh);
-            res.keyPub = castString(data?.keyPub);
-            res.nick = castString(data?.nick);
+            res.body = castString(data?.body);
+            res.userId = castInt(data?.userId);
             return res;
         }
 
         /**
          * @param {Response|null} data
-         * @return {Fl32_Dup_Shared_WApi_User_Create.Response}
+         * @return {Fl32_Dup_Shared_WAPI_Msg_Post.Response}
          */
         this.createRes = function (data = null) {
             const res = new Response();
-            res.userId = castInt(data?.userId);
             return res;
         }
     }

@@ -94,6 +94,10 @@ export default class Fl32_Dup_Front_App {
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
                 });
                 router.addRoute({
+                    path: DEF.ROUTE_CONTACTS,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Route$')
+                });
+                router.addRoute({
                     path: DEF.ROUTE_HOME,
                     component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
                 });

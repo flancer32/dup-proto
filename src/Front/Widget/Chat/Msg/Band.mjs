@@ -53,7 +53,7 @@ export default function (spec) {
         },
         async mounted() {
             // debugger
-            this.band = modBand.getData();
+            this.band = modBand.getRef();
             const first = dtoMsg.createDto();
             first.body = 'This is first message.';
             first.sent = true;

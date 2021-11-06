@@ -1,22 +1,22 @@
 /**
  * Post new message.
  *
- * @namespace Fl32_Dup_Back_WApi_Msg_Post
+ * @namespace Fl32_Dup_Back_WAPI_Msg_Post
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Back_WApi_Msg_Post';
+const NS = 'Fl32_Dup_Back_WAPI_Msg_Post';
 
 /**
  * @implements TeqFw_Web_Back_Api_Service_IFactory
  */
-export default class Fl32_Dup_Back_WApi_Msg_Post {
+export default class Fl32_Dup_Back_WAPI_Msg_Post {
 
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
-        /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Factory} */
-        const route = spec['Fl32_Dup_Shared_WApi_Msg_Post#Factory$'];
+        /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Factory} */
+        const route = spec['Fl32_Dup_Shared_WAPI_Msg_Post#Factory$'];
         /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
         const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
@@ -45,9 +45,9 @@ export default class Fl32_Dup_Back_WApi_Msg_Post {
                 }
 
                 // MAIN FUNCTIONALITY
-                /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Request} */
+                /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
                 const req = context.getInData();
-                /** @type {Fl32_Dup_Shared_WApi_Msg_Post.Response} */
+                /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Response} */
                 const res = context.getOutData();
                 //
                 const trx = await conn.startTransaction();

@@ -1,13 +1,13 @@
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Store_User';
+const NS = 'Fl32_Dup_Front_Store_Contacts';
 /**
  * Part of the entity key to store in Singletons IDB store.
  * @type {string}
  */
-const ENTITY = '/user';
+const ENTITY = '/contacts';
 
 /**
- * @memberOf Fl32_Dup_Front_Store_User
+ * @memberOf Fl32_Dup_Front_Store_Contacts
  * @type {Object}
  */
 const ATTR = {
@@ -18,7 +18,7 @@ const ATTR = {
 };
 
 /**
- * @memberOf Fl32_Dup_Front_Store_User
+ * @memberOf Fl32_Dup_Front_Store_Contacts
  */
 class Dto {
     static name = `${NS}.Dto`;
@@ -32,10 +32,10 @@ class Dto {
     subscription;
 }
 
-export default class Fl32_Dup_Front_Store_User {
+export default class Fl32_Dup_Front_Store_Contacts {
     constructor(spec) {
-        /** @type {Fl32_Dup_Back_Defaults} */
-        const DEF = spec['Fl32_Dup_Back_Defaults$'];
+        /** @type {TeqFw_Web_Push_Back_Defaults} */
+        const DEF = spec['TeqFw_Web_Push_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
@@ -46,8 +46,8 @@ export default class Fl32_Dup_Front_Store_User {
         const dtoSubscript = spec['Fl32_Dup_Front_Dto_User_Subscription$'];
 
         /**
-         * @param {Fl32_Dup_Front_Store_User.Dto} [data]
-         * @return {Fl32_Dup_Front_Store_User.Dto}
+         * @param {Fl32_Dup_Front_Store_Contacts.Dto} [data]
+         * @return {Fl32_Dup_Front_Store_Contacts.Dto}
          */
         this.createDto = function (data) {
             const res = new Dto();

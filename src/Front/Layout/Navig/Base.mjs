@@ -32,6 +32,17 @@ export default function (spec) {
         <q-item-section>{{$t('navig.home')}}</q-item-section>
     </q-item>
 
+    <q-item to="${DEF.ROUTE_CONTACTS}"
+            active-class="bg-primary text-white"
+            clickable
+            v-ripple
+    >
+        <q-item-section avatar>
+            <q-icon name="people"/>
+        </q-item-section>
+        <q-item-section>{{$t('navig.contacts')}}</q-item-section>
+    </q-item>
+
     <q-item to="${DEF.ROUTE_CHAT}"
             active-class="bg-primary text-white"
             clickable

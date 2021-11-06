@@ -37,10 +37,6 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
-        data() {
-            return {};
-        },
         props: {
             /** @type {Fl32_Dup_Front_Dto_Message.Dto} */
             item: null

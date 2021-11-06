@@ -23,8 +23,8 @@ export default function (spec) {
     const mgrKey = spec['Fl32_Dup_Front_Model_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
     const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
-    /** @type {Fl32_Dup_Shared_WApi_User_Create.Factory} */
-    const routeCreate = spec['Fl32_Dup_Shared_WApi_User_Create#Factory$'];
+    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
+    const routeCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_User} */
@@ -87,7 +87,7 @@ export default function (spec) {
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
-                /** @type {Fl32_Dup_Shared_WApi_User_Create.Request} */
+                /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
                 const req = routeCreate.createReq();
                 req.endpoint = dto.subscription.endpoint;
                 req.nick = this.fldNick;
@@ -95,7 +95,7 @@ export default function (spec) {
                 req.keyP256dh = dto.subscription.keys.p256dh;
                 req.keyPub = keyPub;
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Shared_WApi_User_Create.Response} */
+                /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
                 const res = await gate.send(req, routeCreate);
                 // save user ID with key into IDB
                 if (res.userId) {
