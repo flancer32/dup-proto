@@ -21,6 +21,8 @@ export default function Factory(spec) {
     const VueLib = spec['TeqFw_Vue_Front_Lib$'];
     /** @type {Fl32_Dup_Front_Layout_Navig_Base.vueCompTmpl} */
     const navigator = spec['Fl32_Dup_Front_Layout_Navig_Base$'];
+    /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
+    const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
 
     // DEFINE WORKING VARS & PROPS
     const ref = VueLib.getVue().ref;
@@ -30,11 +32,10 @@ export default function Factory(spec) {
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
             <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
-
-            <q-toolbar-title>
-
-            </q-toolbar-title>
-
+            <q-space></q-space>
+            <q-toolbar-title></q-toolbar-title>
+            <q-space></q-space>
+            <leds/>
             <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
@@ -71,7 +72,7 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {navigator},
+        components: {navigator, leds},
         data() {
             return {
                 menuOpen: false

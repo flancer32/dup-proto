@@ -64,6 +64,17 @@ export default function (spec) {
         </q-item-section>
         <q-item-section>{{$t('navig.cfg')}}</q-item-section>
     </q-item>
+    
+    <q-item to="${DEF.ROUTE_LOGS}"
+            active-class="bg-primary text-white"
+            clickable
+            v-ripple
+    >
+        <q-item-section avatar>
+            <q-icon name="receipt"/>
+        </q-item-section>
+        <q-item-section>{{$t('navig.logs')}}</q-item-section>
+    </q-item>
 
 </q-list>
 `;

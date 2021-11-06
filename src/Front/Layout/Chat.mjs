@@ -21,6 +21,8 @@ export default function Factory(spec) {
     const VueLib = spec['TeqFw_Vue_Front_Lib$'];
     /** @type {Fl32_Dup_Front_Layout_Navig_Base.vueCompTmpl} */
     const navigator = spec['Fl32_Dup_Front_Layout_Navig_Base$'];
+    /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
+    const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Input.vueCompTmpl} */
     const messageInput = spec['Fl32_Dup_Front_Widget_Chat_Msg_Input$'];
 
@@ -32,11 +34,10 @@ export default function Factory(spec) {
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
             <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
-
             <q-toolbar-title>
-
             </q-toolbar-title>
-
+            <q-space></q-space>
+            <leds/>
             <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
@@ -73,7 +74,7 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {navigator, messageInput},
+        components: {navigator, leds, messageInput},
         data() {
             return {
                 menuOpen: false
