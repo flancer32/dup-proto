@@ -17,6 +17,12 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_SSE_Channel} */
     const sseChannel = spec['Fl32_Dup_Front_SSE_Channel$'];
+    /** @type {Fl32_Dup_Front_Store_Db} */
+    const db = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
+    const metaMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Band} */
+    const metaBand = spec['Fl32_Dup_Front_Store_Entity_Msg_Band$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -43,9 +49,18 @@ export default function (spec) {
             return {};
         },
         methods: {
-            test() {
-                sseChannel.open();
+            async test() {
+                // sseChannel.open();
                 // setTimeout(() => sseChannel.close(), 10000);
+                const A_MSG = metaMsg.getAttributes();
+                /** @type {TeqFw_Web_Front_Store_IDB} */
+                const idb = db.getDb();
+                await idb.open();
+                const trx = await idb.startTransaction([metaMsg, metaBand]);
+                const idBand = await idb.add(trx, metaBand, {});
+                const idMsg = await idb.add(trx, metaMsg, {[A_MSG.BAND_ID]: idBand});
+                const bp = true;
+                trx.commit();
             }
         },
     };

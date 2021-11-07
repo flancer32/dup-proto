@@ -27,8 +27,8 @@ export default function (spec) {
     const routeCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
-    /** @type {Fl32_Dup_Front_Store_User} */
-    const metaUser = spec['Fl32_Dup_Front_Store_User$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_User} */
+    const metaUser = spec['Fl32_Dup_Front_Store_Entity_User$'];
     /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
     const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
 
@@ -85,7 +85,7 @@ export default function (spec) {
                 const keyPub = await mgrKey.exportKeyPublic(keyPair);
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_User.Dto} */
+                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
                 /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
                 const req = routeCreate.createReq();
@@ -139,7 +139,7 @@ export default function (spec) {
                     this.hasSubscription = true;
 
                     // save subscription to IDB Store
-                    /** @type {typeof Fl32_Dup_Front_Store_User.ATTR} */
+                    /** @type {typeof Fl32_Dup_Front_Store_Entity_User.ATTR} */
                     const ATTR = metaUser.getAttributes();
                     const json = pushSubscription.toJSON();
                     // noinspection JSCheckFunctionSignatures
@@ -160,7 +160,7 @@ export default function (spec) {
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_User.Dto} */
+                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
                 this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
             }

@@ -17,11 +17,14 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Widget_Cfg_SWorker.vueCompTmpl} */
     const sworker = spec['Fl32_Dup_Front_Widget_Cfg_SWorker$'];
+    /** @type {Fl32_Dup_Front_Widget_Cfg_Store.vueCompTmpl} */
+    const store = spec['Fl32_Dup_Front_Widget_Cfg_Store$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-<sworker/>
+    <sworker/>
+    <store/>
 </layout-base>
 `;
     /**
@@ -34,7 +37,7 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {sworker},
+        components: {store, sworker},
         data() {
             return {};
         },

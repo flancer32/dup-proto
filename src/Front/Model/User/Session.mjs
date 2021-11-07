@@ -7,12 +7,12 @@ export default class Fl32_Dup_Front_Model_User_Session {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_Store} */
         const store = spec['TeqFw_Web_Front_Store$'];
-        /** @type {Fl32_Dup_Front_Store_User} */
-        const metaUser = spec['Fl32_Dup_Front_Store_User$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_User} */
+        const metaUser = spec['Fl32_Dup_Front_Store_Entity_User$'];
 
         // DEFINE WORKING VARS / PROPS
         let _routeRedirect, _routeSignIn;
-        /** @type {Fl32_Dup_Front_Store_User.Dto} */
+        /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
         let _currentUser;
         const bp = 5;
         // DEFINE INSTANCE METHODS
@@ -20,7 +20,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
         this.checkUserAuthenticated = async function (router) {
             if (!_currentUser) {
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_User.Dto} */
+                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
                 if (!dto?.id) {
                     if (
@@ -41,7 +41,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
             return Promise.resolve(undefined);
         }
         /**
-         * @return {Fl32_Dup_Front_Store_User.Dto}
+         * @return {Fl32_Dup_Front_Store_Entity_User.Dto}
          */
         this.getUser = function () {
             return _currentUser;

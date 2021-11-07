@@ -1,13 +1,13 @@
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Store_Contacts';
+const NS = 'Fl32_Dup_Front_Store_Entity_User';
 /**
  * Part of the entity key to store in Singletons IDB store.
  * @type {string}
  */
-const ENTITY = '/contacts';
+const ENTITY = '/user';
 
 /**
- * @memberOf Fl32_Dup_Front_Store_Contacts
+ * @memberOf Fl32_Dup_Front_Store_Entity_User
  * @type {Object}
  */
 const ATTR = {
@@ -18,7 +18,7 @@ const ATTR = {
 };
 
 /**
- * @memberOf Fl32_Dup_Front_Store_Contacts
+ * @memberOf Fl32_Dup_Front_Store_Entity_User
  */
 class Dto {
     static name = `${NS}.Dto`;
@@ -32,10 +32,13 @@ class Dto {
     subscription;
 }
 
-export default class Fl32_Dup_Front_Store_Contacts {
+/**
+ * @implements TeqFw_Web_Front_Api_Store_IEntity
+ */
+export default class Fl32_Dup_Front_Store_Entity_User {
     constructor(spec) {
-        /** @type {TeqFw_Web_Push_Back_Defaults} */
-        const DEF = spec['TeqFw_Web_Push_Back_Defaults$'];
+        /** @type {Fl32_Dup_Back_Defaults} */
+        const DEF = spec['Fl32_Dup_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
@@ -46,8 +49,8 @@ export default class Fl32_Dup_Front_Store_Contacts {
         const dtoSubscript = spec['Fl32_Dup_Front_Dto_User_Subscription$'];
 
         /**
-         * @param {Fl32_Dup_Front_Store_Contacts.Dto} [data]
-         * @return {Fl32_Dup_Front_Store_Contacts.Dto}
+         * @param {Fl32_Dup_Front_Store_Entity_User.Dto} [data]
+         * @return {Fl32_Dup_Front_Store_Entity_User.Dto}
          */
         this.createDto = function (data) {
             const res = new Dto();
@@ -67,7 +70,7 @@ export default class Fl32_Dup_Front_Store_Contacts {
          * @return {string}
          */
         this.getEntityName = function () {
-            return `${DEF.SHARED.NAME}${ENTITY}`
+            return `${DEF.SHARED.NAME}${ENTITY}`;
         }
     }
 }

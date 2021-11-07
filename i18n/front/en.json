@@ -19,6 +19,10 @@
         "cache": {
           "title": "Cache"
         }
+      },
+      "store": {
+        "init": "Init IDB Schema",
+        "title": "Store Configuration"
       }
     },
     "user": {

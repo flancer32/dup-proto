@@ -1,6 +1,9 @@
 export default class Fl32_Dup_Shared_Defaults {
     NAME = '@flancer32/duplo-proto';
 
+    DATA_DUPLO_NICK = 'D.U.P.L.O.';
+    DATA_DUPLO_USER_ID = 0;
+
     SPACE_SSE = 'sse';
 
     WAPI_MSG_POST = '/msg/post';
