@@ -46,24 +46,48 @@ export default function (spec) {
                 ctx.setResponseHeader(H2.HTTP2_HEADER_CACHE_CONTROL, 'no-cache');
                 ctx.markRequestProcessed();
 
-
-                /** @type {ServerHttp2Stream|ServerResponse} */
+                // setup stream
+                /** @type {ServerHttp2Stream} */
                 const stream = ctx.getStream();
+                stream.addListener('aborted', () => console.log('SSE stream aborted.'));
+                stream.addListener('close', () => console.log('SSE stream close.'));
+                stream.addListener('data', () => console.log('SSE stream data.'));
+                stream.addListener('drain', () => console.log('SSE stream drain.'));
+                stream.addListener('end', () => console.log('SSE stream end.'));
+                stream.addListener('error', () => console.log('SSE stream error.'));
+                stream.addListener('finish', () => console.log('SSE stream finish.'));
+                stream.addListener('frameError', () => console.log('SSE stream frameError.'));
+                stream.addListener('pause', () => console.log('SSE stream pause.'));
+                stream.addListener('pipe', () => console.log('SSE stream pipe.'));
+                stream.addListener('readable', () => console.log('SSE stream readable.'));
+                stream.addListener('ready', () => console.log('SSE stream ready.'));
+                stream.addListener('resume', () => console.log('SSE stream resume.'));
+                stream.addListener('timeout', () => console.log('SSE stream timeout.'));
+                stream.addListener('trailers', () => console.log('SSE stream trailers.'));
+                stream.addListener('unpipe', () => console.log('SSE stream unpipe.'));
+                stream.addListener('wantTrailers', () => console.log('SSE stream wantTrailers.'));
+
                 stream.respond({
                     [H2.HTTP2_HEADER_STATUS]: H2.HTTP_STATUS_OK,
                     [H2.HTTP2_HEADER_CONTENT_TYPE]: 'text/event-stream',
                     [H2.HTTP2_HEADER_CACHE_CONTROL]: 'no-cache',
                 });
-                console.log(`HTTP headers are sent.`);
+                let id = 5;
 
-                function respond(msg) {
-                    stream.write(`data: ${JSON.stringify(msg)}\n\n`);
+                function respond(msg, event) {
+                    if (event) stream.write(`event: ${event}\n`);
+                    stream.write(`data: ${JSON.stringify(msg)}\n`);
+                    stream.write(`id: ${id++}\n\n`);
                 }
+
+                respond({sessionId: 'some UID'}, 'authorize');
 
                 // TODO: add stream closing function
                 regSse.add(respond);
+                // setTimeout(() => {
+                //     stream.end('finish SSE');
+                // }, 3000);
 
-                stream.write(`data: new handler function is added.\n\n`);
                 context.markRequestComplete();
             }
         }

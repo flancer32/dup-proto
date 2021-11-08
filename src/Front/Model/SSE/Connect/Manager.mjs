@@ -21,18 +21,38 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
             _connect.close();
         }
         this.open = async function () {
-            await _connect.open('./sse/channel', (msg) => {
+            function handlerMessage(event) {
                 try {
+                    const text = event.data;
+                    const msg = JSON.parse(text);
                     const dto = dtoMsg.createDto();
                     dto.body = msg.body;
                     dto.date = new Date();
                     dto.sent = (msg.userId === modSess.getUser().id);
                     if (!dto.sent) dto.author = msg.author;
                     modBand.push(dto);
+                    if (typeof window.navigator.vibrate === 'function')
+                        window.navigator.vibrate([100, 100, 100]);
                 } catch (e) {
                     console.log(text);
                 }
-            });
+            }
+
+            function handlerAuthorize(event) {
+                try {
+                    const text = event.data;
+                    const msg = JSON.parse(text);
+                    console.log(`authorize: ${text}`);
+                } catch (e) {
+                    console.log(text);
+                }
+            }
+
+            const handlers = {
+                authorize: handlerAuthorize,
+                message: handlerMessage,
+            };
+            await _connect.open('./sse/channel', handlers);
         }
     }
 }

@@ -15,8 +15,6 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_SSE_Channel} */
-    const sseChannel = spec['Fl32_Dup_Front_SSE_Channel$'];
     /** @type {Fl32_Dup_Front_Store_Db} */
     const db = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
