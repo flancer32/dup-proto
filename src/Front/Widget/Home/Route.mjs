@@ -27,11 +27,11 @@ export default function (spec) {
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-    <q-card class="bg-white q-mt-xs" style="min-width:245px">
-        <q-card-actions align="center">
-            <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="test"></q-btn>
-        </q-card-actions>
-    </q-card>
+<!--    <q-card class="bg-white q-mt-xs" style="min-width:245px">-->
+<!--        <q-card-actions align="center">-->
+<!--            <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="test"></q-btn>-->
+<!--        </q-card-actions>-->
+<!--    </q-card>-->
 </layout-base>
 `;
     /**
@@ -52,15 +52,15 @@ export default function (spec) {
             async test() {
                 // sseChannel.open();
                 // setTimeout(() => sseChannel.close(), 10000);
-                const A_MSG = metaMsg.getAttributes();
-                /** @type {TeqFw_Web_Front_Store_IDB} */
-                const idb = db.getDb();
-                await idb.open();
-                const trx = await idb.startTransaction([metaMsg, metaBand]);
-                const idBand = await idb.add(trx, metaBand, {});
-                const idMsg = await idb.add(trx, metaMsg, {[A_MSG.BAND_ID]: idBand});
-                const bp = true;
-                trx.commit();
+                // const A_MSG = metaMsg.getAttributes();
+                // /** @type {TeqFw_Web_Front_Store_IDB} */
+                // const idb = db.getDb();
+                // await idb.open();
+                // const trx = await idb.startTransaction([metaMsg, metaBand]);
+                // const idBand = await idb.add(trx, metaBand, {});
+                // const idMsg = await idb.add(trx, metaMsg, {[A_MSG.BAND_ID]: idBand});
+                // const bp = true;
+                // trx.commit();
             }
         },
     };

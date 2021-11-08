@@ -27,7 +27,7 @@ export default class Fl32_Dup_Front_Model_UI_Led {
         /** @type {{value: Fl32_Dup_Front_Dto_Contacts_Card.Dto[]}} */
         const _data = ref(STATE.OFF);
         let isOffline = false;
-        let isConnected = true; // TODO: change to 'false'
+        let isConnected = false;
         let isAjax = false;
 
         // DEFINE INNER FUNCTIONS

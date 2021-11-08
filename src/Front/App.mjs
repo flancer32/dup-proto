@@ -31,6 +31,8 @@ export default class Fl32_Dup_Front_App {
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
+        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
+        const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -132,6 +134,7 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouteToSignIn(DEF.ROUTE_USER_CREATE);
             await _session.open({router});
+            await mgrSse.open(); // open SSE connection
         }
 
         /**
