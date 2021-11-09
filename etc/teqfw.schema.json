@@ -7,7 +7,7 @@
           "attr": {
             "user_ref": {"type": "ref"},
             "nick": {"type": "string"},
-            "key_pub": {"type": "string"}
+            "key_pub": {"type": "text"}
           },
           "index": {
             "PK": {"type": "primary", "attrs": ["user_ref"]}

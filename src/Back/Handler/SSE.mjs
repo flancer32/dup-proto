@@ -25,6 +25,8 @@ export default function (spec) {
     const mAddress = spec['TeqFw_Web_Back_Model_Address$'];
     /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
     const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
+    /** @type {Fl32_Dup_Shared_SSE_Authorize} */
+    const dtoAuth = spec['Fl32_Dup_Shared_SSE_Authorize$'];
 
     // DEFINE INNER FUNCTIONS
     /**
@@ -80,7 +82,10 @@ export default function (spec) {
                     stream.write(`id: ${id++}\n\n`);
                 }
 
-                respond({sessionId: 'some UID'}, 'authorize');
+                const auth = dtoAuth.createDto();
+                auth.connectionId = '4';
+                auth.payload = 'secret';
+                respond(auth, 'authorize');
 
                 // TODO: add stream closing function
                 regSse.add(respond);

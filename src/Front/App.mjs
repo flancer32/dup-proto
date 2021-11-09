@@ -134,7 +134,8 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouteToSignIn(DEF.ROUTE_USER_CREATE);
             await _session.open({router});
-            await mgrSse.open(); // open SSE connection
+            if (await _session.checkUserAuthenticated())
+                await mgrSse.open(); // open SSE connection
         }
 
         /**

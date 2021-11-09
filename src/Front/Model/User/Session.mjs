@@ -14,7 +14,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
         let _routeRedirect, _routeSignIn;
         /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
         let _currentUser;
-        const bp = 5;
+
         // DEFINE INSTANCE METHODS
 
         this.checkUserAuthenticated = async function (router) {

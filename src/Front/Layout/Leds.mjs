@@ -22,12 +22,14 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Model_UI_Led} */
     const modLed = spec['Fl32_Dup_Front_Model_UI_Led$'];
+    /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
+    const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
     // DEFINE WORKING VARS
     /** @type {typeof Fl32_Dup_Front_Model_UI_Led.STATE} */
     const STATE = modLed.getStates();
     const template = `
-<q-btn dense flat round icon="lens" size="8.5px" :color="color" />
+<q-btn dense flat round icon="lens" size="8.5px" :color="color" v-on:click="action"/>
 `;
     /**
      * Template to create new component instances using Vue.
@@ -57,7 +59,13 @@ export default function (spec) {
                 }
             }
         },
-        methods: {},
+        methods: {
+            async action() {
+                const state = modLed.getRef().value;
+                if (state === STATE.NET_OK)
+                    await mgrSse.open();
+            }
+        },
         async mounted() {
         },
     };

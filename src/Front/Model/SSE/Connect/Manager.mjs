@@ -11,6 +11,8 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
         const modBand = spec['Fl32_Dup_Front_Model_Msg_Band$'];
         /** @type {Fl32_Dup_Front_Dto_Message} */
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
+        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize.handler|function} */
+        const hndlAuthorize = spec['Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize$'];
 
         // DEFINE INSTANCE METHODS
         this.isActive = function () {
@@ -42,6 +44,8 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
                 try {
                     const text = event.data;
                     const msg = JSON.parse(text);
+                    const sessId = msg.sessionId;
+
                     console.log(`authorize: ${text}`);
                 } catch (e) {
                     console.log(text);
@@ -49,7 +53,7 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
             }
 
             const handlers = {
-                authorize: handlerAuthorize,
+                authorize: hndlAuthorize,
                 message: handlerMessage,
             };
             await _connect.open('./sse/channel', handlers);
