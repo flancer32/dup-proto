@@ -19,8 +19,9 @@ export default function (spec) {
     const session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {TeqFw_Web_Front_Service_Gate} */
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
-    /** @type {Fl32_Dup_Front_Model_Key_Manager} */
-    const mgrKey = spec['Fl32_Dup_Front_Model_Key_Manager$'];
+    // TODO: change to interface after WF-516
+    /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
+    const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
     const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
@@ -80,9 +81,7 @@ export default function (spec) {
         methods: {
             async create() {
                 // generate keys for asymmetric encryption
-                const keyPair = await mgrKey.generateKeyAsymmetric();
-                const keyPriv = await mgrKey.exportKeyPrivate(keyPair);
-                const keyPub = await mgrKey.exportKeyPublic(keyPair);
+                const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
@@ -93,16 +92,17 @@ export default function (spec) {
                 req.nick = this.fldNick;
                 req.keyAuth = dto.subscription.keys.auth;
                 req.keyP256dh = dto.subscription.keys.p256dh;
-                req.keyPub = keyPub;
+                req.keyPub = keys.publicKey;
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
                 const res = await gate.send(req, routeCreate);
                 // save user ID with key into IDB
                 if (res.userId) {
                     dto.id = res.userId;
+                    dto.serverPubKey = res.serverPublicKey;
                     dto.key = dtoKey.createDto();
-                    dto.key.public = keyPub;
-                    dto.key.private = keyPriv;
+                    dto.key.public = keys.publicKey;
+                    dto.key.secret = keys.secretKey;
                     await store.set(metaUser.getEntityName(), dto);
                     this.isRegistered = true;
                     setTimeout(() => {
@@ -132,10 +132,8 @@ export default function (spec) {
                     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
                     const res = await gate.send(req, routeLoadKey);
                     console.log(`key: ${res.key}`);
+                    /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(res.key);
-                    console.log(pushSubscription.subscriptionId);
-                    console.log(pushSubscription.endpoint);
-                    console.log(JSON.stringify(pushSubscription));
                     this.hasSubscription = true;
 
                     // save subscription to IDB Store

@@ -3,6 +3,9 @@
  *
  * @namespace Fl32_Dup_Back_WAPI_User_Create
  */
+// MODULE'S IMPORT
+import {join} from "path";
+
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Back_WAPI_User_Create';
 
@@ -13,6 +16,12 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
 
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {Fl32_Dup_Back_Defaults} */
+        const DEF = spec['Fl32_Dup_Back_Defaults$'];
+        /** @type {TeqFw_Core_Back_Config} */
+        const config = spec['TeqFw_Core_Back_Config$'];
+        /** @type {TeqFw_Core_Back_Util.readJson|function} */
+        const readJson = spec['TeqFw_Core_Back_Util.readJson'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
@@ -20,11 +29,26 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
         /** @type {Fl32_Dup_Back_Act_User_Create.act|function} */
         const actCreate = spec['Fl32_Dup_Back_Act_User_Create$'];
 
+        // DEFINE WORKING VARS / PROPS
+        let _publicKey;
+
         // DEFINE INSTANCE METHODS
         this.getRouteFactory = () => route;
 
         this.getService = function () {
             // DEFINE INNER FUNCTIONS
+            /**
+             * Load server's public key from the file
+             * @return {string}
+             */
+            function loadPublicKey() {
+                // load key from local file
+                const root = config.getBoot().projectRoot;
+                const path = join(root, DEF.FILE_CRYPTO_KEYS);
+                const keys = readJson(path);
+                return keys?.publicKey;
+            }
+
             /**
              * @param {TeqFw_Web_Back_Api_Service_Context} context
              * @return Promise<void>
@@ -49,6 +73,7 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
                         keyP256dh: req.keyP256dh,
                     });
                     res.userId = userId;
+                    res.serverPublicKey = _publicKey;
                     await trx.commit();
                 } catch (error) {
                     await trx.rollback();
@@ -57,6 +82,7 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
             }
 
             // MAIN FUNCTIONALITY
+            _publicKey = loadPublicKey();
             Object.defineProperty(service, 'name', {value: `${NS}.service`});
             return service;
         }

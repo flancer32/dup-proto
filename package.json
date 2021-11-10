@@ -37,6 +37,8 @@
     "@teqfw/web-push": "*",
     "mysql2": "*",
     "sqlite3": "*",
+    "tweetnacl": "*",
+    "tweetnacl-util": "*",
     "web-push": "^3"
   },
   "devDependencies": {

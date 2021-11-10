@@ -89,9 +89,9 @@ export default function (spec) {
 
                 // TODO: add stream closing function
                 regSse.add(respond);
-                // setTimeout(() => {
-                //     stream.end('finish SSE');
-                // }, 3000);
+                setTimeout(() => {
+                    stream.end('finish SSE');
+                }, 10000);
 
                 context.markRequestComplete();
             }

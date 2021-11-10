@@ -27,6 +27,8 @@ class Request {
  * @memberOf Fl32_Dup_Shared_WAPI_User_Create
  */
 class Response {
+    /** @type {string} */
+    serverPublicKey;
     /** @type {number} */
     userId;
 }
@@ -69,6 +71,7 @@ class Factory {
          */
         this.createRes = function (data = null) {
             const res = new Response();
+            res.serverPublicKey = castString(data?.serverPublicKey);
             res.userId = castInt(data?.userId);
             return res;
         }

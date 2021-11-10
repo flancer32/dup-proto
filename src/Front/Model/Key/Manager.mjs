@@ -1,6 +1,6 @@
 /**
  * Key manager to generate keys, import/export keys, etc.
- * @TeqFw_Core_Shared_Util.b642ab Fl32_Dup_Front_Model_Key_Manager
+ * @namespace Fl32_Dup_Front_Model_Key_Manager
  */
 
 // MODULE'S VARS

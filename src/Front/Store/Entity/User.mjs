@@ -14,6 +14,7 @@ const ATTR = {
     ID: 'id',
     KEY: 'key',
     NICK: 'nick',
+    SERVER_PUB_KEY: 'serverPubKey',
     SUBSCRIPTION: 'subscription',
 };
 
@@ -28,6 +29,8 @@ class Dto {
     key;
     /** @type {string} */
     nick;
+    /** @type {string} */
+    serverPubKey;
     /** @type {Fl32_Dup_Front_Dto_User_Subscription.Dto} */
     subscription;
 }
@@ -57,6 +60,7 @@ export default class Fl32_Dup_Front_Store_Entity_User {
             res.id = castInt(data?.id)
             res.key = dtoKey.createDto(data?.key);
             res.nick = castString(data?.nick)
+            res.serverPubKey = castString(data?.serverPubKey)
             res.subscription = dtoSubscript.createDto(data?.subscription);
             return res;
         }

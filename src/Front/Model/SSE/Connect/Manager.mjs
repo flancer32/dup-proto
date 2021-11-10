@@ -40,18 +40,6 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
                 }
             }
 
-            function handlerAuthorize(event) {
-                try {
-                    const text = event.data;
-                    const msg = JSON.parse(text);
-                    const sessId = msg.sessionId;
-
-                    console.log(`authorize: ${text}`);
-                } catch (e) {
-                    console.log(text);
-                }
-            }
-
             const handlers = {
                 authorize: hndlAuthorize,
                 message: handlerMessage,

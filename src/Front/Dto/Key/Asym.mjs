@@ -9,8 +9,8 @@ const NS = 'Fl32_Dup_Front_Dto_Key_Asym';
  * @type {Object}
  */
 const ATTR = {
-    PRIVATE: 'private',
     PUBLIC: 'public',
+    SECRET: 'secret',
 };
 
 // MODULE'S CLASSES
@@ -20,9 +20,9 @@ const ATTR = {
 class Dto {
     static name = `${NS}.Dto`;
     /** @type {string} */
-    private;
-    /** @type {string} */
     public;
+    /** @type {string} */
+    secret;
 }
 
 /**
@@ -41,7 +41,7 @@ export default class Fl32_Dup_Front_Dto_Key_Asym {
          */
         this.createDto = function (data) {
             const res = new Dto();
-            res.private = castString(data?.private);
+            res.secret = castString(data?.secret);
             res.public = castString(data?.public);
             return res;
         }

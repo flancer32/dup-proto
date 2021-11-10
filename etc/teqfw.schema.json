@@ -2,6 +2,22 @@
   "package": {
     "app": {
       "entity": {
+        "cfg": {
+          "comment": "Configuration data for this application.",
+          "attr": {
+            "key": {
+              "comment": "Path to current config value (/path/to/option)",
+              "type": "string"
+            },
+            "value": {
+              "comment": "Any value stored as text.",
+              "type": "text"
+            }
+          },
+          "index": {
+            "PK": {"type": "primary", "attrs": ["key"]}
+          }
+        },
         "user": {
           "comment": "User data in this app.",
           "attr": {
