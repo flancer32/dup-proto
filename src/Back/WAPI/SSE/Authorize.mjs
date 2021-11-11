@@ -29,8 +29,8 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         const config = spec['TeqFw_Core_Back_Config$'];
         /** @type {TeqFw_Core_Back_Util.readJson|function} */
         const readJson = spec['TeqFw_Core_Back_Util.readJson'];
-        /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
-        const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
+        /** @type {Fl32_Dup_Back_Model_SSE_Registry} */
+        const registry = spec['Fl32_Dup_Back_Model_SSE_Registry$'];
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
@@ -87,8 +87,12 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
                     /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
                     const enigma = await factCrypto.createEnigmaAsym();
                     enigma.setKeys(publicBase64, secretBase64);
+                    /** @type {Fl32_Dup_Shared_SSE_Authorize.Dto} */
                     const decrypted = enigma.decryptAndVerify(token);
-                    console.log(`HOP: ${JSON.stringify(decrypted)}.`);
+                    if (decrypted) {
+                        console.log(`HOP: ${JSON.stringify(decrypted)}.`);
+                        registry.setState(decrypted.connectionId, 'authorized')
+                    }
                     await trx.commit();
                 } catch (error) {
                     await trx.rollback();

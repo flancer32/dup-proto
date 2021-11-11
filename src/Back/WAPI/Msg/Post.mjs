@@ -17,8 +17,8 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Factory} */
         const route = spec['Fl32_Dup_Shared_WAPI_Msg_Post#Factory$'];
-        /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
-        const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
+        /** @type {Fl32_Dup_Back_Model_SSE_Registry} */
+        const regSse = spec['Fl32_Dup_Back_Model_SSE_Registry$'];
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */

@@ -1,5 +1,5 @@
 /**
- * Experimental SSE (Server Side Events) handler.
+ * Experimental SSE (Server Side Events) handler ([processor|dispatcher]???).
  * Try to use function factory instead of class factory.
  *
  * @namespace Fl32_Dup_Back_Handler_SSE
@@ -23,10 +23,12 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Web_Back_Model_Address} */
     const mAddress = spec['TeqFw_Web_Back_Model_Address$'];
-    /** @type {Fl32_Dup_Back_Model_Registry_Sse} */
-    const regSse = spec['Fl32_Dup_Back_Model_Registry_Sse$'];
+    /** @type {Fl32_Dup_Back_Model_SSE_Registry} */
+    const registry = spec['Fl32_Dup_Back_Model_SSE_Registry$'];
     /** @type {Fl32_Dup_Shared_SSE_Authorize} */
     const dtoAuth = spec['Fl32_Dup_Shared_SSE_Authorize$'];
+    /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item} */
+    const metaDtoRegItem = spec['Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item$'];
 
     // DEFINE INNER FUNCTIONS
     /**
@@ -44,13 +46,29 @@ export default function (spec) {
             const path = ctx.getPath();
             const address = mAddress.parsePath(path);
             if (address.space === DEF.SHARED.SPACE_SSE) {
-                ctx.setResponseHeader(H2.HTTP2_HEADER_CONTENT_TYPE, 'text/event-stream');
-                ctx.setResponseHeader(H2.HTTP2_HEADER_CACHE_CONTROL, 'no-cache');
-                ctx.markRequestProcessed();
-
-                // setup stream
+                // pin connection stream to the current scope ...
                 /** @type {ServerHttp2Stream} */
                 const stream = ctx.getStream();
+
+                // ... and create functions to process outgoing events for this connection
+                function respond(payload, msgId, event) {
+                    if (event) stream.write(`event: ${event}\n`);
+                    stream.write(`data: ${JSON.stringify(payload)}\n`);
+                    stream.write(`id: ${msgId++}\n\n`);
+                }
+
+                function close(payload) {
+                    stream.end(payload);
+                }
+
+                // save connection data to SSE registry
+                const item = metaDtoRegItem.createDto();
+                item.respond = respond;
+                item.close = close;
+                item.messageId = 1;
+                const connId = registry.add(item);
+
+                // TMP: add listeners to trace SSE connection events
                 stream.addListener('aborted', () => console.log('SSE stream aborted.'));
                 stream.addListener('close', () => console.log('SSE stream close.'));
                 stream.addListener('data', () => console.log('SSE stream data.'));
@@ -74,24 +92,19 @@ export default function (spec) {
                     [H2.HTTP2_HEADER_CONTENT_TYPE]: 'text/event-stream',
                     [H2.HTTP2_HEADER_CACHE_CONTROL]: 'no-cache',
                 });
-                let id = 5;
 
-                function respond(msg, event) {
-                    if (event) stream.write(`event: ${event}\n`);
-                    stream.write(`data: ${JSON.stringify(msg)}\n`);
-                    stream.write(`id: ${id++}\n\n`);
-                }
-
+                // TODO: this is application specific logic
                 const auth = dtoAuth.createDto();
-                auth.connectionId = '4';
-                auth.payload = 'secret';
-                respond(auth, 'authorize');
-
-                // TODO: add stream closing function
-                regSse.add(respond);
+                auth.connectionId = connId;
+                auth.payload = 'useItOrRemoveIt!';
+                registry.sendMessage(connId, auth, 'authorize');
+                // close connection if not authorized
                 setTimeout(() => {
-                    stream.end('finish SSE');
-                }, 10000);
+                    if (item.state === undefined) {
+                        item.close();
+                        console.log(`Connection '${item.connectionId}' is cosed.`);
+                    }
+                }, 5000);
 
                 context.markRequestComplete();
             }

@@ -19,7 +19,7 @@ const ATTR = {
  */
 class Dto {
     static name = `${NS}.Dto`;
-    /** @type {string} */
+    /** @type {number} */
     connectionId;
     /** @type {string} */
     payload;
@@ -33,6 +33,8 @@ export default class Fl32_Dup_Shared_SSE_Authorize {
     constructor(spec) {
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
+        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
 
         // DEFINE INSTANCE METHODS
         /**
@@ -41,7 +43,7 @@ export default class Fl32_Dup_Shared_SSE_Authorize {
          */
         this.createDto = function (data) {
             const res = new Dto();
-            res.connectionId = castString(data?.connectionId);
+            res.connectionId = castInt(data?.connectionId);
             res.payload = castString(data?.payload);
             return res;
         }
