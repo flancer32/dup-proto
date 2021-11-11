@@ -10,9 +10,12 @@ export default function (spec) {
     const _session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {Fl32_Dup_Shared_SSE_Authorize} */
     const sseAuth = spec['Fl32_Dup_Shared_SSE_Authorize$'];
-    const {box, randomBytes} = spec['Fl32_Dup_Front_Lib_Nacl'];
-    const {decodeBase64, encodeBase64, decodeUTF8, encodeUTF8} = spec['Fl32_Dup_Front_Lib_Nacl_Util'];
-
+    /** @type {TeqFw_Web_Front_Service_Gate} */
+    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Factory} */
+    const wapiAuth = spec['Fl32_Dup_Shared_WAPI_SSE_Authorize#Factory$'];
+    /** @type {Fl32_Dup_Front_Factory_Crypto} */
+    const factCrypto = spec['Fl32_Dup_Front_Factory_Crypto$'];
 
     /**
      * @param {} event
@@ -22,44 +25,30 @@ export default function (spec) {
     async function handler(event) {
         const text = event.data;
         try {
+            // extract input data from event
             const msg = JSON.parse(text);
             const dto = sseAuth.createDto(msg);
             const connectionId = dto.connectionId;
             const payload = dto.payload;
+            // get encryption keys
             /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
             const user = _session.getUser();
             const serverPub = user.serverPubKey;
             const userSec = user.key.secret;
-
-            const abPub = decodeBase64(serverPub);
-            const abSec = decodeBase64(userSec);
-
-            const newNonce = () => randomBytes(box.nonceLength);
-
-            const encrypt = (
-                secretOrSharedKey,
-                json,
-                key
-            ) => {
-                const nonce = newNonce();
-                const messageUint8 = decodeUTF8(JSON.stringify(json));
-                const encrypted = key
-                    ? box(messageUint8, nonce, key, secretOrSharedKey)
-                    : box.after(messageUint8, nonce, secretOrSharedKey);
-
-                const fullMessage = new Uint8Array(nonce.length + encrypted.length);
-                fullMessage.set(nonce);
-                fullMessage.set(encrypted, nonce.length);
-
-                const base64FullMessage = encodeBase64(fullMessage);
-                return base64FullMessage;
-            };
-
-            debugger
-
-            const sharedA = box.before(abPub, abSec);
-
-            const encrypted = encrypt(sharedA, payload);
+            // compose and encrypt payload
+            const source = {connectionId, payload};
+            /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
+            const enigma = await factCrypto.createEnigmaAsym();
+            enigma.setKeys(serverPub, userSec);
+            const encrypted = enigma.encryptAndSign(source);
+            // send encrypted data to server using WAPI
+            /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Request} */
+            const req = wapiAuth.createReq();
+            req.userId = user.id;
+            req.token = encrypted;
+            // noinspection JSValidateTypes
+            /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Response} */
+            const res = await gate.send(req, wapiAuth);
 
         } catch
             (e) {
