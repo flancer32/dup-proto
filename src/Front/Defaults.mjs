@@ -9,6 +9,7 @@ export default class Fl32_Dup_Front_Defaults {
     ROUTE_CONTACTS_LIST = '/contacts/list';
     ROUTE_HOLLOW_OCCUPY = '/hollow/occupy';
     ROUTE_HOME = '/';
+    ROUTE_INVITE_CHECK = '/invite/check/:code';
     ROUTE_LOGS = '/logs';
 
     /** @type {Fl32_Dup_Shared_Defaults} */

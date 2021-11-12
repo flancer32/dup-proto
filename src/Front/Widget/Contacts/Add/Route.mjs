@@ -19,6 +19,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_Web_Front_Api_Dto_Config} */
+    const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
     /** @type {TeqFw_Web_Front_Service_Gate} */
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory} */
@@ -120,7 +122,26 @@ export default function (spec) {
                 req.userId = userId;
                 /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Response} */
                 const res = await gate.send(req, wapiInvite);
-                debugger
+                if (res?.code) {
+                    const code = res.code;
+                    // compose URL to add new friend
+                    const host = `https://${config.urlBase}`;
+                    const route = DEF.ROUTE_INVITE_CHECK.replace(':code', code);
+                    const url = `${host}/#${route}`;
+                    // open sharing options or print out sign up link to console
+                    if (self.navigator.share) {
+                        // smartphone mode
+                        const data = {
+                            title: 'D.U.P.L.O.',
+                            text: this.$t('wg.contact.add.phoneMsg'),
+                            url,
+                        };
+                        await self.navigator.share(data);
+                    } else {
+                        // browser mode
+                        console.log(`invitation url: ${url}`);
+                    }
+                }
             }
         },
         async mounted() {

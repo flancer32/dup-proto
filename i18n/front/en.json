@@ -46,7 +46,8 @@
           "one": "One-time",
           "many": "Reusable",
           "title": "Code usability"
-        }
+        },
+        "phoneMsg": "D.U.P.L.O. is waiting for you."
       }
     },
     "hollow": {
