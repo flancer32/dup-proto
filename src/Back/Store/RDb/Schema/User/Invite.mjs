@@ -1,17 +1,17 @@
 /**
- *  Meta data for '/app/user/signup' entity.
- *  @namespace Fl32_Dup_Back_Store_RDb_Schema_User_Signup
+ *  Meta data for '/app/user/invite' entity.
+ *  @namespace Fl32_Dup_Back_Store_RDb_Schema_User_Invite
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Back_Store_RDb_Schema_User_Signup';
+const NS = 'Fl32_Dup_Back_Store_RDb_Schema_User_Invite';
 /**
  * Path to the entity in plugin's DEM.
  * @type {string}
  */
-const ENTITY = '/app/user/signup';
+const ENTITY = '/app/user/invite';
 
 /**
- * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User_Signup
+ * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User_Invite
  * @type {Object}
  */
 const ATTR = {
@@ -23,7 +23,7 @@ const ATTR = {
 
 // MODULE'S CLASSES
 /**
- * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User_Signup
+ * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User_Invite
  */
 class Dto {
     static name = `${NS}.Dto`;
@@ -53,7 +53,7 @@ class Dto {
 /**
  * @implements TeqFw_Db_Back_RDb_Meta_IEntity
  */
-export default class Fl32_Dup_Back_Store_RDb_Schema_User_Signup {
+export default class Fl32_Dup_Back_Store_RDb_Schema_User_Invite {
     constructor(spec) {
         /** @type {Fl32_Dup_Back_Defaults} */
         const DEF = spec['Fl32_Dup_Back_Defaults$'];

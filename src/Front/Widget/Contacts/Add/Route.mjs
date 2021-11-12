@@ -5,8 +5,8 @@
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Widget_Contacts_Add_Route';
-const LifeCountValues = {ONE: 1, MANY: 2}
-const LifeTimeValues = {MIN5: 1, HOUR: 2, DAY: 3}
+const LIFE_COUNT = {ONE: 1, MANY: 2}
+const LIFE_TIME = {MIN5: 1, HOUR: 2, DAY: 3}
 
 // MODULE'S FUNCTIONS
 /**
@@ -18,7 +18,11 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
-    const _session = spec['TeqFw_User_Front_Api_ISession$'];
+    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_Web_Front_Service_Gate} */
+    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory} */
+    const wapiInvite = spec['Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -75,8 +79,8 @@ export default function (spec) {
         components: {},
         data() {
             return {
-                lifeCount: LifeCountValues.ONE,
-                lifeTime: LifeTimeValues.MIN5,
+                lifeCount: LIFE_COUNT.ONE,
+                lifeTime: LIFE_TIME.MIN5,
                 loading: false,
                 message: null,
             };
@@ -84,25 +88,43 @@ export default function (spec) {
         computed: {
             lifeCountOpts() {
                 return [
-                    {label: this.$t('wg.contact.add.count.one'), value: LifeCountValues.ONE},
-                    {label: this.$t('wg.contact.add.count.many'), value: LifeCountValues.MANY},
+                    {label: this.$t('wg.contact.add.count.one'), value: LIFE_COUNT.ONE},
+                    {label: this.$t('wg.contact.add.count.many'), value: LIFE_COUNT.MANY},
                 ];
             },
             lifeTimeOpts() {
                 return [
-                    {label: this.$t('wg.contact.add.time.min5'), value: LifeTimeValues.MIN5},
-                    {label: this.$t('wg.contact.add.time.hour1'), value: LifeTimeValues.HOUR},
-                    {label: this.$t('wg.contact.add.time.day1'), value: LifeTimeValues.DAY},
+                    {label: this.$t('wg.contact.add.time.min5'), value: LIFE_TIME.MIN5},
+                    {label: this.$t('wg.contact.add.time.hour1'), value: LIFE_TIME.HOUR},
+                    {label: this.$t('wg.contact.add.time.day1'), value: LIFE_TIME.DAY},
                 ];
             }
         },
         methods: {
             async onSubmit() {
-
+                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+                const userCurrent = session.getUser();
+                const userId = userCurrent.id;
+                const date = new Date();
+                if (this.lifeTime === LIFE_TIME.HOUR) {
+                    date.setHours(date.getHours() + 1);
+                } else if (this.lifeTime === LIFE_TIME.DAY) {
+                    date.setDate(date.getDate() + 1);
+                } else {
+                    date.setMinutes(date.getMinutes() + 5); // 5 min by default
+                }
+                /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Request} */
+                const req = wapiInvite.createReq();
+                req.onetime = (this.lifeCount === LIFE_COUNT.ONE);
+                req.dateExpired = date;
+                req.userId = userId;
+                /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Response} */
+                const res = await gate.send(req, wapiInvite);
+                debugger
             }
         },
         async mounted() {
-            await _session.checkUserAuthenticated();
+            await session.checkUserAuthenticated();
 
         },
     };

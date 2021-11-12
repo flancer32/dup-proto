@@ -40,8 +40,8 @@
       "package": {
         "user": {
           "entity": {
-            "signup": {
-              "comment": "Sign up codes for users registration.",
+            "invite": {
+              "comment": "Invitation codes for users registration.",
               "attr": {
                 "code": {"type": "string"},
                 "user_ref": {"type": "ref"},
