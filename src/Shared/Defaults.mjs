@@ -6,6 +6,7 @@ export default class Fl32_Dup_Shared_Defaults {
 
     SPACE_SSE = 'sse';
 
+    WAPI_HOLLOW_IS_FREE = '/hollow/isFree';
     WAPI_MSG_POST = '/msg/post';
     WAPI_SSE_AUTHORIZE = '/sse/authorize';
     WAPI_USER_LIST = '/user/list';

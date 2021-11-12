@@ -1,16 +1,16 @@
 /**
- * Route to create new user on front app startup.
+ * Route to check hollow state on front app startup and create new user if the hollow is empty.
  *
- * @namespace Fl32_Dup_Front_Widget_User_Create_Route
+ * @namespace Fl32_Dup_Front_Widget_Hollow_Occupy_Route
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_User_Create_Route';
+const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
 
 // MODULE'S FUNCTIONS
 /**
  * Factory to create template for new Vue component instances.
  *
- * @returns {Fl32_Dup_Front_Widget_User_Create_Route.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Hollow_Occupy_Route.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -23,9 +23,11 @@ export default function (spec) {
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
-    const routeLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
+    const wapiLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
-    const routeCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
+    const wapiCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
+    /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Factory} */
+    const wapiIsFree = spec['Fl32_Dup_Shared_WAPI_Hollow_IsFree#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_Entity_User} */
@@ -37,16 +39,19 @@ export default function (spec) {
     const template = `
 <layout-empty>
     <q-card class="bg-white" style="min-width:245px">
-        <q-card-section v-if="!hasSubscription">
-            <div class="text-subtitle2">{{$t('wg.user.create.msg.subscribe')}}</div>
+        <q-card-section v-if="isHollowOccupied">
+            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.occupied')}}</div>
+        </q-card-section>
+        <q-card-section v-if="needSubscribe">
+            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.subscribe')}}</div>
             <q-card-actions align="center">
                 <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
             </q-card-actions>
         </q-card-section>
         <q-card-section v-if="hasSubscription && !isRegistered">
-            <div class="text-subtitle2">{{$t('wg.user.create.msg.nick')}}</div>
+            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.nick')}}</div>
             <q-input
-                    :label="$t('wg.user.create.nick.label')"
+                    :label="$t('wg.hollow.occupy.nick.label')"
                     outlined
                     v-model="fldNick"
             ></q-input>
@@ -55,7 +60,7 @@ export default function (spec) {
             </q-card-actions>
         </q-card-section>
         <q-card-section v-if="isRegistered">
-            <div class="text-subtitle2">{{$t('wg.user.create.msg.success')}}</div>
+            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.success')}}</div>
         </q-card-section>
     </q-card>
 </layout-empty>
@@ -64,7 +69,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_User_Create_Route
+     * @memberOf Fl32_Dup_Front_Widget_Hollow_Occupy_Route
      */
     return {
         teq: {package: DEF.SHARED.NAME},
@@ -74,40 +79,59 @@ export default function (spec) {
         data() {
             return {
                 fldNick: null,
-                hasSubscription: false,
+                isHollowOccupied: false,
                 isRegistered: false,
+                needRegister: false,
+                needSubscribe: false,
+                hasSubscription: false,
             };
         },
         methods: {
             async create() {
+                // DEFINE INNER FUNCTIONS
+                /**
+                 * @param {string} nick
+                 * @param {Fl32_Dup_Front_Dto_User_Subscription.Dto} subscript
+                 * @param {string} pubKey
+                 * @return {Promise<Fl32_Dup_Shared_WAPI_User_Create.Response|boolean>}
+                 */
+                async function wapi(nick, subscript, pubKey) {
+                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
+                    const req = wapiCreate.createReq();
+                    req.endpoint = subscript.endpoint;
+                    req.nick = nick;
+                    req.keyAuth = subscript.keys.auth;
+                    req.keyP256dh = subscript.keys.p256dh;
+                    req.keyPub = pubKey;
+                    // noinspection JSValidateTypes
+                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
+                    return await gate.send(req, wapiCreate);
+                }
+
+                // MAIN FUNCTIONALITY
                 // generate keys for asymmetric encryption
                 const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
-                /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
-                const req = routeCreate.createReq();
-                req.endpoint = dto.subscription.endpoint;
-                req.nick = this.fldNick;
-                req.keyAuth = dto.subscription.keys.auth;
-                req.keyP256dh = dto.subscription.keys.p256dh;
-                req.keyPub = keys.publicKey;
-                // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
-                const res = await gate.send(req, routeCreate);
-                // save user ID with key into IDB
+                const res = await wapi(this.fldNick, dto.subscription, keys.publicKey);
+                // generate symmetric key and save user data into IDB
                 if (res.userId) {
                     dto.id = res.userId;
+                    dto.hollowSecretKey = await mgrKey.generateSecretKey();
                     dto.serverPubKey = res.serverPublicKey;
                     dto.key = dtoKey.createDto();
                     dto.key.public = keys.publicKey;
                     dto.key.secret = keys.secretKey;
                     await store.set(metaUser.getEntityName(), dto);
                     this.isRegistered = true;
+                    // redirect user to homepage
                     setTimeout(() => {
                         this.$router.push(DEF.ROUTE_HOME);
                     }, 2000);
+                } else {
+                    console.log(`Some error is occurred on the server, cannot get ID for new user.`);
                 }
             },
 
@@ -127,15 +151,13 @@ export default function (spec) {
                 // MAIN FUNCTIONALITY
                 try {
                     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Request} */
-                    const req = routeLoadKey.createReq();
+                    const req = wapiLoadKey.createReq();
                     // noinspection JSValidateTypes
                     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
-                    const res = await gate.send(req, routeLoadKey);
+                    const res = await gate.send(req, wapiLoadKey);
                     console.log(`key: ${res.key}`);
                     /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(res.key);
-                    this.hasSubscription = true;
-
                     // save subscription to IDB Store
                     /** @type {typeof Fl32_Dup_Front_Store_Entity_User.ATTR} */
                     const ATTR = metaUser.getAttributes();
@@ -143,6 +165,9 @@ export default function (spec) {
                     // noinspection JSCheckFunctionSignatures
                     const dto = metaUser.createDto({[ATTR.SUBSCRIPTION]: json});
                     await store.set(metaUser.getEntityName(), dto);
+                    // switch UI
+                    this.hasSubscription = true;
+                    this.needSubscribe = false;
                 } catch (e) {
                     console.error(e);
                 }
@@ -153,14 +178,28 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
+            // DEFINE INNER FUNCTIONS
+            async function canRegisterNewUser() {
+                /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Response} */
+                const res = await gate.send({}, wapiIsFree);
+                return (res?.isFree === true);
+            }
+
+            // MAIN FUNCTIONALITY
             const authorized = await session.checkUserAuthenticated();
             if (authorized) {
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
-                // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
-                const dto = await store.get(metaUser.getEntityName());
-                this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+                if (await canRegisterNewUser()) {
+                    // noinspection JSValidateTypes
+                    /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+                    const dto = await store.get(metaUser.getEntityName());
+                    this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+                    this.needSubscribe = !this.hasSubscription;
+                    if (this.hasSubscription) this.needRegister = (dto?.id !== undefined);
+                } else {
+                    this.isHollowOccupied = true;
+                }
             }
         },
     };

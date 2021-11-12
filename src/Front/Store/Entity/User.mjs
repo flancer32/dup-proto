@@ -11,6 +11,7 @@ const ENTITY = '/user';
  * @type {Object}
  */
 const ATTR = {
+    HOLLOW_SECRET_KEY: 'hollowSecretKey',
     ID: 'id',
     KEY: 'key',
     NICK: 'nick',
@@ -23,6 +24,8 @@ const ATTR = {
  */
 class Dto {
     static name = `${NS}.Dto`;
+    /** @type {string} */
+    hollowSecretKey;
     /** @type {number} */
     id;
     /** @type {Fl32_Dup_Front_Dto_Key_Asym.Dto} */
@@ -57,6 +60,7 @@ export default class Fl32_Dup_Front_Store_Entity_User {
          */
         this.createDto = function (data) {
             const res = new Dto();
+            res.hollowSecretKey = castString(data?.hollowSecretKey)
             res.id = castInt(data?.id)
             res.key = dtoKey.createDto(data?.key);
             res.nick = castString(data?.nick)
@@ -69,12 +73,9 @@ export default class Fl32_Dup_Front_Store_Entity_User {
 
         this.getAttrNames = () => Object.values(ATTR);
 
-        /**
-         * Get entity name: '@vnd/plugin/path/to/entity'.
-         * @return {string}
-         */
-        this.getEntityName = function () {
-            return `${DEF.SHARED.NAME}${ENTITY}`;
-        }
+        this.getEntityName = () => `${DEF.SHARED.NAME}${ENTITY}`;
+
+        this.getPrimaryKey = () => [ATTR.ID];
     }
+
 }

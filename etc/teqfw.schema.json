@@ -31,7 +31,8 @@
           "relation": {
             "user": {
               "attrs": ["user_ref"],
-              "ref": {"path": "/user", "attrs": ["id"]}
+              "ref": {"path": "/user", "attrs": ["id"]},
+              "action": {"delete": "cascade", "update": "cascade"}
             }
           }
         }

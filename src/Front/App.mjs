@@ -104,8 +104,8 @@ export default class Fl32_Dup_Front_App {
                     component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
                 });
                 router.addRoute({
-                    path: DEF.ROUTE_USER_CREATE,
-                    component: () => container.get('Fl32_Dup_Front_Widget_User_Create_Route$')
+                    path: DEF.ROUTE_HOLLOW_OCCUPY,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Hollow_Occupy_Route$')
                 });
 
                 app.use(router);
@@ -132,10 +132,10 @@ export default class Fl32_Dup_Front_App {
             await initI18n(_root, I18nLib);
             initQuasarUi(_root, QuasarLib);
             const router = initRouter(_root, VueLib, DEF, container);
-            _session.setRouteToSignIn(DEF.ROUTE_USER_CREATE);
+            _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
             await _session.open({router});
-            // if (await _session.checkUserAuthenticated())
-            //     await mgrSse.open(); // open SSE connection
+            if (await _session.checkUserAuthenticated())
+                await mgrSse.open(); // open SSE connection
         }
 
         /**

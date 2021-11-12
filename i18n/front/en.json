@@ -30,9 +30,10 @@
         "title": "Store Configuration"
       }
     },
-    "user": {
-      "create": {
+    "hollow": {
+      "occupy": {
         "msg": {
+          "occupied": "This hollow is occupied by some squirrel.",
           "nick": "Enter your nick and complete registration.",
           "subscribe": "You need to subscribe to notifications first.",
           "success": "You have been successfully registered in the hollow."

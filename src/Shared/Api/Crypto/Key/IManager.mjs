@@ -26,4 +26,12 @@ export default class Fl32_Dup_Shared_Api_Crypto_Key_IManager {
         };
     }
 
+    /**
+     * Generate key for synchronous encryption.
+     * @return {Promise<string>} base64 encoded key.
+     */
+    async generateSecretKey() {
+        return '';
+    }
+
 }

@@ -9,7 +9,7 @@
 export default class Fl32_Dup_Front_Model_Crypto_Key_Manager {
     constructor(spec) {
         // EXTRACT DEPS
-        const {box} = spec['Fl32_Dup_Front_Lib_Nacl'];
+        const {box, secretbox, randomBytes} = spec['Fl32_Dup_Front_Lib_Nacl'];
         const {decodeBase64, encodeBase64} = spec['Fl32_Dup_Front_Lib_Nacl_Util'];
 
         // DEFINE INSTANCE METHODS
@@ -21,6 +21,8 @@ export default class Fl32_Dup_Front_Model_Crypto_Key_Manager {
             return {secretKey, publicKey};
         }
 
-        this.generateSyncKey = async function () {}
+        this.generateSecretKey = async function () {
+            return encodeBase64(randomBytes(secretbox.keyLength));
+        }
     }
 }
