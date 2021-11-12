@@ -9,7 +9,10 @@
   "navig": {
     "cfg": "Config",
     "chat": "Chat",
-    "contacts": "Contacts",
+    "contacts": {
+      "add": "Add User",
+      "list": "List Contacts"
+    },
     "home": "Home"
   },
   "wg": {
@@ -28,6 +31,22 @@
       "store": {
         "init": "Init IDB Schema",
         "title": "Store Configuration"
+      }
+    },
+    "contact": {
+      "add": {
+        "title": "Create sign up code to add new user to the Hollow",
+        "time": {
+          "day1": "1 day",
+          "hour1": "1 hour",
+          "min5": "5 mins",
+          "title": "Code life-time"
+        },
+        "count": {
+          "one": "One-time",
+          "many": "Reusable",
+          "title": "Code usability"
+        }
       }
     },
     "hollow": {

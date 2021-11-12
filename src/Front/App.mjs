@@ -96,8 +96,12 @@ export default class Fl32_Dup_Front_App {
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
                 });
                 router.addRoute({
-                    path: DEF.ROUTE_CONTACTS,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Route$')
+                    path: DEF.ROUTE_CONTACTS_ADD,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Add_Route$')
+                });
+                router.addRoute({
+                    path: DEF.ROUTE_CONTACTS_LIST,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_List_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOME,
@@ -134,8 +138,8 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
             await _session.open(router);
-            if (await _session.checkUserAuthenticated())
-                await mgrSse.open(); // open SSE connection
+            // if (await _session.checkUserAuthenticated())
+            //     await mgrSse.open(); // open SSE connection
         }
 
         /**

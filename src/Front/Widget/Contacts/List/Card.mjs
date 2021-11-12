@@ -1,16 +1,16 @@
 /**
  * Contacts card.
  *
- * @namespace Fl32_Dup_Front_Widget_Contacts_Card
+ * @namespace Fl32_Dup_Front_Widget_Contacts_List_Card
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Contacts_Card';
+const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Card';
 
 // MODULE'S FUNCTIONS
 /**
  * Factory to create template for new Vue component instances.
  *
- * @returns {Fl32_Dup_Front_Widget_Contacts_Card.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Contacts_List_Card.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -31,7 +31,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_Contacts_Card
+     * @memberOf Fl32_Dup_Front_Widget_Contacts_List_Card
      */
     return {
         teq: {package: DEF.SHARED.NAME},

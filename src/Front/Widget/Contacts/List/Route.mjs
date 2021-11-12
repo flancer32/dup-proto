@@ -1,16 +1,16 @@
 /**
- * 'Contacts' route.
+ * List contacts route.
  *
- * @namespace Fl32_Dup_Front_Widget_Contacts_Route
+ * @namespace Fl32_Dup_Front_Widget_Contacts_List_Route
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Contacts_Route';
+const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Route';
 
 // MODULE'S FUNCTIONS
 /**
  * Factory to create template for new Vue component instances.
  *
- * @returns {Fl32_Dup_Front_Widget_Contacts_Route.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Contacts_List_Route.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -21,8 +21,8 @@ export default function (spec) {
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_List.Factory} */
     const wapiContacts = spec['Fl32_Dup_Shared_WAPI_User_List.Factory$'];
-    /** @type {Fl32_Dup_Front_Widget_Contacts_Card.vueCompTmpl} */
-    const card = spec['Fl32_Dup_Front_Widget_Contacts_Card$'];
+    /** @type {Fl32_Dup_Front_Widget_Contacts_List_Card.vueCompTmpl} */
+    const card = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
     /** @type {Fl32_Dup_Front_Dto_Contacts_Card} */
     const dtoCard = spec['Fl32_Dup_Front_Dto_Contacts_Card$'];
     /** @type {Fl32_Dup_Front_Model_Contacts} */
@@ -43,7 +43,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_Contacts_Route
+     * @memberOf Fl32_Dup_Front_Widget_Contacts_List_Route
      */
     return {
         teq: {package: DEF.SHARED.NAME},
