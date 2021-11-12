@@ -36,6 +36,31 @@
             }
           }
         }
+      },
+      "package": {
+        "user": {
+          "entity": {
+            "signup": {
+              "comment": "Sign up codes for users registration.",
+              "attr": {
+                "code": {"type": "string"},
+                "user_ref": {"type": "ref"},
+                "onetime": {"type": "boolean"},
+                "date_expired": {"type": "datetime"}
+              },
+              "index": {
+                "PK": {"type": "primary", "attrs": ["code"]}
+              },
+              "relation": {
+                "user": {
+                  "attrs": ["user_ref"],
+                  "ref": {"path": "/user", "attrs": ["id"]},
+                  "action": {"delete": "cascade", "update": "cascade"}
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
