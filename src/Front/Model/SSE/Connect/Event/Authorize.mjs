@@ -49,9 +49,12 @@ export default function (spec) {
             // noinspection JSValidateTypes
             /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Response} */
             const res = await gate.send(req, wapiAuth);
-
-        } catch
-            (e) {
+            if (res?.success) {} else if (res?.userNotFound) {
+                // user has no public key in the hollow, delete user data from IDB
+                await _session.deleteUser();
+                await _session.open();
+            }
+        } catch (e) {
             console.log(text);
             console.dir(e);
         }

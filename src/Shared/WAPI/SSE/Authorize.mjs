@@ -23,6 +23,8 @@ class Request {
 class Response {
     /** @type {boolean} */
     success;
+    /** @type {boolean} */
+    userNotFound;
 }
 
 /**
@@ -63,6 +65,7 @@ class Factory {
         this.createRes = function (data = null) {
             const res = new Response();
             res.success = castBool(data?.success);
+            res.userNotFound = castBool(data?.userNotFound);
             return res;
         }
     }

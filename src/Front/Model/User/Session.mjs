@@ -11,7 +11,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
         const metaUser = spec['Fl32_Dup_Front_Store_Entity_User$'];
 
         // DEFINE WORKING VARS / PROPS
-        let _routeRedirect, _routeSignIn;
+        let _router, _routeRedirect, _routeSignIn;
         /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
         let _currentUser;
 
@@ -38,8 +38,13 @@ export default class Fl32_Dup_Front_Model_User_Session {
 
         this.close = async function () {
             _currentUser = undefined;
-            return Promise.resolve(undefined);
         }
+
+        this.deleteUser = async function () {
+            _currentUser = undefined;
+            await store.delete(metaUser.getEntityName());
+        }
+
         /**
          * @return {Fl32_Dup_Front_Store_Entity_User.Dto}
          */
@@ -47,8 +52,15 @@ export default class Fl32_Dup_Front_Model_User_Session {
             return _currentUser;
         }
 
-        this.open = async function ({router}) {
-            await this.checkUserAuthenticated(router);
+        this.open = async function (router = null) {
+            if (router) _router = router;
+            await this.checkUserAuthenticated(_router);
+        }
+
+        this.reopen = async function (route = null) {
+            _currentUser = undefined;
+            await this.checkUserAuthenticated(_router);
+            if (_router && route) _router.push(route);
         }
 
         this.setRouteToRedirect = function (route) {

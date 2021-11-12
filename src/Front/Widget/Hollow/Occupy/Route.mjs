@@ -95,7 +95,7 @@ export default function (spec) {
                  * @param {string} pubKey
                  * @return {Promise<Fl32_Dup_Shared_WAPI_User_Create.Response|boolean>}
                  */
-                async function wapi(nick, subscript, pubKey) {
+                async function createUserOnServer(nick, subscript, pubKey) {
                     /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
                     const req = wapiCreate.createReq();
                     req.endpoint = subscript.endpoint;
@@ -115,7 +115,7 @@ export default function (spec) {
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
-                const res = await wapi(this.fldNick, dto.subscription, keys.publicKey);
+                const res = await createUserOnServer(this.fldNick, dto.subscription, keys.publicKey);
                 // generate symmetric key and save user data into IDB
                 if (res.userId) {
                     dto.id = res.userId;
@@ -128,7 +128,7 @@ export default function (spec) {
                     this.isRegistered = true;
                     // redirect user to homepage
                     setTimeout(() => {
-                        this.$router.push(DEF.ROUTE_HOME);
+                        session.reopen(DEF.ROUTE_HOME);
                     }, 2000);
                 } else {
                     console.log(`Some error is occurred on the server, cannot get ID for new user.`);
@@ -155,7 +155,6 @@ export default function (spec) {
                     // noinspection JSValidateTypes
                     /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
                     const res = await gate.send(req, wapiLoadKey);
-                    console.log(`key: ${res.key}`);
                     /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(res.key);
                     // save subscription to IDB Store

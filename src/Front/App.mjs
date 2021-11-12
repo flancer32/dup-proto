@@ -133,7 +133,7 @@ export default class Fl32_Dup_Front_App {
             initQuasarUi(_root, QuasarLib);
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            await _session.open({router});
+            await _session.open(router);
             if (await _session.checkUserAuthenticated())
                 await mgrSse.open(); // open SSE connection
         }

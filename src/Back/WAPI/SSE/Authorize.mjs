@@ -21,6 +21,8 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Back_Defaults} */
         const DEF = spec['Fl32_Dup_Back_Defaults$'];
+        /** @type {TeqFw_Core_Shared_Logger} */
+        const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Factory} */
@@ -69,7 +71,7 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
                 async function loadPublicKey(trx, userId) {
                     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User.Dto} */
                     const one = await crud.readOne(trx, metaAppUser, {[A_USER.USER_REF]: userId})
-                    return one.key_pub;
+                    return one?.key_pub;
                 }
 
                 // MAIN FUNCTIONALITY
@@ -84,14 +86,18 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
                     const token = req.token;
                     const secretBase64 = loadSecretKey();
                     const publicBase64 = await loadPublicKey(trx, userId);
-                    /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
-                    const enigma = await factCrypto.createEnigmaAsym();
-                    enigma.setKeys(publicBase64, secretBase64);
-                    /** @type {Fl32_Dup_Shared_SSE_Authorize.Dto} */
-                    const decrypted = enigma.decryptAndVerify(token);
-                    if (decrypted) {
-                        console.log(`HOP: ${JSON.stringify(decrypted)}.`);
-                        registry.setState(decrypted.connectionId, 'authorized')
+                    if (publicBase64 === undefined) {
+                        res.userNotFound = true;
+                    } else {
+                        /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
+                        const enigma = await factCrypto.createEnigmaAsym();
+                        enigma.setKeys(publicBase64, secretBase64);
+                        /** @type {Fl32_Dup_Shared_SSE_Authorize.Dto} */
+                        const decrypted = enigma.decryptAndVerify(token);
+                        if (decrypted) {
+                            logger.info(`HOP: ${JSON.stringify(decrypted)}.`);
+                            registry.setState(decrypted.connectionId, 'authorized')
+                        }
                     }
                     await trx.commit();
                 } catch (error) {
