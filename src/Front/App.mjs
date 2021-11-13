@@ -91,7 +91,17 @@ export default class Fl32_Dup_Front_App {
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CHAT,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$'),
+                    props: true,
+                    children: [{
+                        path: DEF.ROUTE_CHAT_USER,
+                        component: () => container.get('Fl32_Dup_Front_Widget_Chat_User_Route$'),
+                        props: true
+                    }, {
+                        path: DEF.ROUTE_CHAT_ROOM,
+                        component: () => container.get('Fl32_Dup_Front_Widget_Chat_Room_Route$'),
+                        props: true
+                    }]
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CONTACTS_ADD,
@@ -129,6 +139,11 @@ export default class Fl32_Dup_Front_App {
                 teq: {package: DEF.SHARED.NAME},
                 name: NS,
                 template: '<router-view/>',
+                async mounted() {
+                    await _session.open();
+                    // if (await _session.checkUserAuthenticated())
+                    //     await mgrSse.open(); // open SSE connection
+                }
             });
             // ... and add global available components
             _root.component('LayoutBase', _layoutBase);
@@ -142,9 +157,6 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            // await _session.open(router);
-            // if (await _session.checkUserAuthenticated())
-            //     await mgrSse.open(); // open SSE connection
         }
 
         /**

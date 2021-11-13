@@ -17,11 +17,18 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band.vueCompTmpl} */
     const band = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Chat_Title$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
+    const metaContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-chat>
-    <band/>
+    <router-view></router-view>
+        OP: {{id}}
 </layout-chat>
 `;
     /**
@@ -38,7 +45,16 @@ export default function (spec) {
         data() {
             return {};
         },
+        props: {
+            id: String,
+        },
         methods: {},
-        async mounted() { },
+        async mounted() {
+            const trxRead = await idb.startTransaction(metaContact, false);
+            const found = await idb.readOne(trxRead, metaContact, parseInt(this.id));
+            if (found) {
+                rxTitle.set(found.nick);
+            }
+        },
     };
 }

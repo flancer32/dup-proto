@@ -12,6 +12,7 @@ const ATTR = {
     DATE_REGISTERED: 'dateRegistered',
     KEY_PUBLIC: 'keyPublic',
     NICK: 'nick',
+    PARENT_ID: 'parentId',
     USER_ID: 'userId',
 };
 
@@ -27,6 +28,8 @@ class Dto {
     keyPublic;
     /** @type {string} */
     nick;
+    /** @type {number} */
+    parentId;
     /** @type {number} */
     userId;
 }
@@ -54,6 +57,7 @@ export default class Fl32_Dup_Shared_Dto_Contacts_Card {
             res.dateRegistered = castDate(data?.dateRegistered);
             res.keyPublic = castString(data?.keyPublic);
             res.nick = castString(data?.nick);
+            res.parentId = castInt(data?.parentId);
             res.userId = castInt(data?.userId);
             return res;
         }

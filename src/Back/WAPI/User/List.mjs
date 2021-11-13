@@ -21,12 +21,16 @@ export default class Fl32_Dup_Back_WAPI_User_List {
         const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
         const metaApp = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
+        /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree} */
+        const metaTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
         /** @type {Fl32_Dup_Shared_Dto_Contacts_Card} */
         const dtoCard = spec['Fl32_Dup_Shared_Dto_Contacts_Card$'];
 
         // DEFINE WORKING VARS / PROPS
         /** @type {typeof Fl32_Dup_Shared_Dto_Contacts_Card.ATTR} */
         const ATTR = dtoCard.getAttributes();
+        /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Tree.ATTR} */
+        const A_TREE = metaTree.getAttributes();
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User.ATTR} */
         const A_APP = metaApp.getAttributes();
         /** @type {typeof TeqFw_User_Back_Store_RDb_Schema_User.ATTR} */
@@ -51,15 +55,18 @@ export default class Fl32_Dup_Back_WAPI_User_List {
                 async function listContacts(trx) {
                     const res = {};
                     // actual table names
-                    const T_USER = trx.getTableName(metaUser);
                     const T_APP = trx.getTableName(metaApp);
+                    const T_TREE = trx.getTableName(metaTree);
+                    const T_USER = trx.getTableName(metaUser);
                     // table aliases
-                    const AS_U = 'user';
                     const AS_A = 'app';
+                    const AS_T = 'tree';
+                    const AS_U = 'user';
                     // attributes aliases
                     const A_DATE = ATTR.DATE_REGISTERED;
                     const A_KEY_PUB = ATTR.KEY_PUBLIC;
                     const A_NICK = ATTR.NICK;
+                    const A_PARENT_ID = ATTR.PARENT_ID;
                     const A_USER_ID = ATTR.USER_ID;
 
                     // select from main table
@@ -79,6 +86,14 @@ export default class Fl32_Dup_Back_WAPI_User_List {
                         {[A_NICK]: `${AS_A}.${A_APP.NICK}`},
                         {[A_KEY_PUB]: `${AS_A}.${A_APP.KEY_PUB}`}
                     ]);
+                    // left join app_user_tree
+                    query.leftOuterJoin(
+                        {[AS_T]: T_TREE},
+                        `${AS_T}.${A_TREE.USER_REF}`,
+                        `${AS_U}.${A_USER.ID}`);
+                    query.select([
+                        {[A_PARENT_ID]: `${AS_T}.${A_TREE.PARENT_REF}`},
+                    ]);
                     // const sql = query.toQuery();
                     const rs = await query;
                     for (const one of rs) {
@@ -90,7 +105,7 @@ export default class Fl32_Dup_Back_WAPI_User_List {
 
                 // MAIN FUNCTIONALITY
                 /** @type {Fl32_Dup_Shared_WAPI_User_List.Request} */
-                const req = context.getInData();
+                // const req = context.getInData();
                 /** @type {Fl32_Dup_Shared_WAPI_User_List.Response} */
                 const res = context.getOutData();
                 //
