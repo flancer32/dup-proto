@@ -14,6 +14,8 @@ class Request {
     /** @type {string} */
     endpoint;
     /** @type {string} */
+    invite;
+    /** @type {string} */
     keyAuth;
     /** @type {string} */
     keyP256dh;
@@ -58,6 +60,7 @@ class Factory {
         this.createReq = function (data = null) {
             const res = new Request();
             res.endpoint = castString(data?.endpoint);
+            res.invite = castString(data?.invite);
             res.keyAuth = castString(data?.keyAuth);
             res.keyP256dh = castString(data?.keyP256dh);
             res.keyPub = castString(data?.keyPub);

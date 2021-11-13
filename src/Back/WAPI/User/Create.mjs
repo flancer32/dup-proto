@@ -28,6 +28,10 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
         const route = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
         /** @type {Fl32_Dup_Back_Act_User_Create.act|function} */
         const actCreate = spec['Fl32_Dup_Back_Act_User_Create$'];
+        /** @type {Fl32_Dup_Back_Act_User_Invite_Get.act|function} */
+        const actGetInvite = spec['Fl32_Dup_Back_Act_User_Invite_Get$'];
+        /** @type {Fl32_Dup_Back_Act_User_Invite_Remove.act|function} */
+        const actRemove = spec['Fl32_Dup_Back_Act_User_Invite_Remove$'];
 
         // DEFINE WORKING VARS / PROPS
         let _publicKey;
@@ -64,8 +68,12 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
                 //
                 const trx = await conn.startTransaction();
                 try {
+                    /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite.Dto} */
+                    const invite = (req?.invite) ? await actGetInvite({trx, code: req.invite}) : null;
+                    const parentId = invite ? invite.user_ref : null;
                     const {userId} = await actCreate({
                         trx,
+                        parentId,
                         nick: req.nick,
                         keyPub: req.keyPub,
                         endpoint: req.endpoint,
@@ -74,6 +82,7 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
                     });
                     res.userId = userId;
                     res.serverPublicKey = _publicKey;
+                    if (invite) await actRemove({trx, code: invite.code});
                     await trx.commit();
                 } catch (error) {
                     await trx.rollback();

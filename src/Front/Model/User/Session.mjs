@@ -5,6 +5,7 @@ export default class Fl32_Dup_Front_Model_User_Session {
 
     constructor(spec) {
         // EXTRACT DEPS
+
         /** @type {TeqFw_Web_Front_Store} */
         const store = spec['TeqFw_Web_Front_Store$'];
         /** @type {Fl32_Dup_Front_Store_Entity_User} */
@@ -17,17 +18,19 @@ export default class Fl32_Dup_Front_Model_User_Session {
 
         // DEFINE INSTANCE METHODS
 
-        this.checkUserAuthenticated = async function (router) {
+        this.checkUserAuthenticated = async function () {
             if (!_currentUser) {
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
                 if (!dto?.id) {
                     if (
-                        (typeof router?.push === 'function') &&
+                        (typeof _router?.push === 'function') &&
                         (typeof _routeSignIn === 'string')
                     ) {
-                        router.push(_routeSignIn);
+                        const requiresAuth = _router?.currentRoute?.value?.meta?.requiresAuth ?? true;
+                        if (requiresAuth)
+                            _router.push(_routeSignIn);
                     }
                     return false;
                 }
@@ -52,17 +55,19 @@ export default class Fl32_Dup_Front_Model_User_Session {
             return _currentUser;
         }
 
-        this.open = async function (router = null) {
-            if (router) _router = router;
-            await this.checkUserAuthenticated(_router);
+        this.open = async function () {
+            await this.checkUserAuthenticated();
         }
 
         this.reopen = async function (route = null) {
             _currentUser = undefined;
-            await this.checkUserAuthenticated(_router);
+            await this.checkUserAuthenticated();
             if (_router && route) _router.push(route);
         }
 
+        this.setRouter = function (router) {
+            _router = router;
+        }
         this.setRouteToRedirect = function (route) {
             _routeRedirect = route;
         }

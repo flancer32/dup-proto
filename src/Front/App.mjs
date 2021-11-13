@@ -31,8 +31,6 @@ export default class Fl32_Dup_Front_App {
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
-        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
-        const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -108,6 +106,12 @@ export default class Fl32_Dup_Front_App {
                     component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
                 });
                 router.addRoute({
+                    path: DEF.ROUTE_INVITE_VALIDATE,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Invite_Check_Route$'),
+                    props: true,
+                    meta: {requiresAuth: false}
+                });
+                router.addRoute({
                     path: DEF.ROUTE_HOLLOW_OCCUPY,
                     component: () => container.get('Fl32_Dup_Front_Widget_Hollow_Occupy_Route$')
                 });
@@ -136,8 +140,9 @@ export default class Fl32_Dup_Front_App {
             await initI18n(_root, I18nLib);
             initQuasarUi(_root, QuasarLib);
             const router = initRouter(_root, VueLib, DEF, container);
+            _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            await _session.open(router);
+            // await _session.open(router);
             // if (await _session.checkUserAuthenticated())
             //     await mgrSse.open(); // open SSE connection
         }

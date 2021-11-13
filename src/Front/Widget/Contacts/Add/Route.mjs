@@ -126,7 +126,7 @@ export default function (spec) {
                     const code = res.code;
                     // compose URL to add new friend
                     const host = `https://${config.urlBase}`;
-                    const route = DEF.ROUTE_INVITE_CHECK.replace(':code', code);
+                    const route = DEF.ROUTE_INVITE_VALIDATE.replace(':code', code);
                     const url = `${host}/#${route}`;
                     // open sharing options or print out sign up link to console
                     if (self.navigator.share) {

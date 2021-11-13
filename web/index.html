@@ -45,7 +45,7 @@
                 /** @type {Fl32_Dup_Front_App} */
                 const app = await container.get('Fl32_Dup_Front_App$');
                 await app.init();
-                app.mount('BODY > DIV');
+                await app.mount('BODY > DIV');
             } catch (e) {
                 console.error("Error in bootstrap: " + e + "\n" + e.stack);
             }

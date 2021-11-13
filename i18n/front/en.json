@@ -18,50 +18,61 @@
   "wg": {
     "cfg": {
       "sse": {
-        "title": "Server Sent Events",
+        "close": "Close",
         "open": "Open",
-        "close": "Close"
-      },
-      "sw": {
-        "title": "Service Worker Configuration",
-        "cache": {
-          "title": "Cache"
-        }
+        "title": "Server Sent Events"
       },
       "store": {
         "init": "Init IDB Schema",
         "title": "Store Configuration"
+      },
+      "sw": {
+        "cache": {
+          "title": "Cache"
+        },
+        "title": "Service Worker Configuration"
       }
     },
     "contact": {
       "add": {
-        "title": "Create sign up code to add new user to the Hollow",
+        "count": {
+          "many": "Reusable",
+          "one": "One-time",
+          "title": "Code usability"
+        },
+        "phoneMsg": "D.U.P.L.O. is waiting for you.",
         "time": {
           "day1": "1 day",
           "hour1": "1 hour",
           "min5": "5 mins",
           "title": "Code life-time"
         },
-        "count": {
-          "one": "One-time",
-          "many": "Reusable",
-          "title": "Code usability"
-        },
-        "phoneMsg": "D.U.P.L.O. is waiting for you."
+        "title": "Create sign up code to add new user to the Hollow"
       }
     },
     "hollow": {
       "occupy": {
         "msg": {
-          "occupied": "This hollow is occupied by some squirrel.",
           "nick": "Enter your nick and complete registration.",
+          "occupied": "This hollow is occupied by some squirrel.",
           "subscribe": "You need to subscribe to notifications first.",
           "success": "You have been successfully registered in the hollow."
         },
-        "title": "Registration",
         "nick": {
           "label": "Your nickname"
-        }
+        },
+        "title": "Occupation"
+      }
+    },
+    "invite": {
+      "verify": {
+        "msg": {
+          "checkCode": "Invite verification...",
+          "wrongCode": "Sorry, this invitation is expired. Try to get another one.",
+          "subscribe": "You need to subscribe to notifications first.",
+          "success": "You have been successfully registered in the hollow."
+        },
+        "title": "Registration"
       }
     }
   }

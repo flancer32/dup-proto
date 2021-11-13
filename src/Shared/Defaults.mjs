@@ -13,6 +13,7 @@ export default class Fl32_Dup_Shared_Defaults {
     WAPI_SSE_AUTHORIZE = '/sse/authorize';
     WAPI_USER_CREATE = '/user/create';
     WAPI_USER_INVITE_CREATE = '/user/invite/create';
+    WAPI_USER_INVITE_VALIDATE= '/user/invite/validate';
     WAPI_USER_LIST = '/user/list';
 
     constructor() {

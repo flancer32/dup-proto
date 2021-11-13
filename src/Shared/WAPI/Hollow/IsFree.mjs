@@ -1,5 +1,6 @@
 /**
  * Route data for service to get info about hollow state (free or not).
+ * TODO: add hollow keys to response if hollow is free.
  *
  * @namespace Fl32_Dup_Shared_WAPI_Hollow_IsFree
  */
