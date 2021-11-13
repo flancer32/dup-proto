@@ -20,7 +20,9 @@ export default function (spec) {
     /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Factory} */
     const routePost = spec['Fl32_Dup_Shared_WAPI_Msg_Post.Factory$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
-    const modSess = spec['TeqFw_User_Front_Api_ISession$'];
+    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -52,6 +54,7 @@ export default function (spec) {
         data() {
             return {
                 message: null,
+                otherSideId: null,
             };
         },
         methods: {
@@ -60,8 +63,9 @@ export default function (spec) {
                 /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
                 const req = routePost.createReq();
                 req.body = this.message;
-                const user = modSess.getUser();
+                const user = session.getUser();
                 req.userId = user.id;
+                req.recipientId = this.otherSideId;
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Response} */
                 const res = await gate.send(req, routePost);
@@ -69,6 +73,8 @@ export default function (spec) {
                 this.message = null;
             }
         },
-        async mounted() { },
+        async mounted() {
+            this.otherSideId = rxChat.getOtherSideId();
+        },
     };
 }

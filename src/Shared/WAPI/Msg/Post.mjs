@@ -14,6 +14,8 @@ class Request {
     /** @type {string} */
     body;
     /** @type {number} */
+    recipientId;
+    /** @type {number} */
     userId;
 }
 
@@ -49,6 +51,7 @@ class Factory {
         this.createReq = function (data = null) {
             const res = new Request();
             res.body = castString(data?.body);
+            res.recipientId = castInt(data?.recipientId);
             res.userId = castInt(data?.userId);
             return res;
         }

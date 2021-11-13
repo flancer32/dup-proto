@@ -1,5 +1,5 @@
 /**
- * 'Chat' route.
+ * 'Current Chat' route.
  *
  * @namespace Fl32_Dup_Front_Widget_Chat_Route
  */
@@ -19,6 +19,8 @@ export default function (spec) {
     const band = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Title} */
     const rxTitle = spec['Fl32_Dup_Front_Rx_Chat_Title$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
@@ -28,7 +30,6 @@ export default function (spec) {
     const template = `
 <layout-chat>
     <router-view></router-view>
-        OP: {{id}}
 </layout-chat>
 `;
     /**
@@ -51,8 +52,12 @@ export default function (spec) {
         methods: {},
         async mounted() {
             const trxRead = await idb.startTransaction(metaContact, false);
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
             const found = await idb.readOne(trxRead, metaContact, parseInt(this.id));
             if (found) {
+                rxChat.setTypeUser();
+                rxChat.setTitle(found.nick);
+                rxChat.setOtherSideId(found.userId);
                 rxTitle.set(found.nick);
             }
         },

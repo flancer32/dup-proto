@@ -56,6 +56,7 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
                     const items = regSse.items();
                     for (const item of items) {
                         const userId = req?.userId;
+                        const recipientId = req?.recipientId;
                         const body = req?.body;
                         const author = await getNameByUserId(trx, userId);
                         item({userId, body, author});

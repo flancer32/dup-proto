@@ -2,6 +2,7 @@
  * Chat title (reactive element).
  *
  * @namespace Fl32_Dup_Front_Rx_Chat_Title
+ * @deprecated use Fl32_Dup_Front_Rx_Chat_Current
  */
 export default class Fl32_Dup_Front_Rx_Chat_Title {
     constructor(spec) {
