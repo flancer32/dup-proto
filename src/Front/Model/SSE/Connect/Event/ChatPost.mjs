@@ -8,6 +8,10 @@ const NS = 'Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost';
 export default function (spec) {
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_Web_Front_Service_Gate} */
+    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery.Factory} */
+    const wapiDelivery = spec['Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery#Factory$'];
     /** @type {Fl32_Dup_Shared_SSE_ChatPost} */
     const sseChatPost = spec['Fl32_Dup_Shared_SSE_ChatPost$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
@@ -21,21 +25,37 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost
      */
     async function handler(event) {
+        // DEFINE INNER FUNCTIONS
+        function confirmDelivery(messageId, userId) {
+            const req = wapiDelivery.createReq({messageId, userId});
+            gate.send(req, wapiDelivery);
+        }
+
+        function addToChat(body, author, sent) {
+            const date = new Date();
+            const dto = dtoMsg.createDto({body, date, author, sent});
+            if (dto.sent) dto.author = undefined;
+            rxChat.addMessage(dto);
+        }
+
+        // MAIN FUNCTIONALITY
         const text = event.data;
         try {
             // extract input data from event
+            const user = session.getUser();
+            const userId = user.id;
             const msg = JSON.parse(text);
             const dto = sseChatPost.createDto(msg);
             const connectionId = dto.connectionId;
             const payload = dto.payload;
+            const messageId = msg.msgId;
             // get encryption keys
             {
-                const dto = dtoMsg.createDto();
-                dto.body = msg.body;
-                dto.date = new Date();
-                dto.sent = (msg.userId === session.getUser().id);
-                if (!dto.sent) dto.author = msg.author;
-                rxChat.addMessage(dto);
+                // add message to current band
+                const sent = (msg.userId === userId);
+                addToChat(msg.body, msg.author, sent);
+                // send delivery confirmation (w/o await)
+                confirmDelivery(messageId, userId);
             }
         } catch (e) {
             console.log(text);

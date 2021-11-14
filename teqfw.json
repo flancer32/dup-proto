@@ -45,6 +45,7 @@
     },
     "services": [
       "Fl32_Dup_Back_WAPI_Hollow_IsFree",
+      "Fl32_Dup_Back_WAPI_Msg_Confirm_Delivery",
       "Fl32_Dup_Back_WAPI_Msg_Post",
       "Fl32_Dup_Back_WAPI_SSE_Authorize",
       "Fl32_Dup_Back_WAPI_User_Create",
