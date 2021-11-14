@@ -23,6 +23,8 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
         const metaAppUser = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
+        /** @type {Fl32_Dup_Back_Act_Msg_Queue_User_Add.act|function} */
+        const actQUserAdd = spec['Fl32_Dup_Back_Act_Msg_Queue_User_Add$'];
 
         // DEFINE WORKING VARS / PROPS
 
@@ -52,40 +54,22 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
                 //
                 const trx = await conn.startTransaction();
                 try {
+                    const senderId = req?.userId;
+                    const recipientId = req?.recipientId;
+                    const payload = req?.payload;
+                    const {msgId} = await actQUserAdd({trx, senderId, recipientId, payload});
                     /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item.Dto} */
                     const itemTo = registry.getConnectionByUser(req?.recipientId);
                     if (itemTo) {
-                        const userId = req?.userId;
-                        const recipientId = req?.recipientId;
-                        const body = req?.body;
+                        const userId = senderId;
+                        const body = payload;
                         const author = await getNameByUserId(trx, userId);
-                        const payload = {userId, body, author};
+                        const dto = {userId, body, author, msgId};
                         const event = 'chatPost';
-                        itemTo.respond(payload, null, event);
+                        itemTo.respond(dto, null, event);
                     }
-                    /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item.Dto} */
-                    const itemFrom = registry.getConnectionByUser(req?.userId);
-                    if (itemFrom) {
-                        const userId = req?.userId;
-                        const recipientId = req?.recipientId;
-                        const body = req?.body;
-                        const author = await getNameByUserId(trx, userId);
-                        const payload = {userId, body, author};
-                        const event = 'chatPost';
-                        itemFrom.respond(payload, null, event);
-                    }
-                    // const items = regSse.items();
-                    // for (const item of items) {
-                    //     const userId = req?.userId;
-                    //     const recipientId = req?.recipientId;
-                    //     const body = req?.body;
-                    //     const author = await getNameByUserId(trx, userId);
-                    //     const payload = {userId, body, author};
-                    //     const event = 'chatPost';
-                    //     item.respond(payload, null, event);
-                    // }
-
                     await trx.commit();
+                    res.messageId = msgId;
                 } catch (error) {
                     await trx.rollback();
                     throw error;

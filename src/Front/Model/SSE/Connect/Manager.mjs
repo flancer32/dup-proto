@@ -1,14 +1,12 @@
 export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {Fl32_Dup_Front_Defaults} */
-        const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Web_Front_SSE_Connect} */
         const _connect = spec['TeqFw_Web_Front_SSE_Connect$$']; // new instance
         /** @type {TeqFw_User_Front_Api_ISession} */
         const modSess = spec['TeqFw_User_Front_Api_ISession$'];
-        /** @type {Fl32_Dup_Front_Model_Msg_Band} */
-        const modBand = spec['Fl32_Dup_Front_Model_Msg_Band$'];
+        /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+        const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
         /** @type {Fl32_Dup_Front_Dto_Message} */
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize.handler|function} */
@@ -35,7 +33,7 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
                     dto.date = new Date();
                     dto.sent = (msg.userId === modSess.getUser().id);
                     if (!dto.sent) dto.author = msg.author;
-                    modBand.push(dto);
+                    rxChat.addMessage(dto);
                     if (typeof window.navigator.vibrate === 'function')
                         window.navigator.vibrate([100, 100, 100]);
                 } catch (e) {

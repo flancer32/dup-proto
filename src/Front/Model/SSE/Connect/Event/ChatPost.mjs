@@ -10,13 +10,13 @@ export default function (spec) {
     const session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {Fl32_Dup_Shared_SSE_ChatPost} */
     const sseChatPost = spec['Fl32_Dup_Shared_SSE_ChatPost$'];
-    /** @type {Fl32_Dup_Front_Model_Msg_Band} */
-    const modBand = spec['Fl32_Dup_Front_Model_Msg_Band$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {Fl32_Dup_Front_Dto_Message} */
     const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
 
     /**
-     * @param {} event
+     * @param {*} event
      * @return {Promise<void>}
      * @memberOf Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost
      */
@@ -35,7 +35,7 @@ export default function (spec) {
                 dto.date = new Date();
                 dto.sent = (msg.userId === session.getUser().id);
                 if (!dto.sent) dto.author = msg.author;
-                modBand.push(dto);
+                rxChat.addMessage(dto);
             }
         } catch (e) {
             console.log(text);

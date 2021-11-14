@@ -84,6 +84,47 @@
           }
         }
       }
+    },
+    "queue": {
+      "package": {
+        "msg": {
+          "entity": {
+            "user": {
+              "comment": "Personal messages queue (from user to user).",
+              "attr": {
+                "id": {"type": "id"},
+                "sender_ref": {"type": "ref"},
+                "receiver_ref": {"type": "ref"},
+                "date": {
+                  "comment": "Date for registration in the queue.",
+                  "type": "datetime",
+                  "default": "current"
+                },
+                "state": {
+                  "comment": "Should be enum ir removed.",
+                  "type": "string"
+                },
+                "payload": {
+                  "comment": "Encrypted and base64 encoded message.",
+                  "type": "text"
+                }
+              },
+              "relation": {
+                "sender": {
+                  "attrs": ["sender_ref"],
+                  "ref": {"path": "/user", "attrs": ["id"]},
+                  "action": {"delete": "cascade", "update": "cascade"}
+                },
+                "receiver": {
+                  "attrs": ["receiver_ref"],
+                  "ref": {"path": "/user", "attrs": ["id"]},
+                  "action": {"delete": "cascade", "update": "cascade"}
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "refs": {

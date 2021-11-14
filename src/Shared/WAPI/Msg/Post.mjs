@@ -11,8 +11,11 @@ const NS = 'Fl32_Dup_Shared_WAPI_Msg_Post';
  * @memberOf Fl32_Dup_Shared_WAPI_Msg_Post
  */
 class Request {
-    /** @type {string} */
-    body;
+    /**
+     * Message body, encrypted and base64 encoded.
+     * @type {string}
+     */
+    payload;
     /** @type {number} */
     recipientId;
     /** @type {number} */
@@ -23,7 +26,8 @@ class Request {
  * @memberOf Fl32_Dup_Shared_WAPI_Msg_Post
  */
 class Response {
-
+    /** @type {number} */
+    messageId;
 }
 
 /**
@@ -50,7 +54,7 @@ class Factory {
          */
         this.createReq = function (data = null) {
             const res = new Request();
-            res.body = castString(data?.body);
+            res.payload = castString(data?.payload);
             res.recipientId = castInt(data?.recipientId);
             res.userId = castInt(data?.userId);
             return res;
@@ -62,6 +66,7 @@ class Factory {
          */
         this.createRes = function (data = null) {
             const res = new Response();
+            res.messageId = castInt(data?.messageId);
             return res;
         }
     }

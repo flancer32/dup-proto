@@ -49,6 +49,6 @@
     "@babel/preset-env": "^7",
     "eslint": "^7",
     "esm": "^3",
-    "jest": "*"
+    "mocha": "*"
   }
 }

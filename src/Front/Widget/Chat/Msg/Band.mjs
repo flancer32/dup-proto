@@ -17,10 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band_Item.vueCompTmpl} */
     const message = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band_Item$'];
-    /** @type {Fl32_Dup_Front_Model_Msg_Band} */
-    const modBand = spec['Fl32_Dup_Front_Model_Msg_Band$'];
-    /** @type {Fl32_Dup_Front_Dto_Message} */
-    const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -48,20 +46,9 @@ export default function (spec) {
                 band: []
             };
         },
-        methods: {
-            send() { }
-        },
+        methods: {},
         async mounted() {
-            // debugger
-            this.band = modBand.getRef();
-            const first = dtoMsg.createDto();
-            first.body = 'This is first message.';
-            first.sent = true;
-            const second = dtoMsg.createDto();
-            second.body = 'This is second message.';
-            second.sent = false;
-            // this.band.push(first);
-            // this.band.push(second);
+            this.band = rxChat.getMessages();
         },
     };
 }

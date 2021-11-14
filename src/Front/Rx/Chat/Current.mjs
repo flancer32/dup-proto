@@ -20,6 +20,12 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         // DEFINE INNER FUNCTIONS
 
         // DEFINE INSTANCE METHODS
+        /**
+         * @param {Fl32_Dup_Front_Dto_Message.Dto} data
+         * @return {*}
+         */
+        this.addMessage = (data) => _messages.value.push(data);
+
         this.getMessages = () => _messages;
         this.getOtherSideId = () => _otherSideId;
         this.getTitle = () => _title;

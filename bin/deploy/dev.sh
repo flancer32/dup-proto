@@ -31,7 +31,7 @@ echo "Re-install JS project."
 cd "${DIR_ROOT}" || exit 255
 npm install
 
-echo "Remove cloned dependencies (sources)."
+#echo "Remove cloned dependencies (sources)."
 #rm -fr "${DIR_OWN}/@teqfw"
 #rm -fr "${DIR_OWN}/@flancer32"
 
