@@ -15,12 +15,13 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_User_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-
+    /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
+    const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-chat>
-    Contact ID: {{id}}
+    <msg-band/>
 </layout-chat>
 `;
     /**
@@ -33,18 +34,14 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
+        components: {msgBand},
         data() {
             return {};
         },
         props: {
             id: Number,
         },
-        computed: {
-            contactName() {
-
-            }
-        },
+        computed: {},
         methods: {},
         async mounted() { },
     };

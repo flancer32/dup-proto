@@ -13,6 +13,8 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize.handler|function} */
         const hndlAuthorize = spec['Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize$'];
+        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost.handler|function} */
+        const hndlChatPost = spec['Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost$'];
 
         // DEFINE INSTANCE METHODS
         this.isActive = function () {
@@ -25,6 +27,7 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
         this.open = async function () {
             function handlerMessage(event) {
                 try {
+                    debugger
                     const text = event.data;
                     const msg = JSON.parse(text);
                     const dto = dtoMsg.createDto();
@@ -42,6 +45,7 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
 
             const handlers = {
                 authorize: hndlAuthorize,
+                chatPost: hndlChatPost,
                 message: handlerMessage,
             };
             await _connect.open('./sse/channel', handlers);

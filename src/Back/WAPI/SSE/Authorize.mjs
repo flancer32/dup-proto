@@ -31,8 +31,8 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         const config = spec['TeqFw_Core_Back_Config$'];
         /** @type {TeqFw_Core_Back_Util.readJson|function} */
         const readJson = spec['TeqFw_Core_Back_Util.readJson'];
-        /** @type {Fl32_Dup_Back_Model_SSE_Registry} */
-        const registry = spec['Fl32_Dup_Back_Model_SSE_Registry$'];
+        /** @type {Fl32_Dup_Back_Handler_SSE_Registry} */
+        const registry = spec['Fl32_Dup_Back_Handler_SSE_Registry$'];
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
@@ -97,6 +97,7 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
                         if (decrypted) {
                             logger.info(`HOP: ${JSON.stringify(decrypted)}.`);
                             registry.setState(decrypted.connectionId, 'authorized')
+                            registry.mapUser(decrypted.connectionId, userId);
                         }
                     }
                     await trx.commit();

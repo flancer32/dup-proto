@@ -23,8 +23,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Web_Back_Model_Address} */
     const mAddress = spec['TeqFw_Web_Back_Model_Address$'];
-    /** @type {Fl32_Dup_Back_Model_SSE_Registry} */
-    const registry = spec['Fl32_Dup_Back_Model_SSE_Registry$'];
+    /** @type {Fl32_Dup_Back_Handler_SSE_Registry} */
+    const registry = spec['Fl32_Dup_Back_Handler_SSE_Registry$'];
     /** @type {Fl32_Dup_Shared_SSE_Authorize} */
     const dtoAuth = spec['Fl32_Dup_Shared_SSE_Authorize$'];
     /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item} */
@@ -53,8 +53,9 @@ export default function (spec) {
                 // ... and create functions to process outgoing events for this connection
                 function respond(payload, msgId, event) {
                     if (event) stream.write(`event: ${event}\n`);
-                    stream.write(`data: ${JSON.stringify(payload)}\n`);
-                    stream.write(`id: ${msgId++}\n\n`);
+                    stream.write(`data: ${JSON.stringify(payload)}\n\n`);
+                    // if (msgId) stream.write(`id: ${msgId++}\n`);
+                    // stream.write(`\n\n`);
                 }
 
                 function close(payload) {
@@ -102,7 +103,7 @@ export default function (spec) {
                 setTimeout(() => {
                     if (item.state === undefined) {
                         item.close();
-                        console.log(`Connection '${item.connectionId}' is cosed.`);
+                        console.log(`Connection '${item.connectionId}' is not authorized and is cosed by timeout.`);
                     }
                 }, 5000);
 
