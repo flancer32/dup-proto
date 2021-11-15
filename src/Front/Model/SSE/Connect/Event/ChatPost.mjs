@@ -14,10 +14,6 @@ export default function (spec) {
     const wapiDelivery = spec['Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery#Factory$'];
     /** @type {Fl32_Dup_Shared_SSE_ChatPost} */
     const sseChatPost = spec['Fl32_Dup_Shared_SSE_ChatPost$'];
-    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
-    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-    /** @type {Fl32_Dup_Front_Dto_Message} */
-    const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
     /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
     const actMsgAdd = spec['Fl32_Dup_Front_Act_Band_Msg_Add$'];
 

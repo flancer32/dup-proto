@@ -62,12 +62,13 @@ export default function (spec) {
             if (!found) {
                 this.$router.push(DEF.ROUTE_CONTACTS_LIST);
             } else {
+                const bandId = found.userId;
                 rxChat.setTypeUser();
                 rxChat.setTitle(found.nick);
-                rxChat.setOtherSideId(found.userId);
+                rxChat.setOtherSideId(bandId);
                 // load messages from IDB
                 const trx = await idb.startTransaction(idbMsg, false);
-                const query = IDBKeyRange.only(found.userId);
+                const query = IDBKeyRange.only(bandId);
                 /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto[]} */
                 const items = await idb.readSet(trx, idbMsg, A_MSG.BAND_ID, query);
                 // sort selected messages by date asc
@@ -79,6 +80,7 @@ export default function (spec) {
                     const dto = dtoMsg.createDto();
                     dto.body = item.body;
                     dto.date = item.date;
+                    dto.sent = (item.authorId !== item.bandId);
                     messages.push(dto);
                 }
                 rxChat.resetBand(messages);

@@ -50,10 +50,12 @@ export default function (spec) {
 
         // MAIN FUNCTIONALITY
         await saveMessage(authorId, bandId, body, date, msgId);
-
-        // TODO: tmp variant to detect 'sent' attr for user band
-        const sent = authorId !== bandId;
-        addToBand(body, date, sent);
+        const currentBand = parseInt(rxChat.getOtherSideId().value);
+        if (currentBand === bandId) {
+            // TODO: tmp variant to detect 'sent' attr for user band
+            const sent = authorId !== bandId;
+            addToBand(body, date, sent);
+        }
     }
 
     Object.defineProperty(act, 'name', {value: `${NS}.act`});
