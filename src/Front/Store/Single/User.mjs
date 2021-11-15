@@ -1,5 +1,9 @@
+/**
+ * This is DTO for IDB singletons (see TeqFw_Web_Front_Store)
+ * @type {string}
+ */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Store_Entity_User';
+const NS = 'Fl32_Dup_Front_Store_Single_User';
 /**
  * Part of the entity key to store in Singletons IDB store.
  * @type {string}
@@ -7,7 +11,7 @@ const NS = 'Fl32_Dup_Front_Store_Entity_User';
 const ENTITY = '/user';
 
 /**
- * @memberOf Fl32_Dup_Front_Store_Entity_User
+ * @memberOf Fl32_Dup_Front_Store_Single_User
  * @type {Object}
  */
 const ATTR = {
@@ -20,7 +24,7 @@ const ATTR = {
 };
 
 /**
- * @memberOf Fl32_Dup_Front_Store_Entity_User
+ * @memberOf Fl32_Dup_Front_Store_Single_User
  */
 class Dto {
     static name = `${NS}.Dto`;
@@ -41,7 +45,7 @@ class Dto {
 /**
  * @implements TeqFw_Web_Front_Api_Store_IEntity
  */
-export default class Fl32_Dup_Front_Store_Entity_User {
+export default class Fl32_Dup_Front_Store_Single_User {
     constructor(spec) {
         /** @type {Fl32_Dup_Back_Defaults} */
         const DEF = spec['Fl32_Dup_Back_Defaults$'];
@@ -55,8 +59,8 @@ export default class Fl32_Dup_Front_Store_Entity_User {
         const dtoSubscript = spec['Fl32_Dup_Front_Dto_User_Subscription$'];
 
         /**
-         * @param {Fl32_Dup_Front_Store_Entity_User.Dto} [data]
-         * @return {Fl32_Dup_Front_Store_Entity_User.Dto}
+         * @param {Fl32_Dup_Front_Store_Single_User.Dto} [data]
+         * @return {Fl32_Dup_Front_Store_Single_User.Dto}
          */
         this.createDto = function (data) {
             const res = new Dto();

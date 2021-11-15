@@ -53,17 +53,6 @@ export default function (spec) {
         </q-item-section>
         <q-item-section>{{$t('navig.contacts.add')}}</q-item-section>
     </q-item>
-
-    <q-item to="${DEF.ROUTE_CHAT}"
-            active-class="bg-primary text-white"
-            clickable
-            v-ripple
-    >
-        <q-item-section avatar>
-            <q-icon name="chat"/>
-        </q-item-section>
-        <q-item-section>{{$t('navig.chat')}}</q-item-section>
-    </q-item>
     
     <q-item to="${DEF.ROUTE_CFG}"
             active-class="bg-primary text-white"

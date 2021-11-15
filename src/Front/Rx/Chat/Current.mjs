@@ -25,6 +25,14 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
          * @return {*}
          */
         this.addMessage = (data) => _messages.value.push(data);
+        /**
+         *
+         * @param {Fl32_Dup_Front_Dto_Message.Dto[]} messages
+         */
+        this.resetBand = function (messages) {
+            _messages.value.length = 0;
+            for (const one of messages) _messages.value.push(one);
+        }
 
         this.getMessages = () => _messages;
         this.getOtherSideId = () => _otherSideId;

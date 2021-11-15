@@ -18,7 +18,6 @@ const ENTITY = '/contact/card';
 const ATTR = {
     COLOR_BG: 'colorBg',
     COLOR_TEXT: 'colorText',
-    ID: 'id',
     KEY_PUB: 'keyPub',
     NICK: 'nick',
     PARENT_ID: 'parentId',
@@ -78,7 +77,7 @@ export default class Fl32_Dup_Front_Store_Entity_Contact_Card {
 
         this.getEntityName = () => ENTITY;
 
-        this.getPrimaryKey = () => [ATTR.ID];
+        this.getPrimaryKey = () => [ATTR.USER_ID];
     }
 
 }

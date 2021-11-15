@@ -1,5 +1,5 @@
 /**
- * Root for store configuration widgets.
+ * Store configuration widget.
  *
  * @namespace Fl32_Dup_Front_Widget_Cfg_Store
  */
@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_Store';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Act_Store_Init.act|function} */
-    const actInit = spec['Fl32_Dup_Front_Act_Store_Init$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -37,21 +37,18 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
         data() {
             return {
                 disabled: false,
             };
         },
-        computed: {},
         methods: {
             async init() {
                 this.disabled = true;
-                await actInit({});
+                await idb.dropDb();
+                await idb.open();
                 this.disabled = false;
             }
-        },
-        async mounted() {
         },
     };
 }

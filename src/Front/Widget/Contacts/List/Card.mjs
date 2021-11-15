@@ -78,6 +78,7 @@ export default function (spec) {
                     dto.parentId = wapi.parentId;
                     dto.userId = wapi.userId;
                     await idb.add(trx, metaContact, dto);
+                    await trx.commit(); // TODO: should we use 'await commit' here?
                 }
 
                 /**

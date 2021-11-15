@@ -18,7 +18,7 @@ export default function (spec) {
     const factCrypto = spec['Fl32_Dup_Front_Factory_Crypto$'];
 
     /**
-     * @param {} event
+     * @param event
      * @return {Promise<void>}
      * @memberOf Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize
      */
@@ -31,7 +31,7 @@ export default function (spec) {
             const connectionId = dto.connectionId;
             const payload = dto.payload;
             // get encryption keys
-            /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
             const user = _session.getUser();
             const serverPub = user.serverPubKey;
             const userSec = user.key.secret;

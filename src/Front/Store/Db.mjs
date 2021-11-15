@@ -13,19 +13,19 @@ export default function (spec) {
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['TeqFw_Web_Front_Store_IDB$$']; // new instance
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const metaContactCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+    const idbContactCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
-    const metaMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Band} */
-    const metaMsgBand = spec['Fl32_Dup_Front_Store_Entity_Msg_Band$'];
+    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Band_User} */
+    const idbMsgBandUser = spec['Fl32_Dup_Front_Store_Entity_Msg_Band_User$'];
 
     // DEFINE WORKING VARS / PROPS
-    const E_CONTACT_CARD = metaContactCard.getEntityName();
-    const E_MSG = metaMsg.getEntityName();
-    const E_MSG_BAND = metaMsgBand.getEntityName();
-    const A_CONTACT_CARD = metaContactCard.getAttributes();
-    const A_MSG = metaMsg.getAttributes();
-    const A_MSG_BAND = metaMsgBand.getAttributes();
+    const E_CONTACT_CARD = idbContactCard.getEntityName();
+    const E_MSG = idbMsg.getEntityName();
+    const E_MSG_BAND_USER = idbMsgBandUser.getEntityName();
+    const A_CONTACT_CARD = idbContactCard.getAttributes();
+    const A_MSG = idbMsg.getAttributes();
+    const A_MSG_BAND_USER = idbMsgBandUser.getAttributes();
 
     // DEFINE INNER FUNCTIONS
     /**
@@ -34,15 +34,14 @@ export default function (spec) {
      * @return {(function(*): void)|*}
      */
     function fnUpgradeDb(db) {
-        if (!db.objectStoreNames.contains(E_CONTACT_CARD)) {
-            db.createObjectStore(E_CONTACT_CARD, {keyPath: A_CONTACT_CARD.ID, autoIncrement: true});
-        }
+        if (!db.objectStoreNames.contains(E_CONTACT_CARD))
+            db.createObjectStore(E_CONTACT_CARD, {keyPath: A_CONTACT_CARD.USER_ID});
         if (!db.objectStoreNames.contains(E_MSG)) {
-            db.createObjectStore(E_MSG, {keyPath: A_MSG.ID, autoIncrement: true});
+            const store = db.createObjectStore(E_MSG, {keyPath: A_MSG.MSG_ID});
+            store.createIndex(A_MSG.BAND_ID, A_MSG.BAND_ID);
         }
-        if (!db.objectStoreNames.contains(E_MSG_BAND)) {
-            db.createObjectStore(E_MSG_BAND, {keyPath: A_MSG_BAND.ID, autoIncrement: true});
-        }
+        if (!db.objectStoreNames.contains(E_MSG_BAND_USER))
+            db.createObjectStore(E_MSG_BAND_USER, {keyPath: A_MSG_BAND_USER.USER_ID});
     }
 
     // MAIN FUNCTIONALITY

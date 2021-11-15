@@ -1,5 +1,5 @@
 /**
- * 'Current Chat' route.
+ * Root route for user & room chats.
  *
  * @namespace Fl32_Dup_Front_Widget_Chat_Route
  */
@@ -15,16 +15,6 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band.vueCompTmpl} */
-    const band = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
-    /** @type {Fl32_Dup_Front_Rx_Chat_Title} */
-    const rxTitle = spec['Fl32_Dup_Front_Rx_Chat_Title$'];
-    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
-    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-    /** @type {TeqFw_Web_Front_Store_IDB} */
-    const idb = spec['Fl32_Dup_Front_Store_Db$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const metaContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -42,7 +32,7 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {band},
+        components: {},
         data() {
             return {};
         },
@@ -50,16 +40,6 @@ export default function (spec) {
             id: String,
         },
         methods: {},
-        async mounted() {
-            const trxRead = await idb.startTransaction(metaContact, false);
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
-            const found = await idb.readOne(trxRead, metaContact, parseInt(this.id));
-            if (found) {
-                rxChat.setTypeUser();
-                rxChat.setTitle(found.nick);
-                rxChat.setOtherSideId(found.userId);
-                rxTitle.set(found.nick);
-            }
-        },
+        async mounted() { },
     };
 }

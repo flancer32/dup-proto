@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Model_Crypto_Key_Manager} */
-    const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -44,9 +44,7 @@ export default function (spec) {
         },
         methods: {
             async test() {
-                const keys = await mgrKey.generateAsyncKeys();
-                // const {privateKey, publicKey} = await mgrKey.exportKeys(keys);
-                debugger
+                await rxChat.resetBand(1);
             }
         },
     };

@@ -25,8 +25,8 @@ export default function (spec) {
     const wapiCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_User} */
-    const metaUser = spec['Fl32_Dup_Front_Store_Entity_User$'];
+    /** @type {Fl32_Dup_Front_Store_Single_User} */
+    const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
     // TODO: change to interface after WF-516
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
@@ -126,7 +126,7 @@ export default function (spec) {
                 const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+                /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
                 const res = await createUserOnServer(this.code, this.fldNick, dto.subscription, keys.publicKey);
                 // generate symmetric key and save user data into IDB
@@ -168,7 +168,7 @@ export default function (spec) {
                     /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(this.vapidPubKey);
                     // save subscription to IDB Store
-                    /** @type {typeof Fl32_Dup_Front_Store_Entity_User.ATTR} */
+                    /** @type {typeof Fl32_Dup_Front_Store_Single_User.ATTR} */
                     const ATTR = metaUser.getAttributes();
                     const json = pushSubscription.toJSON();
                     // noinspection JSCheckFunctionSignatures
@@ -203,7 +203,7 @@ export default function (spec) {
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
                     this.vapidPubKey = res.webPushKey;
-                    /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+                    /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                     const dto = await store.get(metaUser.getEntityName());
                     this.displaySubscribe = !(typeof dto?.subscription?.endpoint === 'string');
                     if (!this.displaySubscribe) {

@@ -16,8 +16,11 @@ const ENTITY = '/msg';
  * @type {Object}
  */
 const ATTR = {
+    AUTHOR_ID: 'authorId',
     BAND_ID: 'bandId',
-    ID: 'id',
+    BODY: 'body',
+    DATE: 'date',
+    MSG_ID: 'msgId',
 };
 
 /**
@@ -26,9 +29,15 @@ const ATTR = {
 class Dto {
     static name = `${NS}.Dto`;
     /** @type {number} */
-    bandId;
+    authorId;
     /** @type {number} */
-    id;
+    bandId;
+    /** @type {string} */
+    body;
+    /** @type {Date} */
+    date;
+    /** @type {number} */
+    msgId;
 }
 
 /**
@@ -38,6 +47,10 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
     constructor(spec) {
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castStr = spec['TeqFw_Core_Shared_Util_Cast.castString'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
+        const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
 
         /**
          * @param {Fl32_Dup_Front_Store_Entity_Msg.Dto} [data]
@@ -45,8 +58,11 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
          */
         this.createDto = function (data) {
             const res = new Dto();
-            res.id = castInt(data?.id);
+            res.authorId = castInt(data?.authorId);
             res.bandId = castInt(data?.bandId);
+            res.body = castStr(data?.body);
+            res.date = castDate(data?.date);
+            res.msgId = castInt(data?.msgId);
             return res;
         }
 
@@ -56,6 +72,6 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
 
         this.getEntityName = () => ENTITY;
 
-        this.getPrimaryKey = () => [ATTR.ID];
+        this.getPrimaryKey = () => [ATTR.MSG_ID];
     }
 }

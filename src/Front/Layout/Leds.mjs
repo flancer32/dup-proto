@@ -64,6 +64,8 @@ export default function (spec) {
                 const state = modLed.getRef().value;
                 if (state === STATE.NET_OK)
                     await mgrSse.open();
+                if (state === STATE.SERVER_OK)
+                    await mgrSse.close();
             }
         },
         async mounted() {

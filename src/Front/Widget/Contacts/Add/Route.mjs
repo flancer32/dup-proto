@@ -104,7 +104,7 @@ export default function (spec) {
         },
         methods: {
             async onSubmit() {
-                /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+                /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                 const userCurrent = session.getUser();
                 const userId = userCurrent.id;
                 const date = new Date();

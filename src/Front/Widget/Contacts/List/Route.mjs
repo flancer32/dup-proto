@@ -57,7 +57,7 @@ export default function (spec) {
         },
         methods: {},
         async mounted() {
-            /** @type {Fl32_Dup_Front_Store_Entity_User.Dto} */
+            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
             const userCurrent = session.getUser();
             const userId = userCurrent.id;
             /** @type {Fl32_Dup_Shared_WAPI_User_List.Request} */

@@ -25,8 +25,8 @@ export default function Factory(spec) {
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Input.vueCompTmpl} */
     const messageInput = spec['Fl32_Dup_Front_Widget_Chat_Msg_Input$'];
-    /** @type {Fl32_Dup_Front_Rx_Chat_Title} */
-    const rxTitle = spec['Fl32_Dup_Front_Rx_Chat_Title$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
     // DEFINE WORKING VARS & PROPS
     const ref = VueLib.getVue().ref;
@@ -91,7 +91,7 @@ export default function Factory(spec) {
         setup() {
             const leftDrawerOpen = ref(false)
             const rightDrawerOpen = ref(false)
-            const title = rxTitle.getRef();
+            const title = rxChat.getTitle();
 
             return {
                 title,

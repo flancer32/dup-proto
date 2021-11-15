@@ -13,6 +13,8 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
 
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {TeqFw_Core_Shared_Logger} */
+        const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Factory} */
@@ -58,9 +60,11 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
                     const recipientId = req?.recipientId;
                     const payload = req?.payload;
                     const {msgId} = await actQUserAdd({trx, senderId, recipientId, payload});
+                    logger.info(`Message #${msgId} is registered in queue.`);
                     /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item.Dto} */
-                    const itemTo = registry.getConnectionByUser(req?.recipientId);
+                    const itemTo = registry.getConnectionByUser(recipientId);
                     if (itemTo) {
+                        logger.info(`Recipient #${recipientId} of message #${msgId} is online.`);
                         const userId = senderId;
                         const body = payload;
                         const author = await getNameByUserId(trx, userId);

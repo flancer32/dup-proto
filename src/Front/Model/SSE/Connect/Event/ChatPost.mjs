@@ -18,6 +18,8 @@ export default function (spec) {
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {Fl32_Dup_Front_Dto_Message} */
     const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
+    /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
+    const actMsgAdd = spec['Fl32_Dup_Front_Act_Band_Msg_Add$'];
 
     /**
      * @param {*} event
@@ -31,13 +33,6 @@ export default function (spec) {
             gate.send(req, wapiDelivery);
         }
 
-        function addToChat(body, author, sent) {
-            const date = new Date();
-            const dto = dtoMsg.createDto({body, date, author, sent});
-            if (dto.sent) dto.author = undefined;
-            rxChat.addMessage(dto);
-        }
-
         // MAIN FUNCTIONALITY
         const text = event.data;
         try {
@@ -48,14 +43,21 @@ export default function (spec) {
             const dto = sseChatPost.createDto(msg);
             const connectionId = dto.connectionId;
             const payload = dto.payload;
-            const messageId = msg.msgId;
+            const msgId = msg.msgId;
             // get encryption keys
             {
                 // add message to current band
                 const sent = (msg.userId === userId);
-                addToChat(msg.body, msg.author, sent);
+                // addToChat(msg.body, msg.author, sent);
+                actMsgAdd({
+                    authorId: msg.userId,
+                    bandId: msg.userId,
+                    body: msg.body,
+                    date: new Date(),
+                    msgId,
+                });
                 // send delivery confirmation (w/o await)
-                confirmDelivery(messageId, userId);
+                confirmDelivery(msgId, userId);
             }
         } catch (e) {
             console.log(text);
