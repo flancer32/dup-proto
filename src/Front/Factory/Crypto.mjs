@@ -18,7 +18,7 @@ export default class Fl32_Dup_Front_Factory_Crypto {
         // DEFINE INNER FUNCTIONS
         // DEFINE INSTANCE METHODS
 
-        this.createEnigmaAsym = async function () {
+        this.createEnigmaAsym = function () {
             return new EnigmaAsym({
                 ['Fl32_Dup_Shared_Lib_Nacl']: nacl,
                 ['Fl32_Dup_Shared_Lib_Nacl_Util']: util

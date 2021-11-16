@@ -12,10 +12,20 @@ export default function (spec) {
     const gate = spec['TeqFw_Web_Front_Service_Gate$'];
     /** @type {Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery.Factory} */
     const wapiDelivery = spec['Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery#Factory$'];
-    /** @type {Fl32_Dup_Shared_SSE_ChatPost} */
-    const sseChatPost = spec['Fl32_Dup_Shared_SSE_ChatPost$'];
     /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
     const actMsgAdd = spec['Fl32_Dup_Front_Act_Band_Msg_Add$'];
+    /** @type {Fl32_Dup_Front_Factory_Crypto} */
+    const factCrypto = spec['Fl32_Dup_Front_Factory_Crypto$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+
+    // WORKING VARS
+    /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
+    const enigma = factCrypto.createEnigmaAsym();
+
+    // INNER FUNCTIONS
 
     /**
      * @param {*} event
@@ -23,10 +33,25 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost
      */
     async function handler(event) {
-        // DEFINE INNER FUNCTIONS
+
+        // INNER FUNCTIONS
         function confirmDelivery(messageId, userId) {
             const req = wapiDelivery.createReq({messageId, userId});
             gate.send(req, wapiDelivery);
+        }
+
+        async function decrypt(encrypted, senderId) {
+            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
+            const user = session.getUser();
+            const sec = user.key.secret
+            // get recipient's public key from IDB
+            const trx = await idb.startTransaction(idbContact, false);
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
+            const card = await idb.readOne(trx, idbContact, senderId);
+            const pub = card.keyPub;
+            // set key and encrypt
+            enigma.setKeys(pub, sec);
+            return enigma.decryptAndVerify(encrypted);
         }
 
         // MAIN FUNCTIONALITY
@@ -36,31 +61,26 @@ export default function (spec) {
             const user = session.getUser();
             const userId = user.id;
             const msg = JSON.parse(text);
-            const dto = sseChatPost.createDto(msg);
-            const connectionId = dto.connectionId;
-            const payload = dto.payload;
             const msgId = msg.msgId;
-            // get encryption keys
-            {
-                // add message to current band
-                const sent = (msg.userId === userId);
-                // addToChat(msg.body, msg.author, sent);
-                actMsgAdd({
-                    authorId: msg.userId,
-                    bandId: msg.userId,
-                    body: msg.body,
-                    date: new Date(),
-                    msgId,
-                });
-                // send delivery confirmation (w/o await)
-                confirmDelivery(msgId, userId);
-            }
+            // decrypt message
+            const body = await decrypt(msg.body, msg.userId);
+            // save message to IDB and push to current band (if required)
+            actMsgAdd({
+                authorId: msg.userId,
+                bandId: msg.userId,
+                body,
+                date: new Date(),
+                msgId,
+            });
+            // send delivery confirmation (w/o await)
+            confirmDelivery(msgId, userId);
         } catch (e) {
             console.log(text);
             console.dir(e);
         }
     }
 
+    // MAIN FUNCTIONALITY
     Object.defineProperty(handler, 'name', {value: `${NS}.handler`});
     return handler;
 }

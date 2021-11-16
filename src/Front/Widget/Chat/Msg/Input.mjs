@@ -27,8 +27,17 @@ export default function (spec) {
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
     const actMsgAdd = spec['Fl32_Dup_Front_Act_Band_Msg_Add$'];
+    /** @type {Fl32_Dup_Front_Factory_Crypto} */
+    const factCrypto = spec['Fl32_Dup_Front_Factory_Crypto$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
 
     // WORKING VARS
+    /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
+    const enigma = factCrypto.createEnigmaAsym();
+
     const template = `
 <div class="t-grid-cols" style="width:100%; grid-template-columns: 1fr auto; grid-gap: var(--grid-gap);">
     <div>
@@ -73,11 +82,23 @@ export default function (spec) {
                  * @param {number} recipientId
                  * @return {Promise<number>}
                  */
-                async function sendToServer(msg, authorId, recipientId) {
-
+                async function encryptAndSend(msg, authorId, recipientId) {
+                    // get keys to encrypt
+                    /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
+                    const user = session.getUser();
+                    const sec = user.key.secret
+                    // get recipient's public key from IDB
+                    const trx = await idb.startTransaction(idbContact, false);
+                    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
+                    const card = await idb.readOne(trx, idbContact, recipientId);
+                    const pub = card.keyPub;
+                    // set key and encrypt
+                    enigma.setKeys(pub, sec);
+                    const encrypted = enigma.encryptAndSign(msg);
+                    // post message to server
                     /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
                     const req = routePost.createReq();
-                    req.payload = msg;
+                    req.payload = encrypted;
                     req.userId = authorId;
                     req.recipientId = recipientId;
                     // noinspection JSValidateTypes
@@ -92,7 +113,7 @@ export default function (spec) {
                 const recipientId = this.otherSideId;
                 const msg = this.message;
                 this.message = null;
-                const msgId = await sendToServer(msg, authorId, recipientId);
+                const msgId = await encryptAndSend(msg, authorId, recipientId);
                 logger.info(`Message sent to the server. ID: ${msgId}.`);
                 actMsgAdd({
                     authorId,
