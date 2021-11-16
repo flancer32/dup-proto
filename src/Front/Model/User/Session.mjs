@@ -29,7 +29,8 @@ export default class Fl32_Dup_Front_Model_User_Session {
                         (typeof _routeSignIn === 'string')
                     ) {
                         const requiresAuth = _router?.currentRoute?.value?.meta?.requiresAuth ?? true;
-                        if (requiresAuth)
+                        const isFirstHome = (_router?.currentRoute?.value?.matched?.length === 0);
+                        if (requiresAuth && !isFirstHome)
                             _router.push(_routeSignIn);
                     }
                     return false;

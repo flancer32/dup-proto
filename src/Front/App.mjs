@@ -113,7 +113,7 @@ export default class Fl32_Dup_Front_App {
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOME,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$'),
                 });
                 router.addRoute({
                     path: DEF.ROUTE_INVITE_VALIDATE,

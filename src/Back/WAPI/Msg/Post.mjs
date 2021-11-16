@@ -27,6 +27,8 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
         const metaAppUser = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
         /** @type {Fl32_Dup_Back_Act_Msg_Queue_User_Add.act|function} */
         const actQUserAdd = spec['Fl32_Dup_Back_Act_Msg_Queue_User_Add$'];
+        /** @type {Fl32_Dup_Back_Act_Push_Send.act|function} */
+        const actPushSend = spec['Fl32_Dup_Back_Act_Push_Send$'];
 
         // DEFINE WORKING VARS / PROPS
 
@@ -71,6 +73,15 @@ export default class Fl32_Dup_Back_WAPI_Msg_Post {
                         const dto = {userId, body, author, msgId};
                         const event = 'chatPost';
                         itemTo.respond(dto, null, event);
+                    } else {
+                        // send push notification
+                        logger.info(`Recipient #${recipientId} of message #${msgId} is offline. Sent push notification.`);
+                        const pushMsg = `message from user #${senderId}.`;
+                        await actPushSend({
+                            trx,
+                            userId: recipientId,
+                            body: pushMsg
+                        });
                     }
                     await trx.commit();
                     res.messageId = msgId;

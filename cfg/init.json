@@ -25,5 +25,8 @@
       "port": 9999
     },
     "urlBase": "duplo.wiredgeese.com"
+  },
+  "@teqfw/web-push": {
+    "email": "user@email.com"
   }
 }
