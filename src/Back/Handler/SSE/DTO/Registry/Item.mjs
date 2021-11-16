@@ -33,6 +33,8 @@ class Dto {
     respond;
     /** @type {string} TODO: use it or remove it */
     state;
+    /** @type {number} */
+    userId;
 }
 
 /**
@@ -61,6 +63,7 @@ export default class Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item {
             res.messageId = castInt(data?.messageId);
             res.respond = castFun(data?.respond);
             res.state = castString(data?.state);
+            res.userId = castInt(data?.userId);
             return res;
         }
 

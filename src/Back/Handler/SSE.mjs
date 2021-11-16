@@ -58,6 +58,7 @@ export default function (spec) {
                     // stream.write(`\n\n`);
                 }
 
+                // ... function to close SSE connection (if it is opened)
                 function close(payload) {
                     stream.end(payload);
                 }
@@ -69,9 +70,13 @@ export default function (spec) {
                 item.messageId = 1;
                 const connId = registry.add(item);
 
+                // add handler to remove closed connection from registry
+                stream.addListener('close', () => {
+                    registry.remove(connId);
+                });
+
                 // TMP: add listeners to trace SSE connection events
                 stream.addListener('aborted', () => console.log('SSE stream aborted.'));
-                stream.addListener('close', () => console.log('SSE stream close.'));
                 stream.addListener('data', () => console.log('SSE stream data.'));
                 stream.addListener('drain', () => console.log('SSE stream drain.'));
                 stream.addListener('end', () => console.log('SSE stream end.'));

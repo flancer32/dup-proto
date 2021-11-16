@@ -26,7 +26,7 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Factory} */
-        const sseAuth = spec['Fl32_Dup_Shared_WAPI_SSE_Authorize#Factory$'];
+        const route = spec['Fl32_Dup_Shared_WAPI_SSE_Authorize#Factory$'];
         /** @type {TeqFw_Core_Back_Config} */
         const config = spec['TeqFw_Core_Back_Config$'];
         /** @type {TeqFw_Core_Back_Util.readJson|function} */
@@ -50,7 +50,7 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         const A_QUM = rdbQUserMsg.getAttributes();
 
         // DEFINE INSTANCE METHODS
-        this.getRouteFactory = () => sseAuth;
+        this.getRouteFactory = () => route;
 
         this.getService = function () {
             // DEFINE INNER FUNCTIONS

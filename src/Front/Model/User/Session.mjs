@@ -55,6 +55,12 @@ export default class Fl32_Dup_Front_Model_User_Session {
         this.getUser = function () {
             return _currentUser;
         }
+        /**
+         * @return {number}
+         */
+        this.getUserId = function () {
+            return _currentUser?.id;
+        }
 
         this.open = async function () {
             await this.checkUserAuthenticated();
