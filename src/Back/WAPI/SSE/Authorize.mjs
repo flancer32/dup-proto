@@ -36,14 +36,18 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
-        const metaAppUser = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
+        const rdbAppUser = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
+        /** @type {Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User} */
+        const rdbQUserMsg = spec['Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User$'];
         /** @type {Fl32_Dup_Back_Factory_Crypto} */
         const factCrypto = spec['Fl32_Dup_Back_Factory_Crypto$'];
 
 
         // DEFINE WORKING VARS / PROPS
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User.ATTR} */
-        const A_USER = metaAppUser.getAttributes();
+        const A_USER = rdbAppUser.getAttributes();
+        /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User.ATTR} */
+        const A_QUM = rdbQUserMsg.getAttributes();
 
         // DEFINE INSTANCE METHODS
         this.getRouteFactory = () => sseAuth;
@@ -70,8 +74,34 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
 
                 async function loadPublicKey(trx, userId) {
                     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User.Dto} */
-                    const one = await crud.readOne(trx, metaAppUser, {[A_USER.USER_REF]: userId})
+                    const one = await crud.readOne(trx, rdbAppUser, {[A_USER.USER_REF]: userId})
                     return one?.key_pub;
+                }
+
+                async function sendDelayedMessaged(trx, userId) {
+                    // DEFINE INNER FUNCTIONS
+                    async function getNameByUserId(trx, userId) {
+                        /** @type {Fl32_Dup_Back_Store_RDb_Schema_User.Dto} */
+                        const item = await crud.readOne(trx, rdbAppUser, userId);
+                        return item?.nick ?? '';
+                    }
+
+                    // MAIN FUNCTIONALITY
+                    const where = {[A_QUM.RECEIVER_REF]: parseInt(userId)};
+                    /** @type {Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User.Dto[]} */
+                    const items = await crud.readSet(trx, rdbQUserMsg, where);
+                    for (const item of items) {
+                        /** @type {Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item.Dto} */
+                        const itemTo = registry.getConnectionByUser(userId);
+                        if (itemTo) {
+                            const body = item.payload;
+                            const author = await getNameByUserId(trx, userId);
+                            const dto = {userId: item.sender_ref, body, author, msgId: item.id};
+                            const event = 'chatPost';
+                            itemTo.respond(dto, null, event);
+                        }
+                    }
+
                 }
 
                 // MAIN FUNCTIONALITY
@@ -95,9 +125,10 @@ export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
                         /** @type {Fl32_Dup_Shared_SSE_Authorize.Dto} */
                         const decrypted = enigma.decryptAndVerify(token);
                         if (decrypted) {
-                            logger.info(`HOP: ${JSON.stringify(decrypted)}.`);
+                            logger.info(`User #${userId} is authorized to use SSE.`);
                             registry.setState(decrypted.connectionId, 'authorized')
                             registry.mapUser(decrypted.connectionId, userId);
+                            await sendDelayedMessaged(trx, userId);
                         }
                     }
                     await trx.commit();
