@@ -31,6 +31,10 @@ export default class Fl32_Dup_Front_App {
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
+        /** @type {Fl32_Dup_Front_Model_UI_Led} */
+        const _led = spec['Fl32_Dup_Front_Model_UI_Led$'];
+        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
+        const mgrSSE = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -141,8 +145,8 @@ export default class Fl32_Dup_Front_App {
                 template: '<router-view/>',
                 async mounted() {
                     await _session.open();
-                    // if (await _session.checkUserAuthenticated())
-                    //     await mgrSse.open(); // open SSE connection
+                    if (await _session.checkUserAuthenticated())
+                        await mgrSSE.open(); // open SSE connection
                 }
             });
             // ... and add global available components
@@ -157,7 +161,7 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, VueLib, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-
+            // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {
                 const data = e.data;
@@ -167,6 +171,14 @@ export default class Fl32_Dup_Front_App {
                     );
                     playSound.play();
                 }
+            });
+            // add online/offline events
+            window.addEventListener('online', () => {
+                _led.setOnline();
+                mgrSSE.open();
+            });
+            window.addEventListener('offline', () => {
+                _led.setOffline();
             });
         }
 

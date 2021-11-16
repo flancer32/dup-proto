@@ -59,11 +59,11 @@ export default class Fl32_Dup_Front_Model_UI_Led {
          */
         this.getRef = () => _data;
         this.setOffline = function () {
-            isOffline = false;
+            isOffline = true;
             calcState();
         }
         this.setOnline = function () {
-            isOffline = true;
+            isOffline = false;
             calcState();
         }
         this.setServerConnected = function () {
