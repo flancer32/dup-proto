@@ -39,6 +39,7 @@
     "@teqfw/ui-quasar": "github:teqfw/ui-quasar",
     "@teqfw/user": "github:teqfw/user",
     "@teqfw/vue": "github:teqfw/vue",
+    "@teqfw/web": "github:teqfw/web",
     "@teqfw/web-push": "github:teqfw/web-push",
     "mysql2": "*",
     "sqlite3": "*",
