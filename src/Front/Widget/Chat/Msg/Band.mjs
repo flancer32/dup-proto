@@ -22,12 +22,14 @@ export default function (spec) {
 
     // DEFINE WORKING VARS
     const template = `
-<div class="q-pa-md row justify-center">
-    <div style="width: 100%; max-width: 400px">
+<div 
+    class="q-pa-md fixed-bottom row justify-center" 
+    style="margin-bottom:56px; width: 100%; height:calc(100vh - 50px - 56px)">
+    <q-scroll-area ref="scrollAreaRef" style="height: 100%; width: 100%;"  @scroll="onScrollFirst">
         <message v-for="(item) in band"
-                 :item="item"
+            :item="item"
         />
-    </div>
+    </q-scroll-area>
 </div>
 `;
     /**
@@ -44,11 +46,34 @@ export default function (spec) {
         data() {
             return {
                 band: rxChat.getMessages(),
+                count: rxChat.getMessagesCount(),
+                // scrollAreaRef: null,
             };
         },
-        methods: {},
+        methods: {
+            onScrollFirst() {
+                console.log(`onScrollFirst`);
+            }
+        },
+        watch: {
+            count() {
+                const scroll = this?._?.refs?.scrollAreaRef;
+                if (scroll) {
+                    setTimeout(() => {scroll.setScrollPosition('vertical', 150000, 500);}, 500);
+                }
+            }
+        },
         async mounted() {
-            // this.band = rxChat.getMessages();
+            const scroll = this?._?.refs?.scrollAreaRef;
+            if (scroll) {
+                setTimeout(() => {scroll.setScrollPosition('vertical', 150000, 2000);}, 500);
+            }
+        },
+        updated() {
+            console.log(`updated`);
+        },
+        renderTriggered() {
+            console.log(`renderTriggered`);
         },
     };
 }

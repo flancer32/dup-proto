@@ -12,6 +12,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         // DEFINE WORKING VARS / PROPS
         const ref = VueLib.getVue().ref;
         const _messages = ref([]);
+        const _messagesCount = ref(0);
         const _otherSideId = ref(null);
         const _title = ref();
         const _typeRoom = ref(false);
@@ -24,7 +25,11 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
          * @param {Fl32_Dup_Front_Dto_Message.Dto} data
          * @return {*}
          */
-        this.addMessage = (data) => _messages.value.push(data);
+        this.addMessage = (data) => {
+            _messages.value.push(data);
+            _messagesCount.value = _messages.value.length;
+        }
+
         /**
          *
          * @param {Fl32_Dup_Front_Dto_Message.Dto[]} messages
@@ -35,6 +40,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         }
 
         this.getMessages = () => _messages;
+        this.getMessagesCount = () => _messagesCount;
         this.getOtherSideId = () => _otherSideId;
         this.getTitle = () => _title;
         this.getTypeRoom = () => _typeRoom;
