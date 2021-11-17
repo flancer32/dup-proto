@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
     const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
-    /** @type {Fl32_Dup_Front_Model_UI_Led} */
-    const modLed = spec['Fl32_Dup_Front_Model_UI_Led$'];
+    /** @type {Fl32_Dup_Front_Rx_Led} */
+    const modLed = spec['Fl32_Dup_Front_Rx_Led$'];
 
     // DEFINE WORKING VARS
     const STATE = modLed.getStates();

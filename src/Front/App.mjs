@@ -31,8 +31,8 @@ export default class Fl32_Dup_Front_App {
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
-        /** @type {Fl32_Dup_Front_Model_UI_Led} */
-        const _led = spec['Fl32_Dup_Front_Model_UI_Led$'];
+        /** @type {Fl32_Dup_Front_Rx_Led} */
+        const _led = spec['Fl32_Dup_Front_Rx_Led$'];
         /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
         const mgrSSE = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 

@@ -20,14 +20,14 @@ const Q_COLOR_AJAX = 'green-6';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Model_UI_Led} */
-    const modLed = spec['Fl32_Dup_Front_Model_UI_Led$'];
+    /** @type {Fl32_Dup_Front_Rx_Led} */
+    const rxLed = spec['Fl32_Dup_Front_Rx_Led$'];
     /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
     const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
     // DEFINE WORKING VARS
-    /** @type {typeof Fl32_Dup_Front_Model_UI_Led.STATE} */
-    const STATE = modLed.getStates();
+    /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */
+    const STATE = rxLed.getStates();
     const template = `
 <q-btn dense flat round icon="lens" size="8.5px" :color="color" v-on:click="action"/>
 `;
@@ -47,7 +47,7 @@ export default function (spec) {
         },
         computed: {
             color() {
-                const state = modLed.getRef().value;
+                const state = rxLed.getRef().value;
                 if (state === STATE.AJAX_ON) {
                     return Q_COLOR_AJAX;
                 } else if (state === STATE.SERVER_OK) {
@@ -61,11 +61,22 @@ export default function (spec) {
         },
         methods: {
             async action() {
-                const state = modLed.getRef().value;
-                if (state === STATE.NET_OK)
-                    await mgrSse.open();
-                if (state === STATE.SERVER_OK)
-                    await mgrSse.close();
+                const ledState = rxLed.getRef().value;
+                const isConnOpened = mgrSse.isActive();
+                if (ledState === STATE.NET_OK) {
+                    if (isConnOpened) {
+                        rxLed.setServerConnected();
+                    } else {
+                        await mgrSse.open();
+                    }
+                } else if (ledState === STATE.SERVER_OK) {
+                    if (!isConnOpened) {
+                        rxLed.setServerDisconnected();
+                    } else {
+                        await mgrSse.close();
+                    }
+
+                }
             }
         },
         async mounted() {

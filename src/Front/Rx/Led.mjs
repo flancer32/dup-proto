@@ -1,11 +1,11 @@
 /**
- * UI LED indicator in header.
+ * Reactive element, LED indicator in header.
  *
- * @namespace Fl32_Dup_Front_Model_UI_Led
+ * @namespace Fl32_Dup_Front_Rx_Led
  */
 // MODULE'S VARS
 /**
- * @memberOf Fl32_Dup_Front_Model_UI_Led
+ * @memberOf Fl32_Dup_Front_Rx_Led
  */
 const STATE = {
     AJAX_ON: 'ajax',
@@ -16,7 +16,7 @@ const STATE = {
 Object.freeze(STATE);
 
 // MODULE'S CLASSES
-export default class Fl32_Dup_Front_Model_UI_Led {
+export default class Fl32_Dup_Front_Rx_Led {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Vue_Front_Lib} */
@@ -88,7 +88,7 @@ export default class Fl32_Dup_Front_Model_UI_Led {
     }
 
     /**
-     * @return {typeof Fl32_Dup_Front_Model_UI_Led.STATE}
+     * @return {typeof Fl32_Dup_Front_Rx_Led.STATE}
      */
     getStates() {
         return STATE;

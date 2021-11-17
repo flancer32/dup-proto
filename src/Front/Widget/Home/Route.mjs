@@ -17,13 +17,13 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const _session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {Fl32_Dup_Front_Model_UI_Led} */
-    const _led = spec['Fl32_Dup_Front_Model_UI_Led$'];
+    /** @type {Fl32_Dup_Front_Rx_Led} */
+    const _led = spec['Fl32_Dup_Front_Rx_Led$'];
     /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
     const mgrSSE = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
 
     // WORKING VARS
-    /** @type {typeof Fl32_Dup_Front_Model_UI_Led.STATE} */
+    /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */
     const STATES = _led.getStates();
     const template = `
 <layout-base>

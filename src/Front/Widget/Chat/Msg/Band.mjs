@@ -52,7 +52,7 @@ export default function (spec) {
         },
         methods: {
             onScrollFirst() {
-                console.log(`onScrollFirst`);
+                //console.log(`onScrollFirst`);
             }
         },
         watch: {

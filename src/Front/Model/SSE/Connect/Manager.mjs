@@ -31,6 +31,7 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
             req.userId = _session.getUserId();
             /** @type {Fl32_Dup_Shared_WAPI_SSE_Close.Response} */
             const res = await gate.send(req, wapiClose);
+            if(res?.userNotFound) _connect.close();
         }
 
         this.open = async function () {
