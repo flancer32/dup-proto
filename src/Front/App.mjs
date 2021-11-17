@@ -145,8 +145,8 @@ export default class Fl32_Dup_Front_App {
                 template: '<router-view/>',
                 async mounted() {
                     await _session.open();
-                    if (await _session.checkUserAuthenticated())
-                        await mgrSSE.open(); // open SSE connection
+                    // if (await _session.checkUserAuthenticated())
+                    //     await mgrSSE.open(); // open SSE connection
                 }
             });
             // ... and add global available components

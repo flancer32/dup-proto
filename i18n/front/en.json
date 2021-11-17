@@ -1,6 +1,7 @@
 {
   "btn": {
     "clean": "Clean",
+    "connect": "Connect",
     "disable": "Disable",
     "enable": "Enable",
     "ok": "OK",
@@ -13,6 +14,7 @@
       "add": "Add User",
       "list": "List Contacts"
     },
+    "2home": "Go Home",
     "home": "Home"
   },
   "wg": {

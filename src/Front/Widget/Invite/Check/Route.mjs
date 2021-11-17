@@ -132,6 +132,7 @@ export default function (spec) {
                 // generate symmetric key and save user data into IDB
                 if (res.userId) {
                     dto.id = res.userId;
+                    dto.nick = this.fldNick;
                     dto.serverPubKey = res.serverPublicKey;
                     dto.key = dtoKey.createDto();
                     dto.key.public = keys.publicKey;

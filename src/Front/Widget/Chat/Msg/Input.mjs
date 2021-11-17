@@ -42,15 +42,16 @@ export default function (spec) {
 <div class="t-grid-cols" style="width:100%; grid-template-columns: 1fr auto; grid-gap: var(--grid-gap);">
     <div>
     <q-input
-      v-model="message"
-      outlined
-      placeholder="Message..."
-      autogrow
+      :placeholder="placeholder"
+      :disable="!enabled"
       @keypress.ctrl.enter="send"
+      autogrow
+      outlined
+      v-model="message"
     />
     </div>
     <div style="margin: auto;">
-        <q-btn :label="$t('btn.ok')" color="primary" round v-on:click="send"></q-btn>
+        <q-btn :label="$t('btn.ok')" color="primary" round v-on:click="send" :disable="!enabled"></q-btn>
     </div>
 </div>
 `;
@@ -70,6 +71,14 @@ export default function (spec) {
                 message: null,
                 otherSideId: null,
             };
+        },
+        computed: {
+            enabled() {
+                return this.otherSideId !== null;
+            },
+            placeholder() {
+                return this.enabled ? 'Message...' : 'Please select user to chat...';
+            },
         },
         methods: {
             async send() {

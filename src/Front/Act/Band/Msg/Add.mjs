@@ -45,6 +45,7 @@ export default function (spec) {
             dto.body = body;
             dto.date = date;
             dto.sent = sent;
+            if (!sent && navigator.vibrate) navigator.vibrate(150);
             rxChat.addMessage(dto);
         }
 

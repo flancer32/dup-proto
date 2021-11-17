@@ -19,8 +19,8 @@ export default function Factory(spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Vue_Front_Lib} */
     const VueLib = spec['TeqFw_Vue_Front_Lib$'];
-    /** @type {Fl32_Dup_Front_Layout_Navig_Base.vueCompTmpl} */
-    const navigator = spec['Fl32_Dup_Front_Layout_Navig_Base$'];
+    /** @type {Fl32_Dup_Front_Layout_Nav_Base.vueCompTmpl} */
+    const navigator = spec['Fl32_Dup_Front_Layout_Nav_Base$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
 

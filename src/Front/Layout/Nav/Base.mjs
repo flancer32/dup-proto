@@ -1,16 +1,16 @@
 /**
  * Base navigation.
  *
- * @namespace Fl32_Dup_Front_Layout_Navig_Base
+ * @namespace Fl32_Dup_Front_Layout_Nav_Base
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Layout_Navig_Base';
+const NS = 'Fl32_Dup_Front_Layout_Nav_Base';
 
 // MODULE'S FUNCTIONS
 /**
  * TeqFW DI factory function to get dependencies for the object.
  *
- * @returns {Fl32_Dup_Front_Layout_Navig_Base.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Layout_Nav_Base.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -32,6 +32,17 @@ export default function (spec) {
         <q-item-section>{{$t('navig.home')}}</q-item-section>
     </q-item>
 
+    <q-item to="${DEF.ROUTE_CHAT}"
+            active-class="bg-primary text-white"
+            clickable
+            v-ripple
+    >
+        <q-item-section avatar>
+            <q-icon name="message"/>
+        </q-item-section>
+        <q-item-section>{{$t('navig.chat')}}</q-item-section>
+    </q-item>
+    
     <q-item to="${DEF.ROUTE_CONTACTS_LIST}"
             active-class="bg-primary text-white"
             clickable
@@ -64,7 +75,7 @@ export default function (spec) {
         </q-item-section>
         <q-item-section>{{$t('navig.cfg')}}</q-item-section>
     </q-item>
-    
+<!--    
     <q-item to="${DEF.ROUTE_LOGS}"
             active-class="bg-primary text-white"
             clickable
@@ -75,14 +86,14 @@ export default function (spec) {
         </q-item-section>
         <q-item-section>{{$t('navig.logs')}}</q-item-section>
     </q-item>
-
+-->
 </q-list>
 `;
     /**
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Layout_Navig_Base
+     * @memberOf Fl32_Dup_Front_Layout_Nav_Base
      */
     return {
         teq: {package: DEF.SHARED.NAME},

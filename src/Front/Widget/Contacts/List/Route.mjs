@@ -15,21 +15,12 @@ const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {TeqFw_Web_Front_Service_Gate} */
-    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
-    /** @type {Fl32_Dup_Shared_WAPI_User_List.Factory} */
-    const wapiUsers = spec['Fl32_Dup_Shared_WAPI_User_List.Factory$'];
     /** @type {Fl32_Dup_Front_Widget_Contacts_List_Card.vueCompTmpl} */
     const card = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
-    /** @type {Fl32_Dup_Front_Dto_Contacts_Card} */
-    const dtoCard = spec['Fl32_Dup_Front_Dto_Contacts_Card$'];
     /** @type {Fl32_Dup_Front_Model_Contacts} */
     const modContacts = spec['Fl32_Dup_Front_Model_Contacts$'];
 
     // DEFINE WORKING VARS
-    const A_CARD = dtoCard.getAttributes();
     const template = `
 <layout-base>
     <div class="q-pt-xs q-gutter-xs">
@@ -57,22 +48,7 @@ export default function (spec) {
         },
         methods: {},
         async mounted() {
-            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-            const userCurrent = session.getUser();
-            const userId = userCurrent.id;
-            /** @type {Fl32_Dup_Shared_WAPI_User_List.Request} */
-            const req = wapiUsers.createReq();
-            /** @type {Fl32_Dup_Shared_WAPI_User_List.Response} */
-            const res = await gate.send(req, wapiUsers);
-            const update = [];
-            for (const key of Object.keys(res?.cards)) {
-                const wapi = res.cards[key];
-                if (wapi.userId === userId) continue;
-                // noinspection JSCheckFunctionSignatures
-                const card = dtoCard.createDto({[A_CARD.WAPI_CARD]: wapi});
-                update.push(card);
-            }
-            modContacts.setValues(update);
+            await modContacts.loadFromServer();
         },
     };
 }

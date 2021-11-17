@@ -41,6 +41,7 @@ export default function (spec) {
         }
 
         async function decrypt(encrypted, senderId) {
+            let res = null;
             /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
             const user = session.getUser();
             const sec = user.key.secret
@@ -48,10 +49,13 @@ export default function (spec) {
             const trx = await idb.startTransaction(idbContact, false);
             /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
             const card = await idb.readOne(trx, idbContact, senderId);
-            const pub = card.keyPub;
-            // set key and encrypt
-            enigma.setKeys(pub, sec);
-            return enigma.decryptAndVerify(encrypted);
+            if (card) {
+                const pub = card.keyPub;
+                // set key and encrypt
+                enigma.setKeys(pub, sec);
+                res = enigma.decryptAndVerify(encrypted);
+            }
+            return res;
         }
 
         // MAIN FUNCTIONALITY
@@ -64,14 +68,15 @@ export default function (spec) {
             const msgId = msg.msgId;
             // decrypt message
             const body = await decrypt(msg.body, msg.userId);
-            // save message to IDB and push to current band (if required)
-            actMsgAdd({
-                authorId: msg.userId,
-                bandId: msg.userId,
-                body,
-                date: new Date(),
-                msgId,
-            });
+            if (body)
+                // save message to IDB and push to current band (if required)
+                actMsgAdd({
+                    authorId: msg.userId,
+                    bandId: msg.userId,
+                    body,
+                    date: new Date(),
+                    msgId,
+                });
             // send delivery confirmation (w/o await)
             confirmDelivery(msgId, userId);
         } catch (e) {

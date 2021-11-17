@@ -43,12 +43,12 @@ export default function (spec) {
         components: {message},
         data() {
             return {
-                band: []
+                band: rxChat.getMessages(),
             };
         },
         methods: {},
         async mounted() {
-            this.band = rxChat.getMessages();
+            // this.band = rxChat.getMessages();
         },
     };
 }

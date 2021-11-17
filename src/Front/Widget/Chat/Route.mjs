@@ -15,8 +15,12 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
+    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
+    /** @type {Fl32_Dup_Front_Model_Chat_User} */
+    const modUser = spec['Fl32_Dup_Front_Model_Chat_User$'];
 
-    // DEFINE WORKING VARS
+    // WORKING VARS
     const template = `
 <layout-chat>
     <router-view></router-view>
@@ -39,7 +43,27 @@ export default function (spec) {
         props: {
             id: String,
         },
-        methods: {},
-        async mounted() { },
+        methods: {
+            async switchCard() {
+                const found = await modUser.getCard(this.id);
+                if (found) {
+                    rxChat.setTypeUser();
+                    rxChat.setOtherSideId(found.userId);
+                    rxChat.setTitle(found.nick);
+                }
+            }
+        },
+        watch: {
+            async id(current, old) {
+                // load card data on user changing
+                if (current !== old) {
+                    await this.switchCard();
+                }
+            }
+        },
+        async mounted() {
+            // load card data on the first entry to the route
+            await this.switchCard();
+        },
     };
 }
