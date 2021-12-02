@@ -15,10 +15,9 @@ const NS = 'Fl32_Dup_Front_Layout_Chat';
  */
 export default function Factory(spec) {
     // EXTRACT DEPS
+    const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Vue_Front_Lib} */
-    const VueLib = spec['TeqFw_Vue_Front_Lib$'];
     /** @type {Fl32_Dup_Front_Layout_Nav_Chat.vueCompTmpl} */
     const navigator = spec['Fl32_Dup_Front_Layout_Nav_Chat$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
@@ -29,7 +28,6 @@ export default function Factory(spec) {
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
     // DEFINE WORKING VARS & PROPS
-    const ref = VueLib.getVue().ref;
     const template = `
 <q-layout view="lHr lpR lFr">
 

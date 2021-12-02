@@ -15,17 +15,15 @@ const NS = 'Fl32_Dup_Front_Layout_Base';
  */
 export default function Factory(spec) {
     // EXTRACT DEPS
+    const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Vue_Front_Lib} */
-    const VueLib = spec['TeqFw_Vue_Front_Lib$'];
     /** @type {Fl32_Dup_Front_Layout_Nav_Base.vueCompTmpl} */
     const navigator = spec['Fl32_Dup_Front_Layout_Nav_Base$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
 
     // DEFINE WORKING VARS & PROPS
-    const ref = VueLib.getVue().ref;
     const template = `
 <q-layout view="lHr lpR lFr">
 

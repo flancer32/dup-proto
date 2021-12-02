@@ -11,6 +11,8 @@ const NS = 'Fl32_Dup_Front_App';
 export default class Fl32_Dup_Front_App {
     constructor(spec) {
         // EXTRACT DEPS
+        const {createApp} = spec['TeqFw_Vue_Front_Lib_Vue'];
+        const {createRouter, createWebHashHistory} = spec['TeqFw_Vue_Front_Lib_Router'];
         /** @type {Fl32_Dup_Front_Defaults} */
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Di_Shared_Container} */
@@ -18,9 +20,7 @@ export default class Fl32_Dup_Front_App {
         /** @type {TeqFw_I18n_Front_Lib} */
         const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
-        const QuasarLib = spec['TeqFw_Ui_Quasar_Front_Lib$'];
-        /** @type {TeqFw_Vue_Front_Lib} */
-        const VueLib = spec['TeqFw_Vue_Front_Lib$'];
+        const quasar = spec['TeqFw_Ui_Quasar_Front_Lib'];
         /** @type {Fl32_Dup_Front_Layout_Base} */
         const _layoutBase = spec['Fl32_Dup_Front_Layout_Base$'];
         /** @type {Fl32_Dup_Front_Layout_Chat} */
@@ -73,19 +73,16 @@ export default class Fl32_Dup_Front_App {
                 }
             }
 
-            function initQuasarUi(app, QuasarLib) {
-                const quasar = QuasarLib.getQuasar()
+            function initQuasarUi(app, quasar) {
                 app.use(quasar, {config: {}});
                 // noinspection JSUnresolvedVariable
                 quasar.iconSet.set(quasar.iconSet.svgMaterialIcons);
             }
 
-            function initRouter(app, VueLib, DEF, container) {
-                /** @type {{createRouter, createWebHashHistory}} */
-                const Router = VueLib.getRouter();
+            function initRouter(app, DEF, container) {
                 /** @type {{addRoute}} */
-                const router = Router.createRouter({
-                    history: Router.createWebHashHistory(),
+                const router = createRouter({
+                    history: createWebHashHistory(),
                     routes: [],
                 });
                 // setup application routes (load es6-module on demand with DI-container)
@@ -137,9 +134,7 @@ export default class Fl32_Dup_Front_App {
             // MAIN FUNCTIONALITY
 
             // create root vue component
-            /** @type {{createApp}} */
-            const Vue = VueLib.getVue();
-            _root = Vue.createApp({
+            _root = createApp({
                 teq: {package: DEF.SHARED.NAME},
                 name: NS,
                 template: '<router-view/>',
@@ -157,8 +152,8 @@ export default class Fl32_Dup_Front_App {
             // other initialization
             await _config.init({}); // this app has no separate 'doors' (entry points)
             await initI18n(_root, I18nLib);
-            initQuasarUi(_root, QuasarLib);
-            const router = initRouter(_root, VueLib, DEF, container);
+            initQuasarUi(_root, quasar);
+            const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
             // add sound on WebPush event

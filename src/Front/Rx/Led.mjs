@@ -19,11 +19,9 @@ Object.freeze(STATE);
 export default class Fl32_Dup_Front_Rx_Led {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Vue_Front_Lib} */
-        const VueLib = spec['TeqFw_Vue_Front_Lib$'];
+        const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
         // DEFINE WORKING VARS / PROPS
-        const ref = VueLib.getVue().ref;
         /** @type {{value: Fl32_Dup_Front_Dto_Contacts_Card.Dto[]}} */
         const _data = ref(STATE.OFF);
         let isOffline = false;

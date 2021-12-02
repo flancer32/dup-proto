@@ -6,11 +6,9 @@
 export default class Fl32_Dup_Front_Rx_Chat_Current {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Vue_Front_Lib} */
-        const VueLib = spec['TeqFw_Vue_Front_Lib$'];
+        const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
         // DEFINE WORKING VARS / PROPS
-        const ref = VueLib.getVue().ref;
         const _messages = ref([]);
         const _messagesCount = ref(0);
         const _otherSideId = ref(null);

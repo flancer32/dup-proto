@@ -7,8 +7,7 @@
 export default class Fl32_Dup_Front_Model_Contacts {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Vue_Front_Lib} */
-        const VueLib = spec['TeqFw_Vue_Front_Lib$'];
+        const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const session = spec['TeqFw_User_Front_Api_ISession$'];
         /** @type {TeqFw_Web_Front_Service_Gate} */
@@ -19,7 +18,6 @@ export default class Fl32_Dup_Front_Model_Contacts {
         const dtoCard = spec['Fl32_Dup_Front_Dto_Contacts_Card$'];
 
         // DEFINE WORKING VARS / PROPS
-        const ref = VueLib.getVue().ref;
         /** @type {Fl32_Dup_Front_Dto_Contacts_Card.Dto[]} */
         const _data = ref([]);
         const A_CARD = dtoCard.getAttributes();
