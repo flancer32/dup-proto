@@ -20,16 +20,13 @@
         "front": "Fl32_Dup_Front_Model_Crypto_Key_Manager"
       },
       "TeqFw_User_Front_Api_ISession": {
-        "area": "front",
-        "ns": "Fl32_Dup_Front_Model_User_Session"
+        "front": "Fl32_Dup_Front_Model_User_Session"
       },
       "TeqFw_Web_Front_Api_Gate_IAjaxLed": {
-        "area": "front",
-        "ns": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Gate_IAjaxLed"
+        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Gate_IAjaxLed"
       },
       "TeqFw_Web_Front_Api_SSE_IState": {
-        "area": "front",
-        "ns": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_SSE_IState"
+        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_SSE_IState"
       }
     }
   },
