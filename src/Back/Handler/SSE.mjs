@@ -15,7 +15,7 @@ const NS = 'Fl32_Dup_Back_Handler_SSE';
  * Factory to setup execution context and to create handler.
  *
  * @implements TeqFw_Web_Back_Api_Request_IHandler.Factory
- * @memberOf TeqFw_Web_Back_Plugin_Web_Handler_Static
+ * @memberOf TeqFw_Web_Back_Handler_Static
  */
 export default function (spec) {
     // EXTRACT DEPS
