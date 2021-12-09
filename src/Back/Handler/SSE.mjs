@@ -117,6 +117,11 @@ export default function (spec) {
         }
     }
 
+    // TMP: use common interface for 'Web Server Handler'
+    handle.getListener = function (event) {
+        return handle;
+    }
+
     // MAIN FUNCTIONALITY
     Object.defineProperty(handle, 'name', {value: `${NS}.handle`});
     return handle;
