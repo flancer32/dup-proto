@@ -3,6 +3,7 @@
  * Try to use function factory instead of class factory.
  *
  * @namespace Fl32_Dup_Back_Handler_SSE
+ * @deprecated use TeqFw_Web_Back_Handler_SSE
  */
 // MODULE'S IMPORT
 import {constants as H2} from 'http2';
@@ -16,6 +17,7 @@ const NS = 'Fl32_Dup_Back_Handler_SSE';
  *
  * @implements TeqFw_Web_Back_Api_Request_IHandler.Factory
  * @memberOf TeqFw_Web_Back_Handler_Static
+ * @deprecated use TeqFw_Web_Back_Handler_SSE
  */
 export default function (spec) {
     // EXTRACT DEPS
@@ -115,11 +117,6 @@ export default function (spec) {
                 context.markRequestComplete();
             }
         }
-    }
-
-    // TMP: use common interface for 'Web Server Handler'
-    handle.getListener = function (event) {
-        return handle;
     }
 
     // MAIN FUNCTIONALITY
