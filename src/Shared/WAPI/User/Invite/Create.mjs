@@ -32,7 +32,7 @@ class Response {
 
 /**
  * Factory to create new DTOs and get route address.
- * @implements TeqFw_Web_Back_Api_Service_IRoute
+ * @implements TeqFw_Web_Back_Api_WAPI_IRoute
  * @memberOf Fl32_Dup_Shared_WAPI_User_Invite_Create
  */
 class Factory {

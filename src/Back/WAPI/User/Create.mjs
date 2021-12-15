@@ -10,7 +10,7 @@ import {join} from "path";
 const NS = 'Fl32_Dup_Back_WAPI_User_Create';
 
 /**
- * @implements TeqFw_Web_Back_Api_Service_IFactory
+ * @implements TeqFw_Web_Back_Api_WAPI_IFactory
  */
 export default class Fl32_Dup_Back_WAPI_User_Create {
 
@@ -54,7 +54,7 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
             }
 
             /**
-             * @param {TeqFw_Web_Back_Api_Service_Context} context
+             * @param {TeqFw_Web_Back_Api_WAPI_Context} context
              * @return Promise<void>
              */
             async function service(context) {

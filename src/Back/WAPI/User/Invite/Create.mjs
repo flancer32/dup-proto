@@ -7,7 +7,7 @@
 const NS = 'Fl32_Dup_Back_WAPI_User_Invite_Create';
 
 /**
- * @implements TeqFw_Web_Back_Api_Service_IFactory
+ * @implements TeqFw_Web_Back_Api_WAPI_IFactory
  */
 export default class Fl32_Dup_Back_WAPI_User_Invite_Create {
 
@@ -29,7 +29,7 @@ export default class Fl32_Dup_Back_WAPI_User_Invite_Create {
             // DEFINE INNER FUNCTIONS
 
             /**
-             * @param {TeqFw_Web_Back_Api_Service_Context} context
+             * @param {TeqFw_Web_Back_Api_WAPI_Context} context
              * @return Promise<void>
              */
             async function service(context) {
