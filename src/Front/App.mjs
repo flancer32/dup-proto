@@ -39,7 +39,7 @@ export default class Fl32_Dup_Front_App {
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
 
-        // DEFINE INNER FUNCTIONS
+        // DEFINE INSTANCE METHODS
 
         /**
          * Initialize application.

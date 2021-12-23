@@ -17,13 +17,13 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {TeqFw_Web_Front_Service_Gate} */
-    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {TeqFw_Web_Front_WAPI_Gate} */
+    const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
     // TODO: change to interface after WF-516
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
-    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Factory} */
-    const wapiLoadKey = spec['TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey#Factory$'];
+    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Factory} */
+    const wapiLoadKey = spec['TeqFw_Web_Push_Shared_WAPI_Load_ServerKey#Factory$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
     const wapiCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Factory} */
@@ -150,10 +150,10 @@ export default function (spec) {
 
                 // MAIN FUNCTIONALITY
                 try {
-                    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Request} */
+                    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Request} */
                     const req = wapiLoadKey.createReq();
                     // noinspection JSValidateTypes
-                    /** @type {TeqFw_Web_Push_Shared_Service_Route_Load_ServerKey.Response} */
+                    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Response} */
                     const res = await gate.send(req, wapiLoadKey);
                     /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(res.key);

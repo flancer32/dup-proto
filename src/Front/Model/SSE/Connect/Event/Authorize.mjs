@@ -10,8 +10,8 @@ export default function (spec) {
     const _session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {Fl32_Dup_Shared_SSE_Authorize} */
     const sseAuth = spec['Fl32_Dup_Shared_SSE_Authorize$'];
-    /** @type {TeqFw_Web_Front_Service_Gate} */
-    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {TeqFw_Web_Front_WAPI_Gate} */
+    const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
     /** @type {Fl32_Dup_Shared_WAPI_SSE_Authorize.Factory} */
     const wapiAuth = spec['Fl32_Dup_Shared_WAPI_SSE_Authorize#Factory$'];
     /** @type {Fl32_Dup_Front_Factory_Crypto} */

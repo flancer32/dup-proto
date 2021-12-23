@@ -21,8 +21,8 @@ export default function (spec) {
     const session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {TeqFw_Web_Front_Api_Dto_Config} */
     const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
-    /** @type {TeqFw_Web_Front_Service_Gate} */
-    const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+    /** @type {TeqFw_Web_Front_WAPI_Gate} */
+    const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory} */
     const wapiInvite = spec['Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory$'];
 

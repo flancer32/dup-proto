@@ -13,8 +13,8 @@ export default class Fl32_Dup_Front_Model_SSE_Connect_Manager {
         const hndlAuthorize = spec['Fl32_Dup_Front_Model_SSE_Connect_Event_Authorize$'];
         /** @type {Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost.handler|function} */
         const hndlChatPost = spec['Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost$'];
-        /** @type {TeqFw_Web_Front_Service_Gate} */
-        const gate = spec['TeqFw_Web_Front_Service_Gate$'];
+        /** @type {TeqFw_Web_Front_WAPI_Gate} */
+        const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
         /** @type {Fl32_Dup_Shared_WAPI_SSE_Close.Factory} */
         const wapiClose = spec['Fl32_Dup_Shared_WAPI_SSE_Close#Factory$'];
 
