@@ -54,7 +54,7 @@ export default class Fl32_Dup_Back_WAPI_User_Create {
             }
 
             /**
-             * @param {TeqFw_Web_Back_Api_WAPI_Context} context
+             * @param {TeqFw_Web_Back_Handler_WAPI_Context} context
              * @return Promise<void>
              */
             async function service(context) {
