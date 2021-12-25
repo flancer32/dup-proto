@@ -35,6 +35,8 @@ export default class Fl32_Dup_Front_App {
         const _led = spec['Fl32_Dup_Front_Rx_Led$'];
         /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
         const mgrSSE = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
+        /** @type {Fl32_Dup_Front_Model_Offline} */
+        const _modOffline = spec['Fl32_Dup_Front_Model_Offline$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
