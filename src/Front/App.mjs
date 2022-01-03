@@ -129,6 +129,15 @@ export default class Fl32_Dup_Front_App {
                 return router;
             }
 
+            /**
+             * Create processes that start on events.
+             * TODO: this should be done using 'teqfw.json' descriptor
+             * @param {TeqFw_Di_Shared_Container} container
+             */
+            function initEventProcessors(container) {
+                container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
+            }
+
             // MAIN FUNCTIONALITY
 
             // create root vue component
@@ -153,6 +162,7 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
+            initEventProcessors(container);
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {
