@@ -25,20 +25,17 @@
       "TeqFw_Web_Front_Api_Gate_IAjaxLed": {
         "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Gate_IAjaxLed"
       },
-      "TeqFw_Web_Front_Api_SSE_IState": {
-        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_SSE_IState"
+      "TeqFw_Web_Front_Api_Event_Stream_Reverse_IState": {
+        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Event_Stream_Reverse_State"
       }
     }
   },
   "@teqfw/web": {
     "excludes": {
       "handlers": [
-        "TeqFw_Web_Back_Handler_Upload"
+        "TeqFw_Web_Back_Server_Handler_Upload"
       ]
     },
-    "sse": [
-      "Fl32_Dup_Back_SSE_Stream"
-    ],
     "services": [
       "Fl32_Dup_Back_WAPI_Hollow_IsFree",
       "Fl32_Dup_Back_WAPI_Msg_Confirm_Delivery",

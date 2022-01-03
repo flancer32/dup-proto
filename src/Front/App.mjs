@@ -31,12 +31,8 @@ export default class Fl32_Dup_Front_App {
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
-        /** @type {Fl32_Dup_Front_Rx_Led} */
-        const _led = spec['Fl32_Dup_Front_Rx_Led$'];
-        /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
-        const mgrSSE = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
-        /** @type {Fl32_Dup_Front_Model_Offline} */
-        const _modOffline = spec['Fl32_Dup_Front_Model_Offline$'];
+        /** @type {TeqFw_Web_Front_App_UUID} */
+        const _modUUID = spec['TeqFw_Web_Front_App_UUID$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -142,8 +138,6 @@ export default class Fl32_Dup_Front_App {
                 template: '<router-view/>',
                 async mounted() {
                     await _session.open();
-                    // if (await _session.checkUserAuthenticated())
-                    //     await mgrSSE.open(); // open SSE connection
                 }
             });
             // ... and add global available components
@@ -168,14 +162,6 @@ export default class Fl32_Dup_Front_App {
                     );
                     playSound.play();
                 }
-            });
-            // add online/offline events
-            window.addEventListener('online', () => {
-                _led.setOnline();
-                mgrSSE.open();
-            });
-            window.addEventListener('offline', () => {
-                _led.setOffline();
             });
         }
 

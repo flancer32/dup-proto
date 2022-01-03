@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_SSE';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
-    const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
+    /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
+    const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
     const modLed = spec['Fl32_Dup_Front_Rx_Led$'];
 
@@ -58,11 +58,11 @@ export default function (spec) {
             }
         },
         methods: {
-            async close() {
-                await mgrSse.close();
+            close() {
+                eventStreamReverse.close();
             },
-            async open() {
-                await mgrSse.open();
+            open() {
+                eventStreamReverse.open();
             }
         },
         async mounted() {

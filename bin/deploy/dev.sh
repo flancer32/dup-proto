@@ -29,7 +29,7 @@ rm -fr "${DIR_NODE}" "${DIR_ROOT}/package-lock.json"
 
 echo "Re-install JS project."
 cd "${DIR_ROOT}" || exit 255
-npm install
+npm install --no-optional
 
 #echo "Remove cloned dependencies (sources)."
 #rm -fr "${DIR_OWN}/@teqfw"

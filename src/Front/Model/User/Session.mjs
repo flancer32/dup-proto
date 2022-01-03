@@ -5,7 +5,8 @@ export default class Fl32_Dup_Front_Model_User_Session {
 
     constructor(spec) {
         // EXTRACT DEPS
-
+        /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
+        const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
         /** @type {TeqFw_Web_Front_Store} */
         const store = spec['TeqFw_Web_Front_Store$'];
         /** @type {Fl32_Dup_Front_Store_Single_User} */
@@ -63,6 +64,8 @@ export default class Fl32_Dup_Front_Model_User_Session {
         }
 
         this.open = async function () {
+            if (!eventStreamReverse.stateOpen() && self.navigator.onLine)
+                eventStreamReverse.open();
             await this.checkUserAuthenticated();
         }
 

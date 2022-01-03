@@ -22,8 +22,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
     const rxLed = spec['Fl32_Dup_Front_Rx_Led$'];
-    /** @type {Fl32_Dup_Front_Model_SSE_Connect_Manager} */
-    const mgrSse = spec['Fl32_Dup_Front_Model_SSE_Connect_Manager$'];
+    /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
+    const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
 
     // DEFINE WORKING VARS
     /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */
@@ -62,18 +62,18 @@ export default function (spec) {
         methods: {
             async action() {
                 const ledState = rxLed.getRef().value;
-                const isConnOpened = mgrSse.isActive();
+                const isStreamOpened = eventStreamReverse.stateOpen();
                 if (ledState === STATE.NET_OK) {
-                    if (isConnOpened) {
+                    if (isStreamOpened) {
                         rxLed.setServerConnected();
                     } else {
-                        await mgrSse.open();
+                        await eventStreamReverse.open();
                     }
                 } else if (ledState === STATE.SERVER_OK) {
-                    if (!isConnOpened) {
+                    if (!isStreamOpened) {
                         rxLed.setServerDisconnected();
                     } else {
-                        await mgrSse.close();
+                        await eventStreamReverse.close();
                     }
 
                 }
