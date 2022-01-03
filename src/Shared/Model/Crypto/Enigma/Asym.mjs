@@ -1,7 +1,7 @@
 /**
  * Object to encrypt and decrypt messages using public and secret keys (asymmetric cipher).
  *
- * Each object has own pair of keys and should be used as instance rather then singleton.
+ * Each object has own pair of keys and should be used as instance rather than singleton.
  *
  * @namespace Fl32_Dup_Shared_Model_Crypto_Enigma_Asym
  */

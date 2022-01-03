@@ -147,6 +147,7 @@ export default class Fl32_Dup_Front_App {
 
             // other initialization
             await _config.init({}); // this app has no separate 'doors' (entry points)
+            await _modUUID.init();
             await initI18n(_root, I18nLib);
             initQuasarUi(_root, quasar);
             const router = initRouter(_root, DEF, container);
