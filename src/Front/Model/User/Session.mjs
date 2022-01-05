@@ -5,8 +5,8 @@ export default class Fl32_Dup_Front_Model_User_Session {
 
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
-        const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+        const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_Store} */
         const store = spec['TeqFw_Web_Front_Store$'];
         /** @type {Fl32_Dup_Front_Store_Single_User} */

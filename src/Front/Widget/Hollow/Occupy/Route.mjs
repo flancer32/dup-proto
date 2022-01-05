@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {TeqFw_Web_Front_WAPI_Gate} */
-    const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
+    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
+    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     // TODO: change to interface after WF-516
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];

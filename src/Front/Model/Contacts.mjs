@@ -10,8 +10,8 @@ export default class Fl32_Dup_Front_Model_Contacts {
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
         /** @type {TeqFw_User_Front_Api_ISession} */
         const session = spec['TeqFw_User_Front_Api_ISession$'];
-        /** @type {TeqFw_Web_Front_WAPI_Gate} */
-        const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
+        /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
+        const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
         /** @type {Fl32_Dup_Shared_WAPI_User_List.Factory} */
         const wapiUsers = spec['Fl32_Dup_Shared_WAPI_User_List.Factory$'];
         /** @type {Fl32_Dup_Front_Dto_Contacts_Card} */

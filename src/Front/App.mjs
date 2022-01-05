@@ -32,7 +32,11 @@ export default class Fl32_Dup_Front_App {
         /** @type {TeqFw_User_Front_Api_ISession} */
         const _session = spec['TeqFw_User_Front_Api_ISession$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
-        const _modUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        const _frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        /** @type {TeqFw_Web_Front_App_Back_UUID} */
+        const _backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
+        /** @type {TeqFw_Web_Front_Proc_Tik} */
+        const procTik = spec['TeqFw_Web_Front_Proc_Tik$']; // TODO: we should have initialization for processes
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -156,7 +160,8 @@ export default class Fl32_Dup_Front_App {
 
             // other initialization
             await _config.init({}); // this app has no separate 'doors' (entry points)
-            await _modUUID.init();
+            await _frontUUID.init();
+            await _backUUID.init();
             await initI18n(_root, I18nLib);
             initQuasarUi(_root, quasar);
             const router = initRouter(_root, DEF, container);

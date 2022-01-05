@@ -8,8 +8,8 @@ export default class Fl32_Dup_Front_Model_Offline {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Rx_Led} */
         const rxLed = spec['Fl32_Dup_Front_Rx_Led$'];
-        /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
-        const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+        const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
 
         // DEFINE WORKING VARS / PROPS
 

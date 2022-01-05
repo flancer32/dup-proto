@@ -15,8 +15,10 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_SSE';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
-    const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+    const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct} */
+    const eventStreamDirect = spec['TeqFw_Web_Front_App_Connect_Event_Direct$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
     const modLed = spec['Fl32_Dup_Front_Rx_Led$'];
 
@@ -29,6 +31,7 @@ export default function (spec) {
          <div class="q-gutter-xs">
             <q-btn :label="$t('wg.cfg.sse.open')" color="primary" :disable="openDisabled" v-on:click="open"></q-btn>
             <q-btn :label="$t('wg.cfg.sse.close')" color="primary" :disable="closeDisabled" v-on:click="close"></q-btn>
+            <q-btn :label="$t('wg.cfg.sse.direct')" color="primary" :disable="false" v-on:click="direct"></q-btn>
         </div>
     </q-card-section>
 </q-card>
@@ -63,6 +66,11 @@ export default function (spec) {
             },
             open() {
                 eventStreamReverse.open();
+            },
+            direct() {
+                const data = {name: 'some vents'};
+                // noinspection JSIgnoredPromiseFromCall
+                eventStreamDirect.send(data);
             }
         },
         async mounted() {

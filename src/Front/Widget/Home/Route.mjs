@@ -19,17 +19,8 @@ export default function (spec) {
     const _session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
     const _led = spec['Fl32_Dup_Front_Rx_Led$'];
-    /** @type {TeqFw_Web_Front_App_Event_Embassy} */
-    const embassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
-    /** @type {TeqFw_Web_Shared_Event_TikTok} */
-    const esTik = spec['TeqFw_Web_Shared_Event_TikTok$'];
-    /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
-    const eventStreamReverse = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
-
-    // TODO: remove tmp code
-    embassy.subscribe(esTik.getName(), (evt) => {
-        console.dir(evt);
-    });
+ /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+    const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
 
     // WORKING VARS
     /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */

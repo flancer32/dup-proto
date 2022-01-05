@@ -8,8 +8,8 @@ const NS = 'Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost';
 export default function (spec) {
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {TeqFw_Web_Front_WAPI_Gate} */
-    const gate = spec['TeqFw_Web_Front_WAPI_Gate$'];
+    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
+    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     /** @type {Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery.Factory} */
     const wapiDelivery = spec['Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery#Factory$'];
     /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */

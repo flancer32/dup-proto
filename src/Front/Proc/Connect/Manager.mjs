@@ -7,12 +7,12 @@
 export default class Fl32_Dup_Front_Proc_Connect_Manager {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Web_Front_App_Event_Stream_Reverse} */
-        const stream = spec['TeqFw_Web_Front_App_Event_Stream_Reverse$'];
-        /** @type {TeqFw_Web_Front_Event_Stream_Reverse_Closed} */
-        const efClosed = spec['TeqFw_Web_Front_Event_Stream_Reverse_Closed$'];
-        /** @type {TeqFw_Web_Front_Event_Stream_Reverse_Opened} */
-        const efOpened = spec['TeqFw_Web_Front_Event_Stream_Reverse_Opened$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+        const stream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed} */
+        const efClosed = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed$'];
+        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
+        const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
 
         // DEFINE WORKING VARS / PROPS
         let _isOpened = false;
