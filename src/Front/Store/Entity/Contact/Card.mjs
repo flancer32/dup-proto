@@ -28,7 +28,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Store_Entity_Contact_Card
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {string} */
     colorBg;
     /** @type {string} */

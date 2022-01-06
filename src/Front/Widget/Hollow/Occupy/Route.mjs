@@ -5,6 +5,8 @@
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
+const ATTEMPTS = 4; // number of attempts to get response event from backend
+const TIMEOUT = 2000; // between events messages to backend
 
 // MODULE'S FUNCTIONS
 /**
@@ -34,6 +36,16 @@ export default function (spec) {
     const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
     /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
     const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
+    /** @type {TeqFw_Web_Front_App_UUID} */
+    const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+    /** @type {TeqFw_Web_Front_App_Event_Queue} */
+    const eventsQueue = spec['TeqFw_Web_Front_App_Event_Queue$'];
+    /** @type {TeqFw_Web_Front_App_Event_Embassy} */
+    const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered} */
+    const esbUserRegistered = spec['Fl32_Dup_Shared_Event_Back_User_SignUp_Registered$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_User_SignedUp} */
+    const esfUserSignedUp = spec['Fl32_Dup_Shared_Event_Front_User_SignedUp$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -104,8 +116,39 @@ export default function (spec) {
                     req.keyP256dh = subscript.keys.p256dh;
                     req.keyPub = pubKey;
                     // noinspection JSValidateTypes
-                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
-                    return await gate.send(req, wapiCreate);
+                    // /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
+                    // return await gate.send(req, wapiCreate);
+                    const promise = new Promise((resolve) => {
+                        const payload = esfUserSignedUp.createDto();
+                        payload.endpoint = subscript.endpoint;
+                        payload.nick = nick;
+                        payload.keyAuth = subscript.keys.auth;
+                        payload.keyP256dh = subscript.keys.p256dh;
+                        payload.keyPub = pubKey;
+                        payload.frontUUID = frontUUID.get();
+                        // send event to backend
+                        eventsQueue.add(esfUserSignedUp.getName(), payload);
+                        // repeat event ATTEMPTS times every TIMEOUT ms. until response event will be received
+                        let i = 1;
+                        const intId = setInterval(() => {
+                            if (++i > ATTEMPTS) {
+                                clearInterval(intId);
+                                resolve(null);
+                            } else eventsQueue.add(esfUserSignedUp.getName(), payload);
+                        }, TIMEOUT);
+                        // subscribe to response event from back
+                        backEmbassy.subscribe(
+                            esbUserRegistered.getName(),
+                            /**
+                             * @param {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto} evt
+                             */
+                            (evt) => {
+                                if (intId) clearInterval(intId);
+                                resolve(evt);
+                            }
+                        );
+                    });
+                    return promise;
                 }
 
                 // MAIN FUNCTIONALITY

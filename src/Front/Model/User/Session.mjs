@@ -11,6 +11,8 @@ export default class Fl32_Dup_Front_Model_User_Session {
         const store = spec['TeqFw_Web_Front_Store$'];
         /** @type {Fl32_Dup_Front_Store_Single_User} */
         const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
+        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
+        const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
 
         // DEFINE WORKING VARS / PROPS
         let _router, _routeRedirect, _routeSignIn;
@@ -20,6 +22,11 @@ export default class Fl32_Dup_Front_Model_User_Session {
         // DEFINE INSTANCE METHODS
 
         this.checkUserAuthenticated = async function () {
+            const isHollowFree = dsHollowIsFree.get();
+            if (isHollowFree) {
+                _router.push(_routeSignIn);
+                return false;
+            }
             if (!_currentUser) {
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
@@ -29,15 +36,19 @@ export default class Fl32_Dup_Front_Model_User_Session {
                         (typeof _router?.push === 'function') &&
                         (typeof _routeSignIn === 'string')
                     ) {
-                        const requiresAuth = _router?.currentRoute?.value?.meta?.requiresAuth ?? true;
-                        const isFirstHome = (_router?.currentRoute?.value?.matched?.length === 0);
-                        if (requiresAuth && !isFirstHome)
+                        const route = _router?.currentRoute?.value;
+                        const requiresAuth = route?.meta?.requiresAuth ?? true;
+                        const isHome = (route?.path === '/');
+                        const isFirstHome = (route?.matched?.length === 0);
+                        const isSignIn = (route?.path === _routeSignIn);
+                        if (requiresAuth && !isSignIn)
                             _router.push(_routeSignIn);
                     }
                     return false;
                 }
                 _currentUser = dto;
             }
+
             return true;
         }
 

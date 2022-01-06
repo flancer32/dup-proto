@@ -21,7 +21,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Shared_Dto_Contacts_Card
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {Date} */
     dateRegistered;
     /** @type {string} */

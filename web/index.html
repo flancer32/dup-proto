@@ -44,7 +44,7 @@
                 // create Vue application and mount it to the page
                 /** @type {Fl32_Dup_Front_App} */
                 const app = await container.get('Fl32_Dup_Front_App$');
-                await app.init();
+                await app.init('.launchpad');
                 await app.mount('BODY > DIV');
             } catch (e) {
                 console.error("Error in bootstrap: " + e + "\n" + e.stack);

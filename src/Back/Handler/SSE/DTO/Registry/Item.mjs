@@ -22,7 +22,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Back_Handler_SSE_DTO_Registry_Item
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {function} */
     close;
     /** @type {number} */

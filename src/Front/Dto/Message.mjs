@@ -21,7 +21,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Dto_Message
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {string} */
     author;
     /** @type {string} */

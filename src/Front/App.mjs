@@ -17,6 +17,8 @@ export default class Fl32_Dup_Front_App {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Di_Shared_Container} */
         const container = spec['TeqFw_Di_Shared_Container$'];
+        /** @type {TeqFw_Core_Shared_Logger} */
+        const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_I18n_Front_Lib} */
         const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
@@ -35,8 +37,12 @@ export default class Fl32_Dup_Front_App {
         const _frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
         const _backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
-        /** @type {TeqFw_Web_Front_Proc_Tik} */
-        const procTik = spec['TeqFw_Web_Front_Proc_Tik$']; // TODO: we should have initialization for processes
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+        const reverseEventStream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
+        const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
+        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
+        const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -46,11 +52,42 @@ export default class Fl32_Dup_Front_App {
         /**
          * Initialize application.
          *
+         * @param {string} cssSelector DIV to trace initialization process
          * @return {Promise<void>}
          */
-        this.init = async function () {
+        this.init = async function (cssSelector) {
             // DEFINE INNER FUNCTIONS
 
+            /**
+             * Initialize data sources.
+             */
+            async function initDataSources() {
+                await dsHollowIsFree.init();
+            }
+
+            /**
+             * Create processes that start on events.
+             * TODO: this should be done using 'teqfw.json' descriptor
+             * @param {TeqFw_Di_Shared_Container} container
+             */
+            async function initEventProcessors(container) {
+                await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
+            }
+
+            /**
+             * Wait until back-to-front events stream will be open before continue.
+             * @return {Promise<unknown>}
+             */
+            function initEventStream() {
+                return new Promise((resolve) => {
+                    reverseEventStream.open();
+                    reverseEventStream.subscribe(efOpened.getName(), () => {
+                        debugger
+                        resolve();
+                    });
+                    // TODO: add on error processing
+                });
+            }
 
             /**
              * Setup working languages and fallback language and add translation function to the Vue.
@@ -133,16 +170,9 @@ export default class Fl32_Dup_Front_App {
                 return router;
             }
 
-            /**
-             * Create processes that start on events.
-             * TODO: this should be done using 'teqfw.json' descriptor
-             * @param {TeqFw_Di_Shared_Container} container
-             */
-            function initEventProcessors(container) {
-                container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
-            }
-
             // MAIN FUNCTIONALITY
+            const elDisplay = document.querySelector(cssSelector);
+            elDisplay.innerText = `TeqFW App is initializing...`;
 
             // create root vue component
             _root = createApp({
@@ -159,15 +189,22 @@ export default class Fl32_Dup_Front_App {
             _root.component('LayoutEmpty', _layoutEmpty);
 
             // other initialization
+            logger.pause(false);
             await _config.init({}); // this app has no separate 'doors' (entry points)
+            elDisplay.innerText = `Application config is loaded.`;
             await _frontUUID.init();
             await _backUUID.init();
+            elDisplay.innerHTML = `Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`;
+            await initEventStream();
+            elDisplay.innerText = `Backend events stream is opened.`;
             await initI18n(_root, I18nLib);
+            elDisplay.innerText = `i18n resources are loaded.`;
             initQuasarUi(_root, quasar);
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            initEventProcessors(container);
+            await initDataSources();
+            await initEventProcessors(container);
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {
@@ -179,6 +216,8 @@ export default class Fl32_Dup_Front_App {
                     playSound.play();
                 }
             });
+            // noinspection ES6MissingAwait
+            _session.checkUserAuthenticated();
         }
 
         /**

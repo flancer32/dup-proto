@@ -25,7 +25,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /**
      * Public key for the user.
      * @type {string}

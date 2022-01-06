@@ -18,7 +18,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Dto_User_Subscription_Keys
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {string} */
     auth;
     /** @type {string} */

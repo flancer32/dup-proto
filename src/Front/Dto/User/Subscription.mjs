@@ -20,7 +20,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Dto_User_Subscription
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {Date} */
     expirationTime;
     /** @type {string} */

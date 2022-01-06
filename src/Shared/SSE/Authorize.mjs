@@ -18,7 +18,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Shared_SSE_Authorize
  */
 class Dto {
-    static name = `${NS}.Dto`;
+    static namespace = `${NS}.Dto`;
     /** @type {number} */
     connectionId;
     /** @type {string} */
