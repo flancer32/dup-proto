@@ -1,16 +1,16 @@
 /**
  * Route to check invitation code on the front app and to add new user.
  *
- * @namespace Fl32_Dup_Front_Widget_Invite_Check_Route
+ * @namespace Fl32_Dup_Front_Widget_Invite_Validate_Route
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Invite_Check_Route';
+const NS = 'Fl32_Dup_Front_Widget_Invite_Validate_Route';
 
 // MODULE'S FUNCTIONS
 /**
  * Factory to create template for new Vue component instances.
  *
- * @returns {Fl32_Dup_Front_Widget_Invite_Check_Route.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Invite_Validate_Route.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -21,8 +21,6 @@ export default function (spec) {
     const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Validate.Factory} */
     const wapiValidate = spec['Fl32_Dup_Shared_WAPI_User_Invite_Validate#Factory$'];
-    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
-    const wapiCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_Single_User} */
@@ -32,6 +30,8 @@ export default function (spec) {
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
     /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
     const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
+    /** @type {Fl32_Dup_Front_Proc_User_Register} */
+    const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -73,7 +73,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_Invite_Check_Route
+     * @memberOf Fl32_Dup_Front_Widget_Invite_Validate_Route
      */
     return {
         teq: {package: DEF.SHARED.NAME},
@@ -97,38 +97,21 @@ export default function (spec) {
             code: String,
         },
         methods: {
-
             async create() {
-                // DEFINE INNER FUNCTIONS
-                /**
-                 * @param {string} code
-                 * @param {string} nick
-                 * @param {Fl32_Dup_Front_Dto_User_Subscription.Dto} subscript
-                 * @param {string} pubKey
-                 * @return {Promise<Fl32_Dup_Shared_WAPI_User_Create.Response|boolean>}
-                 */
-                async function createUserOnServer(code, nick, subscript, pubKey) {
-                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
-                    const req = wapiCreate.createReq();
-                    req.endpoint = subscript.endpoint;
-                    req.invite = code;
-                    req.nick = nick;
-                    req.keyAuth = subscript.keys.auth;
-                    req.keyP256dh = subscript.keys.p256dh;
-                    req.keyPub = pubKey;
-                    // noinspection JSValidateTypes
-                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
-                    return await gate.send(req, wapiCreate);
-                }
-
-                // MAIN FUNCTIONALITY
                 // generate keys for asymmetric encryption
                 const keys = await mgrKey.generateAsyncKeys();
-                // get user data with subscription details from IDB and compose WAPI-request
+                // get user data with subscription details from IDB
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
-                const res = await createUserOnServer(this.code, this.fldNick, dto.subscription, keys.publicKey);
+                // start process to register user on backend
+                /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
+                const res = await procSignUp.run({
+                    invite: this.code,
+                    nick: this.fldNick,
+                    pubKey: keys.publicKey,
+                    subscription: dto.subscription
+                });
                 // generate symmetric key and save user data into IDB
                 if (res.userId) {
                     dto.id = res.userId;

@@ -5,8 +5,6 @@
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
-const ATTEMPTS = 4; // number of attempts to get response event from backend
-const TIMEOUT = 2000; // between events messages to backend
 
 // MODULE'S FUNCTIONS
 /**
@@ -26,8 +24,6 @@ export default function (spec) {
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Factory} */
     const wapiLoadKey = spec['TeqFw_Web_Push_Shared_WAPI_Load_ServerKey#Factory$'];
-    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Factory} */
-    const wapiCreate = spec['Fl32_Dup_Shared_WAPI_User_Create#Factory$'];
     /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Factory} */
     const wapiIsFree = spec['Fl32_Dup_Shared_WAPI_Hollow_IsFree#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
@@ -36,16 +32,10 @@ export default function (spec) {
     const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
     /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
     const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
-    /** @type {TeqFw_Web_Front_App_UUID} */
-    const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
-    /** @type {TeqFw_Web_Front_App_Event_Queue} */
-    const eventsQueue = spec['TeqFw_Web_Front_App_Event_Queue$'];
-    /** @type {TeqFw_Web_Front_App_Event_Embassy} */
-    const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
-    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered} */
-    const esbUserRegistered = spec['Fl32_Dup_Shared_Event_Back_User_SignUp_Registered$'];
-    /** @type {Fl32_Dup_Shared_Event_Front_User_SignedUp} */
-    const esfUserSignedUp = spec['Fl32_Dup_Shared_Event_Front_User_SignedUp$'];
+    /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
+    const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
+    /** @type {Fl32_Dup_Front_Proc_User_Register} */
+    const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -100,57 +90,6 @@ export default function (spec) {
         },
         methods: {
             async create() {
-                // DEFINE INNER FUNCTIONS
-                /**
-                 * @param {string} nick
-                 * @param {Fl32_Dup_Front_Dto_User_Subscription.Dto} subscript
-                 * @param {string} pubKey
-                 * @return {Promise<Fl32_Dup_Shared_WAPI_User_Create.Response|boolean>}
-                 */
-                async function createUserOnServer(nick, subscript, pubKey) {
-                    /** @type {Fl32_Dup_Shared_WAPI_User_Create.Request} */
-                    const req = wapiCreate.createReq();
-                    req.endpoint = subscript.endpoint;
-                    req.nick = nick;
-                    req.keyAuth = subscript.keys.auth;
-                    req.keyP256dh = subscript.keys.p256dh;
-                    req.keyPub = pubKey;
-                    // noinspection JSValidateTypes
-                    // /** @type {Fl32_Dup_Shared_WAPI_User_Create.Response} */
-                    // return await gate.send(req, wapiCreate);
-                    const promise = new Promise((resolve) => {
-                        const payload = esfUserSignedUp.createDto();
-                        payload.endpoint = subscript.endpoint;
-                        payload.nick = nick;
-                        payload.keyAuth = subscript.keys.auth;
-                        payload.keyP256dh = subscript.keys.p256dh;
-                        payload.keyPub = pubKey;
-                        payload.frontUUID = frontUUID.get();
-                        // send event to backend
-                        eventsQueue.add(esfUserSignedUp.getName(), payload);
-                        // repeat event ATTEMPTS times every TIMEOUT ms. until response event will be received
-                        let i = 1;
-                        const intId = setInterval(() => {
-                            if (++i > ATTEMPTS) {
-                                clearInterval(intId);
-                                resolve(null);
-                            } else eventsQueue.add(esfUserSignedUp.getName(), payload);
-                        }, TIMEOUT);
-                        // subscribe to response event from back
-                        backEmbassy.subscribe(
-                            esbUserRegistered.getName(),
-                            /**
-                             * @param {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto} evt
-                             */
-                            (evt) => {
-                                if (intId) clearInterval(intId);
-                                resolve(evt);
-                            }
-                        );
-                    });
-                    return promise;
-                }
-
                 // MAIN FUNCTIONALITY
                 // generate keys for asymmetric encryption
                 const keys = await mgrKey.generateAsyncKeys();
@@ -158,7 +97,13 @@ export default function (spec) {
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                 const dto = await store.get(metaUser.getEntityName());
-                const res = await createUserOnServer(this.fldNick, dto.subscription, keys.publicKey);
+                // start process to register user on backend
+                /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
+                const res = await procSignUp.run({
+                    nick: this.fldNick,
+                    pubKey: keys.publicKey,
+                    subscription: dto.subscription
+                });
                 // generate symmetric key and save user data into IDB
                 if (res.userId) {
                     dto.id = res.userId;
@@ -169,6 +114,9 @@ export default function (spec) {
                     dto.key.secret = keys.secretKey;
                     await store.set(metaUser.getEntityName(), dto);
                     this.isRegistered = true;
+                    // noinspection ES6MissingAwait
+                    dsHollowIsFree.set(false);
+
                     // redirect user to homepage
                     setTimeout(() => {
                         session.reopen(DEF.ROUTE_HOME);

@@ -38,7 +38,7 @@ export default class Fl32_Dup_Front_App {
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
         const _backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
-        const reverseEventStream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+        const streamBf = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
         /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
@@ -59,6 +59,19 @@ export default class Fl32_Dup_Front_App {
             // DEFINE INNER FUNCTIONS
 
             /**
+             * Create printout function to log application startup events (to page or to console).
+             * @param {string} css
+             * @return {(function(string))|*}
+             */
+            function createPrintout(css) {
+                const elDisplay = document.querySelector(cssSelector);
+                return function (msg) {
+                    if (elDisplay) elDisplay.innerText = msg;
+                    else console.log(msg);
+                }
+            }
+
+            /**
              * Initialize data sources.
              */
             async function initDataSources() {
@@ -76,14 +89,13 @@ export default class Fl32_Dup_Front_App {
 
             /**
              * Wait until back-to-front events stream will be open before continue.
-             * @return {Promise<unknown>}
+             * @return {Promise<TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened.Dto>}
              */
-            function initEventStream() {
+            async function initEventStream() {
                 return new Promise((resolve) => {
-                    reverseEventStream.open();
-                    reverseEventStream.subscribe(efOpened.getName(), () => {
-                        debugger
-                        resolve();
+                    streamBf.open();
+                    streamBf.subscribe(efOpened.getName(), (evt) => {
+                        resolve(evt);
                     });
                     // TODO: add on error processing
                 });
@@ -157,13 +169,14 @@ export default class Fl32_Dup_Front_App {
                 });
                 router.addRoute({
                     path: DEF.ROUTE_INVITE_VALIDATE,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Invite_Check_Route$'),
+                    component: () => container.get('Fl32_Dup_Front_Widget_Invite_Validate_Route$'),
                     props: true,
                     meta: {requiresAuth: false}
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOLLOW_OCCUPY,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Hollow_Occupy_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Widget_Hollow_Occupy_Route$'),
+                    meta: {requiresAuth: false}
                 });
 
                 app.use(router);
@@ -171,8 +184,8 @@ export default class Fl32_Dup_Front_App {
             }
 
             // MAIN FUNCTIONALITY
-            const elDisplay = document.querySelector(cssSelector);
-            elDisplay.innerText = `TeqFW App is initializing...`;
+            const print = createPrintout(cssSelector);
+            print(`TeqFW App is initializing...`);
 
             // create root vue component
             _root = createApp({
@@ -191,14 +204,14 @@ export default class Fl32_Dup_Front_App {
             // other initialization
             logger.pause(false);
             await _config.init({}); // this app has no separate 'doors' (entry points)
-            elDisplay.innerText = `Application config is loaded.`;
+            print(`Application config is loaded.`);
             await _frontUUID.init();
             await _backUUID.init();
-            elDisplay.innerHTML = `Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`;
+            print(`Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`);
             await initEventStream();
-            elDisplay.innerText = `Backend events stream is opened.`;
+            print(`Backend events stream is opened.`);
             await initI18n(_root, I18nLib);
-            elDisplay.innerText = `i18n resources are loaded.`;
+            print(`i18n resources are loaded.`);
             initQuasarUi(_root, quasar);
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);

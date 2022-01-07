@@ -2,6 +2,7 @@
  * DataSource for hollow state (free or occupied).
  *
  * This data source is initialized once, when front is started.
+ * It's required to set state manually when first user is registered because state is cached in IndexedDb.
  *
  */
 // MODULE'S VARS

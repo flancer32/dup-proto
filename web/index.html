@@ -20,17 +20,20 @@
             async function initDiContainer() {
                 const urlWithPath = `${location.origin}${location.pathname}`;
                 const baseUrl = urlWithPath.endsWith('/') ? urlWithPath.slice(0, -1) : urlWithPath;
-                // create and setup DI Container
-                const modContainer = await import('./src/@teqfw/di/Shared/Container.mjs');
+                // load sources and create DI Container
+                const module = await import('./src/@teqfw/di/Shared/Container.mjs');
+                /** @type {typeof TeqFw_Di_Shared_Container} */
+                const Container = module.default;
                 /** @type {TeqFw_Di_Shared_Container} */
-                const container = new modContainer.default();
+                const container = new Container();
+                // load available namespaces from server
                 const res = await fetch('./api/@teqfw/web/load/namespaces');
                 const json = await res.json();
-                // setup namespaces mapping
+                // add namespaces to container
                 if (json?.data?.items && Array.isArray(json.data.items))
                     for (const item of json.data.items)
                         container.addSourceMapping(item.ns, baseUrl + item.path, true, item.ext);
-                // setup replaces
+                // add replaces to container
                 if (json?.data?.replaces && Array.isArray(json.data.replaces))
                     for (const item of json.data.replaces)
                         container.addModuleReplacement(item.orig, item.alter);
