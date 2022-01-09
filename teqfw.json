@@ -16,7 +16,7 @@
     },
     "replace": {
       "Fl32_Dup_Shared_Api_Crypto_Key_IManager": {
-        "back": "Fl32_Dup_Back_Model_Crypto_Key_Manager",
+        "back": "Fl32_Dup_Back_Mod_Crypto_Key_Manager",
         "front": "Fl32_Dup_Front_Model_Crypto_Key_Manager"
       },
       "TeqFw_User_Front_Api_ISession": {

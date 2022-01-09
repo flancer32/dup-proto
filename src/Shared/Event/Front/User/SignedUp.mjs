@@ -13,6 +13,8 @@ class Dto {
     /** @type {string} */
     endpoint;
     /** @type {string} */
+    frontUUID;
+    /** @type {string} */
     invite;
     /** @type {string} */
     keyAuth;
@@ -42,6 +44,7 @@ export default class Fl32_Dup_Shared_Event_Front_User_SignedUp {
         this.createDto = function (data) {
             const res = new Dto();
             res.endpoint = castString(data?.endpoint);
+            res.frontUUID = castString(data?.frontUUID);
             res.invite = castString(data?.invite);
             res.keyAuth = castString(data?.keyAuth);
             res.keyP256dh = castString(data?.keyP256dh);

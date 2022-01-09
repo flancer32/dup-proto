@@ -37,7 +37,7 @@ npm install --no-optional
 
 echo "Clone dependencies from github to inner folders."
 mkdir -p "${DIR_OWN}/@teqfw/"
-mkdir -p "${DIR_OWN}/@flancer32/"
+#mkdir -p "${DIR_OWN}/@flancer32/"
 
 processRepo "teqfw/core"
 processRepo "teqfw/db"

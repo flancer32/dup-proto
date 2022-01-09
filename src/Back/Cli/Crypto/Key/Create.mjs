@@ -31,7 +31,7 @@ export default function Factory(spec) {
     const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command#Factory$'];
     // TODO: change to interface after WF-516
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
-    const mgrKey = spec['Fl32_Dup_Back_Model_Crypto_Key_Manager$'];
+    const mgrKey = spec['Fl32_Dup_Back_Mod_Crypto_Key_Manager$'];
 
 
     // DEFINE INNER FUNCTIONS

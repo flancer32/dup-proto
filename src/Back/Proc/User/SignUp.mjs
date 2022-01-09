@@ -1,8 +1,10 @@
+/**
+ * Register new user in DB.
+ */
+// MODULE'S IMPORT
 import {join} from "path";
 
-/**
- * Process to register new user in DB.
- */
+// MODULE'S CLASSES
 export default class Fl32_Dup_Back_Proc_User_SignUp {
     constructor(spec) {
         // EXTRACT DEPS

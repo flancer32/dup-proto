@@ -33,6 +33,8 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+    /** @type {Fl32_Dup_Front_Proc_Msg_Post} */
+    const procPost = spec['Fl32_Dup_Front_Proc_Msg_Post$'];
 
     // WORKING VARS
     /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
@@ -89,7 +91,7 @@ export default function (spec) {
                  * @param {string} msg
                  * @param {number} authorId
                  * @param {number} recipientId
-                 * @return {Promise<number>}
+                 * @return {Promise<string>}
                  */
                 async function encryptAndSend(msg, authorId, recipientId) {
                     // get keys to encrypt
@@ -105,15 +107,23 @@ export default function (spec) {
                     enigma.setKeys(pub, sec);
                     const encrypted = enigma.encryptAndSign(msg);
                     // post message to server
-                    /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
-                    const req = routePost.createReq();
-                    req.payload = encrypted;
-                    req.userId = authorId;
-                    req.recipientId = recipientId;
-                    // noinspection JSValidateTypes
-                    /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Response} */
-                    const res = await gate.send(req, routePost);
-                    return res.messageId;
+                    const confirm = await procPost.run({
+                        message: encrypted,
+                        userId: authorId,
+                        recipientId
+                    });
+                    return confirm?.messageId;
+
+                    // /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
+                    // const req = routePost.createReq();
+                    // req.payload = encrypted;
+                    // req.userId = authorId;
+                    // req.recipientId = recipientId;
+                    // // noinspection JSValidateTypes
+                    // /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Response} */
+                    // const res = await gate.send(req, routePost);
+                    //
+                    // return res.messageId;
                 }
 
                 // MAIN FUNCTIONALITY
@@ -123,14 +133,18 @@ export default function (spec) {
                 const msg = this.message;
                 this.message = null;
                 const msgId = await encryptAndSend(msg, authorId, recipientId);
-                logger.info(`Message sent to the server. ID: ${msgId}.`);
-                actMsgAdd({
-                    authorId,
-                    bandId: recipientId,
-                    body: msg,
-                    date: new Date(),
-                    msgId,
-                });
+                if (msgId) {
+                    logger.info(`Message sent to the server. ID: ${msgId}.`);
+                    actMsgAdd({
+                        authorId,
+                        bandId: recipientId,
+                        body: msg,
+                        date: new Date(),
+                        msgId,
+                    });
+                } else {
+                    logger.info(`Cannot send message to the server`);
+                }
             }
         },
         async mounted() {
