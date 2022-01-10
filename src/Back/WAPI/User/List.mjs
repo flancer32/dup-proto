@@ -19,8 +19,6 @@ export default class Fl32_Dup_Back_WAPI_User_List {
         const route = spec['Fl32_Dup_Shared_WAPI_User_List#Factory$'];
         /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
         const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
-        /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
-        const metaApp = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree} */
         const metaTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
         /** @type {Fl32_Dup_Shared_Dto_Contacts_Card} */
@@ -31,8 +29,6 @@ export default class Fl32_Dup_Back_WAPI_User_List {
         const ATTR = dtoCard.getAttributes();
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Tree.ATTR} */
         const A_TREE = metaTree.getAttributes();
-        /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User.ATTR} */
-        const A_APP = metaApp.getAttributes();
         /** @type {typeof TeqFw_User_Back_Store_RDb_Schema_User.ATTR} */
         const A_USER = metaUser.getAttributes();
 
@@ -55,11 +51,9 @@ export default class Fl32_Dup_Back_WAPI_User_List {
                 async function listContacts(trx) {
                     const res = {};
                     // actual table names
-                    const T_APP = trx.getTableName(metaApp);
                     const T_TREE = trx.getTableName(metaTree);
                     const T_USER = trx.getTableName(metaUser);
                     // table aliases
-                    const AS_A = 'app';
                     const AS_T = 'tree';
                     const AS_U = 'user';
                     // attributes aliases
@@ -75,16 +69,9 @@ export default class Fl32_Dup_Back_WAPI_User_List {
                     query.table({[AS_U]: T_USER});
                     query.select([
                         {[A_USER_ID]: `${AS_U}.${A_USER.ID}`},
+                        {[A_KEY_PUB]: `${AS_U}.${A_USER.KEY_PUB}`},
+                        {[A_NICK]: `${AS_U}.${A_USER.USERNAME}`},
                         {[A_DATE]: `${AS_U}.${A_USER.DATE_CREATED}`},
-                    ]);
-                    // left join app_user
-                    query.leftOuterJoin(
-                        {[AS_A]: T_APP},
-                        `${AS_A}.${A_APP.USER_REF}`,
-                        `${AS_U}.${A_USER.ID}`);
-                    query.select([
-                        {[A_NICK]: `${AS_A}.${A_APP.NICK}`},
-                        {[A_KEY_PUB]: `${AS_A}.${A_APP.KEY_PUB}`}
                     ]);
                     // left join app_user_tree
                     query.leftOuterJoin(

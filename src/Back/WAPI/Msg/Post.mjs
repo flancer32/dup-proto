@@ -8,6 +8,7 @@ const NS = 'Fl32_Dup_Back_WAPI_Msg_Post';
 
 /**
  * @implements TeqFw_Web_Back_Api_WAPI_IFactory
+ * @deprecated use events & processes
  */
 export default class Fl32_Dup_Back_WAPI_Msg_Post {
 

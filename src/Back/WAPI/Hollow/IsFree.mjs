@@ -8,6 +8,7 @@ const NS = 'Fl32_Dup_Back_WAPI_Hollow_IsFree';
 
 /**
  * @implements TeqFw_Web_Back_Api_WAPI_IFactory
+ * @deprecated use Fl32_Dup_Back_Proc_Hollow_State_Request
  */
 export default class Fl32_Dup_Back_WAPI_Hollow_IsFree {
 

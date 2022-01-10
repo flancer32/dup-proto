@@ -14,8 +14,6 @@ export default function (spec) {
     const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
     /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
     const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
-    /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
-    const metaProfile = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree} */
     const metaUserTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
     /** @type {TeqFw_Web_Push_Back_Act_Subscript_Add.act|function} */
@@ -39,32 +37,19 @@ export default function (spec) {
         // DEFINE INNER FUNCTIONS
 
         /**
-         * Save application profile for the user.
-         * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @param {number} userId
-         * @param {string} nick
-         * @param {string} keyPub
-         * @return {Promise<void>}
-         */
-        async function addProfile(trx, userId, nick, keyPub) {
-            /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User.ATTR} */
-            const ATTR = metaProfile.getAttributes();
-            await crud.create(trx, metaProfile, {
-                [ATTR.USER_REF]: userId,
-                [ATTR.NICK]: nick,
-                [ATTR.KEY_PUB]: keyPub,
-            });
-        }
-
-        /**
          * Register user and get userId.
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
+         * @param {string} username
+         * @param {string} publicKey
          * @return {Promise<number>}
          */
-        async function addUser(trx) {
+        async function addUser(trx, username, publicKey) {
             /** @type {typeof TeqFw_User_Back_Store_RDb_Schema_User.ATTR} */
             const ATTR = metaUser.getAttributes();
-            const pk = await crud.create(trx, metaUser);
+            const data = metaUser.createDto();
+            data.username = username;
+            data.key_pub = publicKey;
+            const pk = await crud.create(trx, metaUser, data);
             return pk[ATTR.ID];
         }
 
@@ -83,7 +68,7 @@ export default function (spec) {
         }
 
         // MAIN FUNCTIONALITY
-        const userId = await addUser(trx);
+        const userId = await addUser(trx, nick, keyPub);
         // add Web Push subscription
         const {code} = await actSubscriptAdd({trx, userId, endpoint, auth: keyAuth, p256dh: keyP256dh});
         if (
@@ -91,7 +76,6 @@ export default function (spec) {
             (code !== SUB_ADD_CODE.DUPLICATE)
         ) throw new Error('Cannot add web push subscription for new user.')
         // add app related data
-        await addProfile(trx, userId, nick, keyPub);
         const parentIdChecked = parentId ?? userId;
         await addUserTree(trx, userId, parentIdChecked);
         return {userId};

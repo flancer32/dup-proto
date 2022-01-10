@@ -18,8 +18,8 @@ export default class Fl32_Dup_Back_Proc_Hollow_State_Request {
         const esfStateRequested = spec['Fl32_Dup_Shared_Event_Front_Hollow_State_Requested$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Hollow_State_Composed} */
         const esbStateComposed = spec['Fl32_Dup_Shared_Event_Back_Hollow_State_Composed$'];
-        /** @type {Fl32_Dup_Back_Store_RDb_Schema_User} */
-        const metaAppUser = spec['Fl32_Dup_Back_Store_RDb_Schema_User$'];
+        /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
+        const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
 
         // MAIN FUNCTIONALITY
         frontEmbassy.subscribe(esfStateRequested.getName(), handler)
@@ -33,7 +33,7 @@ export default class Fl32_Dup_Back_Proc_Hollow_State_Request {
             try {
                 const payload = esbStateComposed.createDto();
                 payload.frontUUID = evt.frontUUID;
-                const items = await crud.readSet(trx, metaAppUser, null, null, null, 1);
+                const items = await crud.readSet(trx, metaUser, null, null, null, 1);
                 payload.hollowIsFree = (items.length === 0);
                 backQueue.add(evt.frontUUID, esbStateComposed.getName(), payload);
                 await trx.commit();

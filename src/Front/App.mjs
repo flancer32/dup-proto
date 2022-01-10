@@ -94,7 +94,7 @@ export default class Fl32_Dup_Front_App {
             async function initEventStream() {
                 return new Promise((resolve) => {
                     streamBf.open();
-                    streamBf.subscribe(efOpened.getName(), (evt) => {
+                    streamBf.subscribe(efOpened.getEventName(), (evt) => {
                         resolve(evt);
                     });
                     // TODO: add on error processing

@@ -35,7 +35,7 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Dto_IMeta
+ * @implements TeqFw_Core_Shared_Api_Factory_Dto_IMeta
  */
 export default class Fl32_Dup_Shared_Dto_Contacts_Card {
 

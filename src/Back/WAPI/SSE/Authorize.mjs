@@ -14,6 +14,7 @@ const NS = 'Fl32_Dup_Back_WAPI_SSE_Authorize';
 
 /**
  * @implements TeqFw_Web_Back_Api_WAPI_IFactory
+ * @deprecated use events streams
  */
 export default class Fl32_Dup_Back_WAPI_SSE_Authorize {
 

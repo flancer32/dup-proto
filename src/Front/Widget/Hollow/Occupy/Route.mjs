@@ -24,8 +24,6 @@ export default function (spec) {
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
     /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Factory} */
     const wapiLoadKey = spec['TeqFw_Web_Push_Shared_WAPI_Load_ServerKey#Factory$'];
-    /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Factory} */
-    const wapiIsFree = spec['Fl32_Dup_Shared_WAPI_Hollow_IsFree#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_Single_User} */
@@ -168,19 +166,11 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
-            // DEFINE INNER FUNCTIONS
-            async function canRegisterNewUser() {
-                /** @type {Fl32_Dup_Shared_WAPI_Hollow_IsFree.Response} */
-                const res = await gate.send({}, wapiIsFree);
-                return (res?.isFree === true);
-            }
-
-            // MAIN FUNCTIONALITY
             const authorized = await session.checkUserAuthenticated();
             if (authorized) {
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
-                if (await canRegisterNewUser()) {
+                if (dsHollowIsFree.get() === true) {
                     // noinspection JSValidateTypes
                     /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
                     const dto = await store.get(metaUser.getEntityName());

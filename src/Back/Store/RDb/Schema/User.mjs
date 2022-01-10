@@ -23,6 +23,7 @@ const ATTR = {
 // MODULE'S CLASSES
 /**
  * @memberOf Fl32_Dup_Back_Store_RDb_Schema_User
+ * @deprecated use TeqFw_User_Back_Store_RDb_Schema_User.Dto
  */
 class Dto {
     static namespace = `${NS}.Dto`;
@@ -45,6 +46,7 @@ class Dto {
 // noinspection JSClosureCompilerSyntax
 /**
  * @implements TeqFw_Db_Back_RDb_Meta_IEntity
+ * @deprecated use TeqFw_User_Back_Store_RDb_Schema_User
  */
 export default class Fl32_Dup_Back_Store_RDb_Schema_User {
     constructor(spec) {
