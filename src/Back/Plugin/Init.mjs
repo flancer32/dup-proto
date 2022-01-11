@@ -34,9 +34,10 @@ export default function Factory(spec) {
         // MAIN FUNCTIONALITY
         await initDb();
         // TODO: just create processes
-        container.get('Fl32_Dup_Back_Proc_Hollow_State_Request$');
-        container.get('Fl32_Dup_Back_Proc_Msg_Queue$');
-        container.get('Fl32_Dup_Back_Proc_User_SignUp$');
+        // run initialization synchronously to prevent doubling of singletons
+        await container.get('Fl32_Dup_Back_Proc_Hollow_State_Request$');
+        await container.get('Fl32_Dup_Back_Proc_Msg_Queue$');
+        await container.get('Fl32_Dup_Back_Proc_User_SignUp$');
 
     }
 

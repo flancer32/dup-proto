@@ -7,8 +7,12 @@
 export default class Fl32_Dup_Front_Proc_Connect_Manager {
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {TeqFw_Core_Shared_Logger} */
+        const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const stream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+        /** @type {TeqFw_Web_Front_App_Event_Bus} */
+        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed} */
         const efClosed = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
@@ -19,25 +23,25 @@ export default class Fl32_Dup_Front_Proc_Connect_Manager {
         let _idIntervalTry;
 
         // MAIN FUNCTIONALITY
-
-        stream.subscribe(efOpened.getName(), () => {
+        eventsFront.subscribe(efOpened.getEventName(), () => {
             _isOpened = true;
             if (_idIntervalTry) {
                 clearInterval(_idIntervalTry);
                 _idIntervalTry = null;
             }
+            logger.info(`New back-to-front event stream is opened by Connection Manager.`);
         });
 
-        stream.subscribe(efClosed.getName(), () => {
+        eventsFront.subscribe(efClosed.getEventName(), () => {
+            logger.info(`Back-to-front event stream is closed. Try to re-connect.`);
             if (!_idIntervalTry)
                 _idIntervalTry = setInterval(() => {
                     stream.open();
+                    logger.info(`Connection Manager tries to open back-to-front event stream.`);
                 }, 1000 * 5)
         });
 
-        // DEFINE INNER FUNCTIONS
-
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         this.init = function () {
         }
     }

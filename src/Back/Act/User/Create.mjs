@@ -47,7 +47,7 @@ export default function (spec) {
             /** @type {typeof TeqFw_User_Back_Store_RDb_Schema_User.ATTR} */
             const ATTR = metaUser.getAttributes();
             const data = metaUser.createDto();
-            data.username = username;
+            data.username = username.trim().toLowerCase();
             data.key_pub = publicKey;
             const pk = await crud.create(trx, metaUser, data);
             return pk[ATTR.ID];

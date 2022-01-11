@@ -103,7 +103,7 @@ export default function (spec) {
                     subscription: dto.subscription
                 });
                 // generate symmetric key and save user data into IDB
-                if (res.userId) {
+                if (res?.userId) {
                     dto.id = res.userId;
                     dto.hollowSecretKey = await mgrKey.generateSecretKey();
                     dto.serverPubKey = res.serverPublicKey;

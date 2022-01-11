@@ -17,12 +17,10 @@ export default class Fl32_Dup_Front_DSource_Hollow_IsFree {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Web_Front_Store} */
         const store = spec['TeqFw_Web_Front_Store$'];
-        /** @type {TeqFw_Web_Front_App_UUID} */
-        const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
-        /** @type {TeqFw_Web_Front_App_Event_Queue} */
-        const eventsQueue = spec['TeqFw_Web_Front_App_Event_Queue$'];
-        /** @type {TeqFw_Web_Front_App_Event_Embassy} */
-        const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+        /** @type {TeqFw_Web_Front_App_Event_Bus} */
+        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Hollow_State_Requested} */
         const esfStateRequested = spec['Fl32_Dup_Shared_Event_Front_Hollow_State_Requested$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Hollow_State_Composed} */
@@ -43,25 +41,25 @@ export default class Fl32_Dup_Front_DSource_Hollow_IsFree {
             // DEFINE INNER FUNCTIONS
             function requestHollowState() {
                 return new Promise((resolve) => {
-                    const payload = esfStateRequested.createDto();
-                    payload.frontUUID = frontUUID.get();
+                    const message = esfStateRequested.createDto();
+                    portalBack.publish(message); // send first message
                     let i = 0;
                     const intId = setInterval(() => {
-                        eventsQueue.add(esfStateRequested.getName(), payload);
+                        portalBack.publish(message);
                         if (i++ > ATTEMPTS) {
                             clearInterval(intId);
                             resolve(null);
                         }
                     }, TIMEOUT);
 
-                    backEmbassy.subscribe(
-                        esbStateComposed.getName(),
+                    eventsFront.subscribe(
+                        esbStateComposed.getEventName(),
                         /**
-                         * @param {Fl32_Dup_Shared_Event_Back_Hollow_State_Composed.Dto} evt
+                         * @param {Fl32_Dup_Shared_Event_Back_Hollow_State_Composed.Dto} data
                          */
-                        (evt) => {
+                        ({data}) => {
                             if (intId) clearInterval(intId);
-                            resolve(evt.hollowIsFree);
+                            resolve(data.hollowIsFree);
                         }
                     );
                 });

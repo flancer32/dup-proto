@@ -39,6 +39,8 @@ export default class Fl32_Dup_Front_App {
         const _backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const streamBf = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
+        /** @type {TeqFw_Web_Front_App_Event_Bus} */
+        const eventBus = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
         /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
@@ -94,7 +96,9 @@ export default class Fl32_Dup_Front_App {
             async function initEventStream() {
                 return new Promise((resolve) => {
                     streamBf.open();
-                    streamBf.subscribe(efOpened.getEventName(), (evt) => {
+                    const subscript = eventBus.subscribe(efOpened.getEventName(), (evt) => {
+                        logger.info(`Back-to-front event stream is opened on the front.`);
+                        eventBus.unsubscribe(subscript);
                         resolve(evt);
                     });
                     // TODO: add on error processing
@@ -216,8 +220,8 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            await initDataSources();
             await initEventProcessors(container);
+            await initDataSources();
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {

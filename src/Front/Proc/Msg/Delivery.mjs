@@ -13,8 +13,12 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
-        /** @type {TeqFw_Web_Front_App_Event_Queue} */
-        const eventsQueue = spec['TeqFw_Web_Front_App_Event_Queue$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+        /** @type {TeqFw_Web_Front_App_Event_Bus} */
+        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+        const eventsQueue = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
         /** @type {TeqFw_Web_Front_App_Event_Embassy} */
         const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */

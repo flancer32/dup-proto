@@ -16,10 +16,10 @@ export default class Fl32_Dup_Front_Proc_User_Register {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
-        /** @type {TeqFw_Web_Front_App_Event_Queue} */
-        const eventsQueue = spec['TeqFw_Web_Front_App_Event_Queue$'];
-        /** @type {TeqFw_Web_Front_App_Event_Embassy} */
-        const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+        /** @type {TeqFw_Web_Front_App_Event_Bus} */
+        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered} */
         const esbUserRegistered = spec['Fl32_Dup_Shared_Event_Back_User_SignUp_Registered$'];
         /** @type {Fl32_Dup_Shared_Event_Front_User_SignedUp} */
@@ -37,17 +37,17 @@ export default class Fl32_Dup_Front_Proc_User_Register {
          * @return {Promise<Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null>}
          */
         this.run = async function ({nick, invite, pubKey, subscription}) {
-            const payload = esfUserSignedUp.createDto();
-            payload.endpoint = subscription.endpoint;
-            payload.invite = invite;
-            payload.nick = nick;
-            payload.keyAuth = subscription.keys.auth;
-            payload.keyP256dh = subscription.keys.p256dh;
-            payload.keyPub = pubKey;
-            payload.frontUUID = frontUUID.get();
+            const message = esfUserSignedUp.createDto();
+            const data = message.data;
+            data.endpoint = subscription.endpoint;
+            data.invite = invite;
+            data.nick = nick;
+            data.keyAuth = subscription.keys.auth;
+            data.keyP256dh = subscription.keys.p256dh;
+            data.keyPub = pubKey;
+            data.frontUUID = frontUUID.get();
             // send event to backend first time
-            // noinspection ES6MissingAwait
-            eventsQueue.add(esfUserSignedUp.getName(), payload);
+            portalBack.publish(message);
             // wait until response event will come from back
             return await new Promise((resolve) => {
                 // ENCLOSED VARS
@@ -61,7 +61,7 @@ export default class Fl32_Dup_Front_Proc_User_Register {
                  */
                 function onBackResponse(evt) {
                     if (repeatId) clearInterval(repeatId);
-                    resolve(evt);
+                    resolve(evt?.data);
                 }
 
                 /**
@@ -71,14 +71,14 @@ export default class Fl32_Dup_Front_Proc_User_Register {
                     if (++i > ATTEMPTS) {
                         clearInterval(repeatId);
                         resolve(null);
-                    } else eventsQueue.add(esfUserSignedUp.getName(), payload);
+                    } else portalBack.publish(message);
                 }
 
                 // MAIN
                 // repeat event message every 5 sec.
                 repeatId = setInterval(repeat, TIMEOUT);
                 // subscribe to response event from back
-                backEmbassy.subscribe(esbUserRegistered.getName(), onBackResponse);
+                eventsFront.subscribe(esbUserRegistered.getEventName(), onBackResponse);
             });
         }
     }
