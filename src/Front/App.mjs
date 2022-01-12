@@ -86,7 +86,9 @@ export default class Fl32_Dup_Front_App {
              * @param {TeqFw_Di_Shared_Container} container
              */
             async function initEventProcessors(container) {
+                // TODO: init from 'teqfw.json'
                 await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
+                await container.get('TeqFw_User_Front_Proc_Authenticate$');
             }
 
             /**
@@ -212,6 +214,7 @@ export default class Fl32_Dup_Front_App {
             await _frontUUID.init();
             await _backUUID.init();
             print(`Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`);
+            await initEventProcessors(container);
             await initEventStream();
             print(`Backend events stream is opened.`);
             await initI18n(_root, I18nLib);
@@ -220,7 +223,6 @@ export default class Fl32_Dup_Front_App {
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            await initEventProcessors(container);
             await initDataSources();
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');

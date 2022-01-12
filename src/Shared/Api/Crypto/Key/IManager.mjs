@@ -1,7 +1,7 @@
 /**
  * Interface for cryptographic keys manager.
  *
- * There are different cryptographic libraries and algorithms, so this interface define
+ * There are different cryptographic libraries and algorithms, so this interface defines
  * base principles for crypto keys usage in the app (both for back & front).
  *
  * @namespace Fl32_Dup_Shared_Api_Crypto_Key_IManager
@@ -11,6 +11,7 @@
  * Interface for cryptographic keys manager.
  *
  * @interface
+ * @deprecated use TeqFw_User_Shared_Api_Crypto_Key_IManager
  */
 export default class Fl32_Dup_Shared_Api_Crypto_Key_IManager {
 

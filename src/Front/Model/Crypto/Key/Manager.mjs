@@ -5,6 +5,7 @@
 
 /**
  * @implements Fl32_Dup_Shared_Api_Crypto_Key_IManager
+ * @deprecated use TeqFw_User_Front_Mod_Crypto_Key_Manager
  */
 export default class Fl32_Dup_Front_Model_Crypto_Key_Manager {
     constructor(spec) {

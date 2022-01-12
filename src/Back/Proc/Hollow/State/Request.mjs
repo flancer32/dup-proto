@@ -21,7 +21,7 @@ export default class Fl32_Dup_Back_Proc_Hollow_State_Request {
         /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
         const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         eventsBack.subscribe(esfStateRequested.getEventName(), handler)
 
         // DEFINE INNER FUNCTIONS

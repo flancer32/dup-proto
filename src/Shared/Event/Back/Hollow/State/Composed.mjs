@@ -22,8 +22,8 @@ export default class Fl32_Dup_Shared_Event_Back_Hollow_State_Composed {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
-        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */
+        const castBoolean= spec['TeqFw_Core_Shared_Util_Cast.castBoolean'];
 
         // ENCLOSED VARS
         const ATTR = dtoBase.getAttributes();
@@ -35,9 +35,7 @@ export default class Fl32_Dup_Shared_Event_Back_Hollow_State_Composed {
          */
         function createData(data) {
             const res = new Dto();
-            res.backUUID = castString(data?.backUUID);
-            res.frontUUID = castString(data?.frontUUID);
-            res.streamUUID = castString(data?.streamUUID);
+            res.hollowIsFree = castBoolean(data?.hollowIsFree);
             return res;
         }
 

@@ -15,9 +15,9 @@ export default function Factory(spec) {
     /** @type {TeqFw_Db_Back_RDb_Connect} */
     const connect = spec['TeqFw_Db_Back_RDb_Connect$']; // get implementation
 
-    // COMPOSE RESULT
+    // ENCLOSED FUNCTIONS
     async function init() {
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCTIONS
         /**
          * Get local configuration and initialize DB connection.
          * Place connection object as 'TeqFw_Db_Back_RDb_IConnect' singleton to DI-container.
@@ -31,7 +31,7 @@ export default function Factory(spec) {
             container.set('TeqFw_Db_Back_RDb_IConnect$', connect); // set as interface
         }
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         await initDb();
         // TODO: just create processes
         // run initialization synchronously to prevent doubling of singletons
@@ -41,6 +41,7 @@ export default function Factory(spec) {
 
     }
 
+    // MAIN
     Object.defineProperty(init, 'name', {value: `${NS}.${init.name}`});
     return init;
 }
