@@ -17,23 +17,31 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
-    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
-    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     // TODO: change to interface after WF-516
     /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
     const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
-    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Factory} */
-    const wapiLoadKey = spec['TeqFw_Web_Push_Shared_WAPI_Load_ServerKey#Factory$'];
     /** @type {TeqFw_Web_Front_Store} */
     const store = spec['TeqFw_Web_Front_Store$'];
     /** @type {Fl32_Dup_Front_Store_Single_User} */
     const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
     /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
     const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
+    /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
+    const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
+    /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
+    const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
     /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
     const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
+    /** @type {TeqFw_Web_Front_App_Event_Bus} */
+    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Push_Shared_Event_Front_Key_Load_Request} */
+    const esfKeyReq = spec['TeqFw_Web_Push_Shared_Event_Front_Key_Load_Request$'];
+    /** @type {TeqFw_Web_Push_Shared_Event_Back_Key_Load_Response} */
+    const esbKeyRes = spec['TeqFw_Web_Push_Shared_Event_Back_Key_Load_Response$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -90,7 +98,7 @@ export default function (spec) {
             async create() {
                 // MAIN FUNCTIONALITY
                 // generate keys for asymmetric encryption
-                const keys = await mgrKey.generateAsyncKeys();
+                // const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
                 /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
@@ -125,7 +133,24 @@ export default function (spec) {
             },
 
             async subscribe() {
-                // DEFINE INNER FUNCTIONS
+                // ENCLOSED FUNCTIONS
+                async function loadServerKey() {
+                    return new Promise((resolve) => {
+                        const idFail = setTimeout(resolve, 10000); // return after timeout
+                        eventsFront.subscribe(
+                            esbKeyRes.getEventName(),
+                            (event) => {
+                                /** @type {TeqFw_Web_Push_Shared_Event_Back_Key_Load_Response.Dto} */
+                                const data = event.data;
+                                clearTimeout(idFail);
+                                resolve(data.key);
+                            }
+                        );
+                        const message = esfKeyReq.createDto();
+                        portalBack.publish(message);
+                    });
+                }
+
                 async function subscribePush(key) {
                     /** @type {PushSubscriptionOptionsInit} */
                     const opts = {
@@ -134,25 +159,19 @@ export default function (spec) {
                     };
                     const sw = await navigator.serviceWorker.ready;
                     return await sw.pushManager.subscribe(opts);
-
                 }
 
-                // MAIN FUNCTIONALITY
+                // MAIN
                 try {
-                    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Request} */
-                    const req = wapiLoadKey.createReq();
-                    // noinspection JSValidateTypes
-                    /** @type {TeqFw_Web_Push_Shared_WAPI_Load_ServerKey.Response} */
-                    const res = await gate.send(req, wapiLoadKey);
+                    const key = await loadServerKey();
                     /** @type {PushSubscription} */
-                    const pushSubscription = await subscribePush(res.key);
+                    const pushSubscription = await subscribePush(key);
                     // save subscription to IDB Store
-                    /** @type {typeof Fl32_Dup_Front_Store_Single_User.ATTR} */
-                    const ATTR = metaUser.getAttributes();
-                    const json = pushSubscription.toJSON();
+                    const obj = pushSubscription.toJSON();
+                    debugger
                     // noinspection JSCheckFunctionSignatures
-                    const dto = metaUser.createDto({[ATTR.SUBSCRIPTION]: json});
-                    await store.set(metaUser.getEntityName(), dto);
+                    const dto = dtoSubscript.createDto(obj);
+                    await dsSubscript.set(dto);
                     // switch UI
                     this.hasSubscription = true;
                     this.needSubscribe = false;

@@ -1,8 +1,14 @@
 /**
  * Web application.
  *
- * Load config and i18n dictionary from server, initialize Vue (add router, Quasar UI, i18next),
- * create and mount root vue component.
+ * Initialization:
+ * - Load config and i18n from server (WAPI).
+ * - Init UUID for front & back.
+ * - Init processes and bind it to events.
+ * - Open reverse events stream.
+ * - Init Vue (add router, Quasar UI, i18next),
+ *
+ * Then create and mount root vue component to given DOM element.
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_App';
@@ -43,8 +49,6 @@ export default class Fl32_Dup_Front_App {
         const eventBus = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
-        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-        const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -74,9 +78,14 @@ export default class Fl32_Dup_Front_App {
             }
 
             /**
-             * Initialize data sources.
+             * Create and initialize data sources.
              */
-            async function initDataSources() {
+            async function initDataSources(container) {
+                /** @type {TeqFw_User_Front_DSource_User} */
+                const user = await container.get('TeqFw_User_Front_DSource_User$');
+                await user.get();
+                /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
+                const dsHollowIsFree = await container.get('Fl32_Dup_Front_DSource_Hollow_IsFree$');
                 await dsHollowIsFree.init();
             }
 
@@ -197,9 +206,16 @@ export default class Fl32_Dup_Front_App {
             _root = createApp({
                 teq: {package: DEF.SHARED.NAME},
                 name: NS,
-                template: '<router-view/>',
+                data() {
+                    return {
+                        canDisplay: false
+                    };
+                },
+                template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App starting...</div>',
                 async mounted() {
-                    await _session.open();
+                    // await _session.open();
+                    const me = this;
+                    me.canDisplay = true;
                 }
             });
             // ... and add global available components
@@ -211,19 +227,21 @@ export default class Fl32_Dup_Front_App {
             logger.pause(false);
             await _config.init({}); // this app has no separate 'doors' (entry points)
             print(`Application config is loaded.`);
+            await initI18n(_root, I18nLib);
+            print(`i18n resources are loaded.`);
             await _frontUUID.init();
             await _backUUID.init();
             print(`Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`);
-            await initEventProcessors(container);
             await initEventStream();
             print(`Backend events stream is opened.`);
-            await initI18n(_root, I18nLib);
-            print(`i18n resources are loaded.`);
+            await initEventProcessors(container);
+            print(`Frontend processes are created.`);
             initQuasarUi(_root, quasar);
+            await initDataSources(container);
+            print(`Data sources are initialized.`);
             const router = initRouter(_root, DEF, container);
             _session.setRouter(router);
             _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
-            await initDataSources();
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {
