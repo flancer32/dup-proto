@@ -17,21 +17,18 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_User_Front_Api_ISession} */
     const session = spec['TeqFw_User_Front_Api_ISession$'];
-    // TODO: change to interface after WF-516
-    /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
-    const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
-    /** @type {TeqFw_Web_Front_Store} */
-    const store = spec['TeqFw_Web_Front_Store$'];
-    /** @type {Fl32_Dup_Front_Store_Single_User} */
-    const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
-    /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
-    const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
+    /** @type {TeqFw_User_Front_DSource_User} */
+    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
     const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
-    /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
-    const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
     /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
     const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
+    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
+    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+    /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
+    const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
+    /** @type {Fl32_Dup_Front_Dto_User} */
+    const dtoUser = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -101,28 +98,25 @@ export default function (spec) {
                 // const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB and compose WAPI-request
                 // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                const dto = await store.get(metaUser.getEntityName());
+                const user = await dsUser.get();
+                const sub = await dsSubscript.get();
                 // start process to register user on backend
                 /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
                 const res = await procSignUp.run({
                     nick: this.fldNick,
-                    pubKey: keys.publicKey,
-                    subscription: dto.subscription
+                    pubKey: user.keys.public,
+                    subscription: sub
                 });
                 // generate symmetric key and save user data into IDB
                 if (res?.userId) {
-                    dto.id = res.userId;
-                    dto.hollowSecretKey = await mgrKey.generateSecretKey();
-                    dto.serverPubKey = res.serverPublicKey;
-                    dto.key = dtoKey.createDto();
-                    dto.key.public = keys.publicKey;
-                    dto.key.secret = keys.secretKey;
-                    await store.set(metaUser.getEntityName(), dto);
+                    // save/update data in IDB
+                    user.id = res.userId;
+                    await dsUser.set(user);
+                    await dsHollowIsFree.set(false);
+                    const profile = dtoUser.createDto()
+                    profile.username = this.fldNick;
+                    await dsProfile.set(profile);
                     this.isRegistered = true;
-                    // noinspection ES6MissingAwait
-                    dsHollowIsFree.set(false);
-
                     // redirect user to homepage
                     setTimeout(() => {
                         session.reopen(DEF.ROUTE_HOME);
@@ -168,7 +162,6 @@ export default function (spec) {
                     const pushSubscription = await subscribePush(key);
                     // save subscription to IDB Store
                     const obj = pushSubscription.toJSON();
-                    debugger
                     // noinspection JSCheckFunctionSignatures
                     const dto = dtoSubscript.createDto(obj);
                     await dsSubscript.set(dto);
@@ -190,12 +183,12 @@ export default function (spec) {
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
                 if (dsHollowIsFree.get() === true) {
-                    // noinspection JSValidateTypes
-                    /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                    const dto = await store.get(metaUser.getEntityName());
-                    this.hasSubscription = (typeof dto?.subscription?.endpoint === 'string');
+                    // get data from IDB and calculate state
+                    const user = await dsUser.get();
+                    const sub = await dsSubscript.get();
+                    this.hasSubscription = (typeof sub?.endpoint === 'string');
                     this.needSubscribe = !this.hasSubscription;
-                    if (this.hasSubscription) this.needRegister = (dto?.id !== undefined);
+                    if (this.hasSubscription) this.needRegister = (user?.id !== undefined);
                 } else {
                     this.isHollowOccupied = true;
                 }

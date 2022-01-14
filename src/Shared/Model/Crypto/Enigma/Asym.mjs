@@ -4,6 +4,7 @@
  * Each object has own pair of keys and should be used as instance rather than singleton.
  *
  * @namespace Fl32_Dup_Shared_Model_Crypto_Enigma_Asym
+ * @deprecated use TeqFw_User_Shared_Api_Crypto_IScrambler
  */
 
 export default class Fl32_Dup_Shared_Model_Crypto_Enigma_Asym {

@@ -96,15 +96,17 @@ export default class Fl32_Dup_Front_App {
              */
             async function initEventProcessors(container) {
                 // TODO: init from 'teqfw.json'
+                // Some processes (authentication) should be subscribed to events before Reverse Stream can be opened.
                 await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
-                await container.get('TeqFw_User_Front_Proc_Authenticate$');
             }
 
             /**
              * Wait until back-to-front events stream will be open before continue.
+             * @param {TeqFw_Di_Shared_Container} container
              * @return {Promise<TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened.Dto>}
              */
-            async function initEventStream() {
+            async function initEventStream(container) {
+                await container.get('TeqFw_User_Front_Proc_Authenticate$');
                 return new Promise((resolve) => {
                     streamBf.open();
                     const subscript = eventBus.subscribe(efOpened.getEventName(), (evt) => {
@@ -232,7 +234,7 @@ export default class Fl32_Dup_Front_App {
             await _frontUUID.init();
             await _backUUID.init();
             print(`Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`);
-            await initEventStream();
+            await initEventStream(container);
             print(`Backend events stream is opened.`);
             await initEventProcessors(container);
             print(`Frontend processes are created.`);
