@@ -14,6 +14,12 @@ export default class Fl32_Dup_Front_DSource_User_Profile {
         let _cache;
 
         // INSTANCE METHODS
+
+        this.clean = async () => {
+            _cache = undefined;
+            await store.delete(STORE_KEY);
+        }
+
         /**
          * Get user data from IDB or generate new one and sae to IDB.
          * @return {Promise<Fl32_Dup_Front_Dto_User.Dto>}

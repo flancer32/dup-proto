@@ -1,5 +1,6 @@
 /**
  * @implements TeqFw_User_Front_Api_ISession
+ * @deprecated
  */
 export default class Fl32_Dup_Front_Model_User_Session {
 

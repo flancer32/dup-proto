@@ -28,12 +28,16 @@ export default class Fl32_Dup_Front_DSource_Hollow_IsFree {
 
         // DEFINE WORKING VARS / PROPS
         const STORE_KEY = `${DEF.SHARED.NAME}/back/hollow/is_free`;
-        let _value;
+        let _cache;
 
         // DEFINE INSTANCE METHODS
-        this.get = () => _value;
+        this.clean = async () => {
+            _cache = undefined;
+            await store.delete(STORE_KEY);
+        }
+        this.get = () => _cache;
         this.set = async (data) => {
-            _value = data;
+            _cache = data;
             await store.set(STORE_KEY, data);
         }
         this.init = async function () {
@@ -69,12 +73,12 @@ export default class Fl32_Dup_Front_DSource_Hollow_IsFree {
             // MAIN FUNCTIONALITY
             const value = await store.get(STORE_KEY);
             if (typeof value === 'boolean') {
-                _value = value;
+                _cache = value;
             } else {
-                _value = await requestHollowState();
-                await store.set(STORE_KEY, _value);
+                _cache = await requestHollowState();
+                await store.set(STORE_KEY, _cache);
             }
-            return _value;
+            return _cache;
         }
     }
 }

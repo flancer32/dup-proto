@@ -37,8 +37,8 @@ export default class Fl32_Dup_Front_App {
         const _layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const _config = spec['TeqFw_Web_Front_Model_Config$'];
-        /** @type {TeqFw_User_Front_Api_ISession} */
-        const _session = spec['TeqFw_User_Front_Api_ISession$'];
+        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
+        const _dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const _frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
@@ -98,6 +98,7 @@ export default class Fl32_Dup_Front_App {
                 // TODO: init from 'teqfw.json'
                 // Some processes (authentication) should be subscribed to events before Reverse Stream can be opened.
                 await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
+                await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
             }
 
             /**
@@ -215,9 +216,9 @@ export default class Fl32_Dup_Front_App {
                 },
                 template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App starting...</div>',
                 async mounted() {
-                    // await _session.open();
-                    const me = this;
-                    me.canDisplay = true;
+                    if (_dsHollowIsFree.get())
+                        this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
+                    this.canDisplay = true;
                 }
             });
             // ... and add global available components
@@ -241,9 +242,7 @@ export default class Fl32_Dup_Front_App {
             initQuasarUi(_root, quasar);
             await initDataSources(container);
             print(`Data sources are initialized.`);
-            const router = initRouter(_root, DEF, container);
-            _session.setRouter(router);
-            _session.setRouteToSignIn(DEF.ROUTE_HOLLOW_OCCUPY);
+            initRouter(_root, DEF, container);
             // add sound on WebPush event
             const bCast = new BroadcastChannel('teqfw-sw');
             bCast.addEventListener('message', (e) => {
@@ -255,8 +254,6 @@ export default class Fl32_Dup_Front_App {
                     playSound.play();
                 }
             });
-            // noinspection ES6MissingAwait
-            _session.checkUserAuthenticated();
         }
 
         /**
