@@ -17,12 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Logger} */
     const logger = spec['TeqFw_Core_Shared_Logger$'];
-    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
-    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
-    /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Factory} */
-    const routePost = spec['Fl32_Dup_Shared_WAPI_Msg_Post.Factory$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_User_Front_DSource_User} */
+    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
@@ -95,9 +91,8 @@ export default function (spec) {
                  */
                 async function encryptAndSend(msg, authorId, recipientId) {
                     // get keys to encrypt
-                    /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                    const user = session.getUser();
-                    const sec = user.key.secret
+                    const user = await dsUser.get();
+                    const sec = user.keys.secret
                     // get recipient's public key from IDB
                     const trx = await idb.startTransaction(idbContact, false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
@@ -113,21 +108,10 @@ export default function (spec) {
                         recipientId
                     });
                     return confirm?.messageId;
-
-                    // /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Request} */
-                    // const req = routePost.createReq();
-                    // req.payload = encrypted;
-                    // req.userId = authorId;
-                    // req.recipientId = recipientId;
-                    // // noinspection JSValidateTypes
-                    // /** @type {Fl32_Dup_Shared_WAPI_Msg_Post.Response} */
-                    // const res = await gate.send(req, routePost);
-                    //
-                    // return res.messageId;
                 }
 
                 // MAIN FUNCTIONALITY
-                const user = session.getUser();
+                const user = await dsUser.get();
                 const authorId = user.id;
                 const recipientId = this.otherSideId;
                 const msg = this.message;

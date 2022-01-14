@@ -15,8 +15,6 @@ const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
@@ -94,9 +92,7 @@ export default function (spec) {
         methods: {
             async create() {
                 // MAIN FUNCTIONALITY
-                // generate keys for asymmetric encryption
-                // const keys = await mgrKey.generateAsyncKeys();
-                // get user data with subscription details from IDB and compose WAPI-request
+                const me = this;
                 // noinspection JSValidateTypes
                 const user = await dsUser.get();
                 const sub = await dsSubscript.get();
@@ -107,7 +103,7 @@ export default function (spec) {
                     pubKey: user.keys.public,
                     subscription: sub
                 });
-                // generate symmetric key and save user data into IDB
+                // save user id into IDB
                 if (res?.userId) {
                     // save/update data in IDB
                     user.id = res.userId;
@@ -119,7 +115,7 @@ export default function (spec) {
                     this.isRegistered = true;
                     // redirect user to homepage
                     setTimeout(() => {
-                        session.reopen(DEF.ROUTE_HOME);
+                        me.$router.push(DEF.ROUTE_HOME);
                     }, 2000);
                 } else {
                     console.log(`Some error is occurred on the server, cannot get ID for new user.`);
@@ -178,20 +174,17 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
-            const authorized = await session.checkUserAuthenticated();
-            if (authorized) {
-                this.$router.push(DEF.ROUTE_HOME);
+            // get data from IDB and calculate state
+            const user = await dsUser.get();
+            if (dsHollowIsFree.get() === true) {
+                const sub = await dsSubscript.get();
+                this.hasSubscription = (typeof sub?.endpoint === 'string');
+                this.needSubscribe = !this.hasSubscription;
+                if (this.hasSubscription) this.needRegister = (user?.id !== undefined);
             } else {
-                if (dsHollowIsFree.get() === true) {
-                    // get data from IDB and calculate state
-                    const user = await dsUser.get();
-                    const sub = await dsSubscript.get();
-                    this.hasSubscription = (typeof sub?.endpoint === 'string');
-                    this.needSubscribe = !this.hasSubscription;
-                    if (this.hasSubscription) this.needRegister = (user?.id !== undefined);
-                } else {
-                    this.isHollowOccupied = true;
-                }
+                // user is authenticated, goto home page
+                this.isHollowOccupied = true;
+                if (user.id) this.$router.push(DEF.ROUTE_HOME);
             }
         },
     };

@@ -15,11 +15,11 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const _session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
+    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
     const _led = spec['Fl32_Dup_Front_Rx_Led$'];
- /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
     const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
 
     // WORKING VARS
@@ -54,10 +54,11 @@ export default function (spec) {
         template,
         components: {},
         data() {
-            return {};
+            return {
+                name: null
+            };
         },
         computed: {
-            name: () => _session.getUser()?.nick,
             enableConnect: () => _led.getRef().value === STATES.NET_OK,
         },
         methods: {
@@ -65,6 +66,9 @@ export default function (spec) {
                 eventStreamReverse.open();
             }
         },
-        mounted() { }
+        async mounted() {
+            const user = await dsProfile.get();
+            this.name = user?.username;
+        }
     };
 }

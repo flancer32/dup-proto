@@ -17,8 +17,8 @@ const LIFE_TIME = {MIN5: 1, HOUR: 2, DAY: 3}
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_User_Front_DSource_User} */
+    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Front_Api_Dto_Config} */
     const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
     /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
@@ -104,8 +104,7 @@ export default function (spec) {
         },
         methods: {
             async onSubmit() {
-                /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                const userCurrent = session.getUser();
+                const userCurrent = await dsUser.get();
                 const userId = userCurrent.id;
                 const date = new Date();
                 if (this.lifeTime === LIFE_TIME.HOUR) {
@@ -143,10 +142,6 @@ export default function (spec) {
                     }
                 }
             }
-        },
-        async mounted() {
-            await session.checkUserAuthenticated();
-
         },
     };
 }

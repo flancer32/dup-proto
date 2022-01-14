@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Invite_Validate_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_User_Front_DSource_User} */
+    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
     const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Validate.Factory} */
@@ -98,6 +98,7 @@ export default function (spec) {
         },
         methods: {
             async create() {
+                const me = this;
                 // generate keys for asymmetric encryption
                 const keys = await mgrKey.generateAsyncKeys();
                 // get user data with subscription details from IDB
@@ -125,7 +126,7 @@ export default function (spec) {
                     this.displaySuccess = true;
                     // redirect user to homepage
                     setTimeout(() => {
-                        session.reopen(DEF.ROUTE_HOME);
+                        me.$router.push(DEF.ROUTE_HOME);
                     }, 2000);
                 } else {
                     this.displayRegister = false;
@@ -174,10 +175,8 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
-            // DEFINE INNER FUNCTIONS
-            // MAIN FUNCTIONALITY
-            const authorized = await session.checkUserAuthenticated();
-            if (authorized) {
+            const user = await dsUser.get();
+            if (user?.id) {
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
                 const req = wapiValidate.createReq();

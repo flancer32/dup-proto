@@ -5,9 +5,15 @@
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Model_SSE_Connect_Event_ChatPost';
 
+/**
+ *
+ * @param spec
+ * @return {(function(*): Promise<void>)|*}
+ * @deprecated use Fl32_Dup_Front_Proc_Msg_Post
+ */
 export default function (spec) {
-    /** @type {TeqFw_User_Front_Api_ISession} */
-    const session = spec['TeqFw_User_Front_Api_ISession$'];
+    /** @type {TeqFw_User_Front_DSource_User} */
+    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
     const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
     /** @type {Fl32_Dup_Shared_WAPI_Msg_Confirm_Delivery.Factory} */
@@ -42,9 +48,8 @@ export default function (spec) {
 
         async function decrypt(encrypted, senderId) {
             let res = null;
-            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-            const user = session.getUser();
-            const sec = user.key.secret
+            const user = await dsUser.get();
+            const sec = user.keys.secret
             // get recipient's public key from IDB
             const trx = await idb.startTransaction(idbContact, false);
             /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
@@ -62,7 +67,7 @@ export default function (spec) {
         const text = event.data;
         try {
             // extract input data from event
-            const user = session.getUser();
+            const user = await dsUser.get();
             const userId = user.id;
             const msg = JSON.parse(text);
             const msgId = msg.msgId;

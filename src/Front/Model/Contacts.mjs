@@ -8,14 +8,14 @@ export default class Fl32_Dup_Front_Model_Contacts {
     constructor(spec) {
         // EXTRACT DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
-        /** @type {TeqFw_User_Front_Api_ISession} */
-        const session = spec['TeqFw_User_Front_Api_ISession$'];
         /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
         const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
         /** @type {Fl32_Dup_Shared_WAPI_User_List.Factory} */
         const wapiUsers = spec['Fl32_Dup_Shared_WAPI_User_List.Factory$'];
         /** @type {Fl32_Dup_Front_Dto_Contacts_Card} */
         const dtoCard = spec['Fl32_Dup_Front_Dto_Contacts_Card$'];
+        /** @type {TeqFw_User_Front_DSource_User} */
+        const dsUser = spec['TeqFw_User_Front_DSource_User$'];
 
         // DEFINE WORKING VARS / PROPS
         /** @type {Fl32_Dup_Front_Dto_Contacts_Card.Dto[]} */
@@ -40,8 +40,7 @@ export default class Fl32_Dup_Front_Model_Contacts {
         this.getRef = () => _data;
 
         this.loadFromServer = async function () {
-            /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-            const userCurrent = session.getUser();
+            const userCurrent = await dsUser.get();
             const userId = userCurrent.id;
             /** @type {Fl32_Dup_Shared_WAPI_User_List.Request} */
             const req = wapiUsers.createReq();
