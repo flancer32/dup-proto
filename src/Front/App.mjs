@@ -49,6 +49,8 @@ export default class Fl32_Dup_Front_App {
         const eventBus = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
+        /** @type {Fl32_Dup_Front_DSource_User_Profile} */
+        const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
 
         // DEFINE WORKING VARS / PROPS
         let _root; // root vue component for the application
@@ -108,6 +110,7 @@ export default class Fl32_Dup_Front_App {
              */
             async function initEventStream(container) {
                 await container.get('TeqFw_User_Front_Proc_Authenticate$');
+                await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
                 return new Promise((resolve) => {
                     streamBf.open();
                     const subscript = eventBus.subscribe(efOpened.getEventName(), (evt) => {
@@ -214,10 +217,21 @@ export default class Fl32_Dup_Front_App {
                         canDisplay: false
                     };
                 },
-                template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App starting...</div>',
+                template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App is starting...</div>',
                 async mounted() {
-                    if (_dsHollowIsFree.get())
+                    await _dsHollowIsFree.init();
+                    if (_dsHollowIsFree.get()) {
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
+                    } else {
+                        const profile = await dsProfile.get();
+                        if (!profile?.username) {
+                            if (
+                                !document.location.href.includes(DEF.ROUTE_HOLLOW_OCCUPY) &&
+                                !document.location.href.includes('/invite/validate/')
+                            )
+                                this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
+                        }
+                    }
                     this.canDisplay = true;
                 }
             });

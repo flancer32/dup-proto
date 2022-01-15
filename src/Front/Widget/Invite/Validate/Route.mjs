@@ -15,23 +15,28 @@ const NS = 'Fl32_Dup_Front_Widget_Invite_Validate_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Logger} */
+    const logger = spec['TeqFw_Core_Shared_Logger$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
-    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
-    /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Validate.Factory} */
-    const wapiValidate = spec['Fl32_Dup_Shared_WAPI_User_Invite_Validate#Factory$'];
-    /** @type {TeqFw_Web_Front_Store} */
-    const store = spec['TeqFw_Web_Front_Store$'];
-    /** @type {Fl32_Dup_Front_Store_Single_User} */
-    const metaUser = spec['Fl32_Dup_Front_Store_Single_User$'];
-    // TODO: change to interface after WF-516
-    /** @type {Fl32_Dup_Shared_Api_Crypto_Key_IManager} */
-    const mgrKey = spec['Fl32_Dup_Front_Model_Crypto_Key_Manager$'];
-    /** @type {Fl32_Dup_Front_Dto_Key_Asym} */
-    const dtoKey = spec['Fl32_Dup_Front_Dto_Key_Asym$'];
+    /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
+    const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
+    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
+    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+    /** @type {TeqFw_Web_Front_App_Event_Bus} */
+    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
+    const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
+    /** @type {Fl32_Dup_Front_Dto_User} */
+    const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request} */
+    const esfValidReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response} */
+    const esbValidRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -79,7 +84,6 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
         data() {
             return {
                 displayCodeVerify: true,
@@ -99,29 +103,24 @@ export default function (spec) {
         methods: {
             async create() {
                 const me = this;
-                // generate keys for asymmetric encryption
-                const keys = await mgrKey.generateAsyncKeys();
-                // get user data with subscription details from IDB
-                // noinspection JSValidateTypes
-                /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                const dto = await store.get(metaUser.getEntityName());
+                const user = await dsUser.get();
+                const sub = await dsSubscript.get();
                 // start process to register user on backend
                 /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
                 const res = await procSignUp.run({
-                    invite: this.code,
                     nick: this.fldNick,
-                    pubKey: keys.publicKey,
-                    subscription: dto.subscription
+                    invite: this.code,
+                    pubKey: user.keys.public,
+                    subscription: sub
                 });
-                // generate symmetric key and save user data into IDB
+                // save user id into IDB
                 if (res?.userId) {
-                    dto.id = res.userId;
-                    dto.nick = this.fldNick;
-                    dto.serverPubKey = res.serverPublicKey;
-                    dto.key = dtoKey.createDto();
-                    dto.key.public = keys.publicKey;
-                    dto.key.secret = keys.secretKey;
-                    await store.set(metaUser.getEntityName(), dto);
+                    // save/update data in IDB
+                    user.id = res.userId;
+                    await dsUser.set(user);
+                    const profile = dtoProfile.createDto()
+                    profile.username = this.fldNick;
+                    await dsProfile.set(profile);
                     this.displayRegister = false;
                     this.displaySuccess = true;
                     // redirect user to homepage
@@ -132,12 +131,12 @@ export default function (spec) {
                     this.displayRegister = false;
                     this.displayError = true;
                     this.fldError = `Some error is occurred on the server, cannot get ID for the new user.`;
-                    console.log(this.fldError);
+                    logger.error(this.fldError);
                 }
             },
 
             async subscribe() {
-                // DEFINE INNER FUNCTIONS
+                // ENCLOSED FUNCTIONS
                 async function subscribePush(key) {
                     /** @type {PushSubscriptionOptionsInit} */
                     const opts = {
@@ -148,17 +147,15 @@ export default function (spec) {
                     return await sw.pushManager.subscribe(opts);
                 }
 
-                // MAIN FUNCTIONALITY
+                // MAIN
                 try {
                     /** @type {PushSubscription} */
                     const pushSubscription = await subscribePush(this.vapidPubKey);
                     // save subscription to IDB Store
-                    /** @type {typeof Fl32_Dup_Front_Store_Single_User.ATTR} */
-                    const ATTR = metaUser.getAttributes();
-                    const json = pushSubscription.toJSON();
+                    const obj = pushSubscription.toJSON();
                     // noinspection JSCheckFunctionSignatures
-                    const dto = metaUser.createDto({[ATTR.SUBSCRIPTION]: json});
-                    await store.set(metaUser.getEntityName(), dto);
+                    const dto = dtoSubscript.createDto(obj);
+                    await dsSubscript.set(dto);
                     // switch UI
                     this.displaySubscribe = false;
                     this.displayRegister = true;
@@ -166,7 +163,7 @@ export default function (spec) {
                     this.displaySubscribe = false;
                     this.displayError = true;
                     this.fldError = `Some error is occurred. See console log for details. ${e}`;
-                    console.log(this.fldError);
+                    logger.error(this.fldError);
                 }
             }
         },
@@ -175,22 +172,56 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
+            // ENCLOSED FUNCTIONS
+            /**
+             * Send invitation code to server and get Web Push subscription data back.
+             * @param {string} code
+             * @return {Promise<Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response.Dto>}
+             */
+            async function validateInvite(code) {
+                return new Promise((resolve) => {
+                    // ENCLOSED VARS
+                    let idFail, subs;
+
+                    // ENCLOSED FUNCTIONS
+                    /**
+                     * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response.Dto} data
+                     * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+                     */
+                    function onResponse({data, meta}) {
+                        clearTimeout(idFail);
+                        resolve(data);
+                        eventsFront.unsubscribe(subs);
+                    }
+
+                    // MAIN
+                    subs = eventsFront.subscribe(esbValidRes.getEventName(), onResponse);
+                    idFail = setTimeout(() => {
+                        eventsFront.unsubscribe(subs);
+                        resolve();
+                    }, 10000); // return nothing after timeout
+                    // request data from back
+                    const message = esfValidReq.createDto();
+                    message.data.code = code;
+                    portalBack.publish(message);
+                });
+            }
+
+            // MAIN
             const user = await dsUser.get();
             if (user?.id) {
+                // redirect authenticated users to the home
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
-                const req = wapiValidate.createReq();
-                req.code = this.code;
-                /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Validate.Response} */
-                const res = await gate.send(req, wapiValidate);
+                const res = await validateInvite(this.code);
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
                     this.vapidPubKey = res.webPushKey;
-                    /** @type {Fl32_Dup_Front_Store_Single_User.Dto} */
-                    const dto = await store.get(metaUser.getEntityName());
-                    this.displaySubscribe = !(typeof dto?.subscription?.endpoint === 'string');
+                    const sub = await dsSubscript.get();
+                    const profile = await dsProfile.get();
+                    this.displaySubscribe = !(typeof sub?.endpoint === 'string');
                     if (!this.displaySubscribe) {
-                        this.displayRegister = (dto?.id === undefined);
+                        this.displayRegister = (profile?.username === undefined);
                         if (!this.displayRegister) this.$router.push(DEF.ROUTE_HOME);
                     }
                 } else {

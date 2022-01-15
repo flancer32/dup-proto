@@ -15,6 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Logger} */
+    const logger = spec['TeqFw_Core_Shared_Logger$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
@@ -26,7 +28,7 @@ export default function (spec) {
     /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
     const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
-    const dtoUser = spec['Fl32_Dup_Front_Dto_User$'];
+    const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -93,7 +95,6 @@ export default function (spec) {
             async create() {
                 // MAIN FUNCTIONALITY
                 const me = this;
-                // noinspection JSValidateTypes
                 const user = await dsUser.get();
                 const sub = await dsSubscript.get();
                 // start process to register user on backend
@@ -109,7 +110,7 @@ export default function (spec) {
                     user.id = res.userId;
                     await dsUser.set(user);
                     await dsHollowIsFree.set(false);
-                    const profile = dtoUser.createDto()
+                    const profile = dtoProfile.createDto()
                     profile.username = this.fldNick;
                     await dsProfile.set(profile);
                     this.isRegistered = true;
@@ -118,24 +119,38 @@ export default function (spec) {
                         me.$router.push(DEF.ROUTE_HOME);
                     }, 2000);
                 } else {
-                    console.log(`Some error is occurred on the server, cannot get ID for new user.`);
+                    logger.error(`Some error is occurred on the server, cannot get ID for new user.`);
                 }
             },
 
             async subscribe() {
                 // ENCLOSED FUNCTIONS
+                /**
+                 * Load public server key for asymmetric encryption.
+                 * @return {Promise<string|null>}
+                 */
                 async function loadServerKey() {
                     return new Promise((resolve) => {
-                        const idFail = setTimeout(resolve, 10000); // return after timeout
-                        eventsFront.subscribe(
-                            esbKeyRes.getEventName(),
-                            (event) => {
-                                /** @type {TeqFw_Web_Push_Shared_Event_Back_Key_Load_Response.Dto} */
-                                const data = event.data;
-                                clearTimeout(idFail);
-                                resolve(data.key);
-                            }
-                        );
+                        // ENCLOSED VARS
+                        let idFail, subs;
+
+                        // ENCLOSED FUNCTIONS
+                        /**
+                         * @param {TeqFw_Web_Push_Shared_Event_Back_Key_Load_Response.Dto} data
+                         */
+                        function onResponse({data}) {
+                            clearTimeout(idFail);
+                            resolve(data.key);
+                            eventsFront.unsubscribe(subs);
+                        }
+
+                        // MAIN
+                        subs = eventsFront.subscribe(esbKeyRes.getEventName(), onResponse);
+                        idFail = setTimeout(() => {
+                            eventsFront.unsubscribe(subs);
+                            resolve(null);
+                        }, 10000); // return nothing after timeout
+                        // request data from back
                         const message = esfKeyReq.createDto();
                         portalBack.publish(message);
                     });
@@ -165,7 +180,7 @@ export default function (spec) {
                     this.hasSubscription = true;
                     this.needSubscribe = false;
                 } catch (e) {
-                    console.error(e);
+                    logger.error(e);
                 }
             }
         },

@@ -44,6 +44,7 @@ class Dto {
 
 /**
  * @implements TeqFw_Web_Front_Api_Store_IEntity
+ * @deprecated use Fl32_Dup_Front_DSource_User_Profile
  */
 export default class Fl32_Dup_Front_Store_Single_User {
     constructor(spec) {

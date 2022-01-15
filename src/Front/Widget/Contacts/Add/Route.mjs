@@ -17,14 +17,20 @@ const LIFE_TIME = {MIN5: 1, HOUR: 2, DAY: 3}
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Logger} */
+    const logger = spec['TeqFw_Core_Shared_Logger$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Front_Api_Dto_Config} */
     const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
-    /** @type {TeqFw_Web_Front_App_Connect_WAPI} */
-    const gate = spec['TeqFw_Web_Front_App_Connect_WAPI$'];
-    /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory} */
-    const wapiInvite = spec['Fl32_Dup_Shared_WAPI_User_Invite_Create.Factory$'];
+    /** @type {TeqFw_Web_Front_App_Event_Bus} */
+    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request} */
+    const esfCreateReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response} */
+    const esbCreateRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -104,6 +110,46 @@ export default function (spec) {
         },
         methods: {
             async onSubmit() {
+                // ENCLOSED FUNCTIONS
+                /**
+                 * Request back to create invite code.
+                 * @param userId
+                 * @param date
+                 * @param onetime
+                 * @return {Promise<unknown>}
+                 */
+                async function createInvite(userId, date, onetime) {
+                    return new Promise((resolve) => {
+                        // ENCLOSED VARS
+                        let idFail, subs;
+
+                        // ENCLOSED FUNCTIONS
+                        /**
+                         * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response.Dto} data
+                         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+                         */
+                        function onResponse({data, meta}) {
+                            clearTimeout(idFail);
+                            resolve(data.code);
+                            eventsFront.unsubscribe(subs);
+                        }
+
+                        // MAIN
+                        subs = eventsFront.subscribe(esbCreateRes.getEventName(), onResponse);
+                        idFail = setTimeout(() => {
+                            eventsFront.unsubscribe(subs);
+                            resolve();
+                        }, 10000); // return nothing after timeout
+                        // request data from back
+                        const message = esfCreateReq.createDto();
+                        message.data.dateExpired = date;
+                        message.data.onetime = onetime;
+                        message.data.userId = userId;
+                        portalBack.publish(message);
+                    });
+                }
+
+                // MAIN
                 const userCurrent = await dsUser.get();
                 const userId = userCurrent.id;
                 const date = new Date();
@@ -114,15 +160,9 @@ export default function (spec) {
                 } else {
                     date.setMinutes(date.getMinutes() + 5); // 5 min by default
                 }
-                /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Request} */
-                const req = wapiInvite.createReq();
-                req.onetime = (this.lifeCount === LIFE_COUNT.ONE);
-                req.dateExpired = date;
-                req.userId = userId;
-                /** @type {Fl32_Dup_Shared_WAPI_User_Invite_Create.Response} */
-                const res = await gate.send(req, wapiInvite);
-                if (res?.code) {
-                    const code = res.code;
+                const onetime = (this.lifeCount === LIFE_COUNT.ONE);
+                const code = await createInvite(userId, date, onetime);
+                if (code) {
                     // compose URL to add new friend
                     const host = `https://${config.urlBase}`;
                     const route = DEF.ROUTE_INVITE_VALIDATE.replace(':code', code);
@@ -137,9 +177,11 @@ export default function (spec) {
                         };
                         await self.navigator.share(data);
                     } else {
-                        // browser mode
-                        console.log(`invitation url: ${url}`);
+                        // desktop mode
+                        logger.info(`invitation url: ${url}`);
                     }
+                } else {
+                    logger.error(`Cannot create invite code on backend.`);
                 }
             }
         },
