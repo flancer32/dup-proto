@@ -16,6 +16,8 @@ export default class Fl32_Dup_Back_Dto_Config_Local {
  * @memberOf Fl32_Dup_Back_Dto_Config_Local
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         /** @type {TeqFw_Db_Back_Dto_Config_Local.Factory} */
         const fDb = spec['TeqFw_Db_Back_Dto_Config_Local#Factory$'];
@@ -31,6 +33,3 @@ export class Factory {
         }
     }
 }
-
-// finalize code components for this es6-module
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
