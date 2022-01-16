@@ -27,6 +27,10 @@
               "attr": {
                 "code": {"type": "string"},
                 "user_ref": {"type": "ref"},
+                "user_nick": {
+                  "comment": "Parent nick for first contact card of new user.",
+                  "type": "string"
+                },
                 "onetime": {"type": "boolean"},
                 "date_expired": {"type": "datetime"}
               },

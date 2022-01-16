@@ -33,9 +33,10 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Create {
             const trx = await conn.startTransaction();
             try {
                 const userId = data.userId;
+                const userNick= data.userNick;
                 const onetime = data.onetime;
                 const dateExpired = castDate(data.dateExpired);
-                const {code} = await actCreate({trx, userId, onetime, dateExpired});
+                const {code} = await actCreate({trx, userId, userNick, onetime, dateExpired});
                 await trx.commit();
                 // send response back to front
                 const msg = esbCreateRes.createDto();

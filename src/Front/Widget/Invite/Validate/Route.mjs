@@ -17,6 +17,10 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Logger} */
     const logger = spec['TeqFw_Core_Shared_Logger$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
+    const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
@@ -207,6 +211,23 @@ export default function (spec) {
                 });
             }
 
+            /**
+             * Save parent contact.
+             * @param {number} userId
+             * @param {string} nick
+             * @param {string} keyPub
+             * @return {Promise<void>}
+             */
+            async function addParentCard(userId, nick, keyPub) {
+                const dto = idbCard.createDto();
+                dto.userId = userId;
+                dto.nick = nick;
+                dto.keyPub = keyPub;
+                const trx = await idb.startTransaction(idbCard);
+                await idb.add(trx, idbCard, dto);
+                await trx.commit();
+            }
+
             // MAIN
             const user = await dsUser.get();
             if (user?.id) {
@@ -216,7 +237,9 @@ export default function (spec) {
                 const res = await validateInvite(this.code);
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
+                    await addParentCard(res.parentId, res.parentNick, res.parentPubKey);
                     this.vapidPubKey = res.webPushKey;
+
                     const sub = await dsSubscript.get();
                     const profile = await dsProfile.get();
                     this.displaySubscribe = !(typeof sub?.endpoint === 'string');

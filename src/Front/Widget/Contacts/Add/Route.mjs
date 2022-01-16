@@ -21,6 +21,8 @@ export default function (spec) {
     const logger = spec['TeqFw_Core_Shared_Logger$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
+    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
+    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {TeqFw_Web_Front_Api_Dto_Config} */
     const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -119,6 +121,7 @@ export default function (spec) {
                  * @return {Promise<unknown>}
                  */
                 async function createInvite(userId, date, onetime) {
+                    const profile = await dsProfile.get();
                     return new Promise((resolve) => {
                         // ENCLOSED VARS
                         let idFail, subs;
@@ -139,12 +142,13 @@ export default function (spec) {
                         idFail = setTimeout(() => {
                             eventsFront.unsubscribe(subs);
                             resolve();
-                        }, 10000); // return nothing after timeout
-                        // request data from back
+                        }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
+                        // send invite data to back
                         const message = esfCreateReq.createDto();
                         message.data.dateExpired = date;
                         message.data.onetime = onetime;
                         message.data.userId = userId;
+                        message.data.userNick = profile.username;
                         portalBack.publish(message);
                     });
                 }

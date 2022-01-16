@@ -20,7 +20,6 @@ const ATTR = {
     COLOR_TEXT: 'colorText',
     KEY_PUB: 'keyPub',
     NICK: 'nick',
-    PARENT_ID: 'parentId',
     USER_ID: 'userId',
 };
 
@@ -33,14 +32,10 @@ class Dto {
     colorBg;
     /** @type {string} */
     colorText;
-    /** @type {number} */
-    id;
     /** @type {string} */
     keyPub;
     /** @type {string} */
     nick;
-    /** @type {number} */
-    parentId;
     /** @type {number} */
     userId;
 }
@@ -63,10 +58,8 @@ export default class Fl32_Dup_Front_Store_Entity_Contact_Card {
             const res = new Dto();
             res.colorBg = castString(data?.colorBg);
             res.colorText = castString(data?.colorText);
-            res.id = castInt(data?.id);
             res.keyPub = castString(data?.keyPub);
             res.nick = castString(data?.nick);
-            res.parentId = castInt(data?.parentId);
             res.userId = castInt(data?.userId);
             return res;
         }

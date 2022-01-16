@@ -29,12 +29,13 @@ export default function (spec) {
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} userId
+     * @param {string} userNick
      * @param {boolean} onetime
      * @param {Date} dateExpired
      * @return {Promise<{code:string}>}
      * @memberOf Fl32_Dup_Back_Act_User_Invite_Create
      */
-    async function act({trx, userId, onetime, dateExpired}) {
+    async function act({trx, userId, userNick, onetime, dateExpired}) {
         // DEFINE INNER FUNCTIONS
         /**
          * @param trx
@@ -64,6 +65,7 @@ export default function (spec) {
         dto.code = code;
         dto.date_expired = dateExp;
         dto.onetime = onetime;
+        dto.user_nick = userNick;
         dto.user_ref = userId;
         await crud.create(trx, metaInvite, dto);
         return {code};

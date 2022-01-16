@@ -11,7 +11,9 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite} */
-        const metaInvite = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Invite$'];
+        const rdbInvite = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Invite$'];
+        /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
+        const rdbUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
@@ -29,7 +31,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
 
         // ENCLOSED VARS
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
-        const A_INVITE = metaInvite.getAttributes();
+        const A_INVITE = rdbInvite.getAttributes();
 
         // MAIN
         eventsBack.subscribe(esfValidateReq.getEventName(), onRequest)
@@ -48,7 +50,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
              */
             async function selectInvite(trx, code) {
                 const norm = code.trim().toLowerCase();
-                return await crud.readOne(trx, metaInvite, {[A_INVITE.CODE]: norm});
+                return await crud.readOne(trx, rdbInvite, {[A_INVITE.CODE]: norm});
             }
 
             // MAIN
@@ -63,6 +65,11 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
                     // select WebPush subscription key
                     const {publicKey} = actLoadWebPushKeys();
                     msg.data.webPushKey = publicKey;
+                    msg.data.parentId = invite.user_ref;
+                    msg.data.parentNick = invite.user_nick;
+                    /** @type {TeqFw_User_Back_Store_RDb_Schema_User.Dto} */
+                    const user = await crud.readOne(trx, rdbUser, invite.user_ref);
+                    msg.data.parentPubKey = user.key_pub;
                 }
                 await trx.commit();
                 // send event message to front

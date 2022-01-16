@@ -16,6 +16,8 @@ class Dto {
     onetime;
     /** @type {number} */
     userId;
+    /** @type {string} */
+    userNick;
 }
 
 /**
@@ -32,6 +34,8 @@ export default class Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request {
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
         // ENCLOSED VARS
         const ATTR = dtoBase.getAttributes();
@@ -46,6 +50,7 @@ export default class Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request {
             res.dateExpired = castDate(data?.dateExpired);
             res.onetime = castBoolean(data?.onetime);
             res.userId = castInt(data?.userId);
+            res.userNick = castString(data?.userNick);
             return res;
         }
 

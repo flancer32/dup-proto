@@ -18,6 +18,7 @@ const ATTR = {
     CODE: 'code',
     DATE_EXPIRED: 'date_expired',
     ONETIME: 'onetime',
+    USER_NICK: 'user_nick',
     USER_REF: 'user_ref',
 };
 
@@ -42,6 +43,11 @@ class Dto {
      * @type {boolean}
      */
     onetime;
+    /**
+     * Nickname of the user who creates this sign up code to add to contact card of parent.
+     * @type {string}
+     */
+    user_nick;
     /**
      * User who creates this sign up code.
      * @type {number}

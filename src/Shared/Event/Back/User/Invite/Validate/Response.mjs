@@ -10,6 +10,12 @@ const NS = 'Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response';
  */
 class Dto {
     static namespace = NS;
+    /** @type {number} */
+    parentId;
+    /** @type {string} */
+    parentNick;
+    /** @type {string} */
+    parentPubKey;
     /**
      * VAPID public key for WebPush subscriptions.
      * @type {string}
@@ -25,6 +31,8 @@ export default class Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
+        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
@@ -38,6 +46,9 @@ export default class Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response {
          */
         function createData(data) {
             const res = new Dto();
+            res.parentId = castInt(data?.parentId);
+            res.parentNick = castString(data?.parentNick);
+            res.parentPubKey = castString(data?.parentPubKey);
             res.webPushKey = castString(data?.webPushKey);
             return res;
         }

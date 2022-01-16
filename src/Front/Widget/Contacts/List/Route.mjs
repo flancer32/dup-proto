@@ -62,7 +62,6 @@ export default function (spec) {
                 for (let i = 1; i < 10; i++) {
                     const card = idbContact.createDto();
                     card.keyPub = 'pub';
-                    card.id = i;
                     card.userId = i;
                     card.nick = `nick_${i}`;
                     await idb.add(trx, idbContact, card);
