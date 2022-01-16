@@ -9,7 +9,7 @@ const NS = 'Fl32_Dup_Shared_Event_Back_Hollow_State_Composed';
  * @memberOf Fl32_Dup_Shared_Event_Back_Hollow_State_Composed
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {boolean} */
     hollowIsFree;
 }

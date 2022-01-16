@@ -18,7 +18,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Shared_SSE_ChatPost
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {number} */
     connectionId;
     /** @type {string} */

@@ -11,7 +11,7 @@ const NS = 'Fl32_Dup_Shared_Event_Front_Msg_Post';
  * @memberOf Fl32_Dup_Shared_Event_Front_Msg_Post
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /**
      * Message body, encrypted and base64 encoded.
      * @type {string}

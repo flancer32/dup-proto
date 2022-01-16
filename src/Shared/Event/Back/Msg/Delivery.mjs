@@ -13,7 +13,7 @@ const NS = 'Fl32_Dup_Shared_Event_Back_Msg_Delivery';
  * @memberOf Fl32_Dup_Shared_Event_Back_Msg_Delivery
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
 }
 
 /**

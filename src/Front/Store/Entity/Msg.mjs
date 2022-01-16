@@ -27,7 +27,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Store_Entity_Msg
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {number} */
     authorId;
     /** @type {number} */

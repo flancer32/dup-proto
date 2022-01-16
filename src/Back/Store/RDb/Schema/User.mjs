@@ -26,7 +26,7 @@ const ATTR = {
  * @deprecated use TeqFw_User_Back_Store_RDb_Schema_User.Dto
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /**
      * Public key for the user.
      * @type {string}

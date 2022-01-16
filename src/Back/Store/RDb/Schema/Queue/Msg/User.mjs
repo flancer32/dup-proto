@@ -28,7 +28,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /**
      * Message date (when registered in queue).
      * @type {Date}

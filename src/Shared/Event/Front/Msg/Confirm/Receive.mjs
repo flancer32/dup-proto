@@ -11,7 +11,7 @@ const NS = 'Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive';
  * @memberOf Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
 }
 
 /**

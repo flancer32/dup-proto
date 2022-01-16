@@ -18,7 +18,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Dto_Key_Asym
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {string} */
     public;
     /** @type {string} */

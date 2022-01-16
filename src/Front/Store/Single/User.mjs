@@ -27,7 +27,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Store_Single_User
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {string} */
     hollowSecretKey;
     /** @type {number} */

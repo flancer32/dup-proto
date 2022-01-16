@@ -17,7 +17,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Front_Dto_Contacts_Card
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {Fl32_Dup_Shared_Dto_Contacts_Card.Dto} */
     wapiCard;
 }

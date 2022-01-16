@@ -9,7 +9,7 @@ const NS = 'Fl32_Dup_Shared_Event_Back_User_SignUp_Registered';
  * @memberOf Fl32_Dup_Shared_Event_Back_User_SignUp_Registered
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {string} */
     serverPublicKey;
     /** @type {number} */

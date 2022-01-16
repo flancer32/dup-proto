@@ -9,7 +9,7 @@ const NS = 'Fl32_Dup_Shared_Event_Front_User_SignedUp';
  * @memberOf Fl32_Dup_Shared_Event_Front_User_SignedUp
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /** @type {string} */
     endpoint;
     /** @type {string} */

@@ -24,7 +24,7 @@ const ATTR = {
  * @memberOf Fl32_Dup_Back_Store_RDb_Schema_Cfg
  */
 class Dto {
-    static namespace = `${NS}.Dto`;
+    static namespace = NS;
     /**
      * Path to current config value (/path/to/option).
      * @type {string}
