@@ -14,6 +14,10 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry} */
+        const regStreams = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry$'];
+        /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
+        const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
         const esfMsgPost = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
@@ -54,12 +58,21 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
              * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
              */
             function transferMessage(data, meta) {
-                const msg = esbReceive.createDto();
-                msg.data.message = data.message;
-                msg.data.recipientId = data.recipientId;
-                msg.data.senderId = data.userId;
-                // we need to have a registry with user ids and front UUIDs
-                msg.meta.frontUUID = '????';
+                const userId = data.recipientId;
+                const streams = regUserStreams.getStreams(userId);
+                if (streams.length === 0)
+                    logger.error(`There are no opened event streams for user #${userId}.`);
+                for (const one of streams) {
+                    const frontUUID = regStreams.mapUUIDStreamToFront(one);
+                    if (frontUUID) {
+                        const msg = esbReceive.createDto();
+                        msg.data.message = data.message;
+                        msg.data.recipientId = data.recipientId;
+                        msg.data.senderId = data.userId;
+                        msg.meta.frontUUID = frontUUID;
+                        portalFront.publish(msg);
+                    }
+                }
             }
 
             // MAIN

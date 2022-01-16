@@ -203,11 +203,13 @@ export default function (spec) {
                     idFail = setTimeout(() => {
                         eventsFront.unsubscribe(subs);
                         resolve();
-                    }, 10000); // return nothing after timeout
+                    }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
                     // request data from back
-                    const message = esfValidReq.createDto();
-                    message.data.code = code;
-                    portalBack.publish(message);
+
+                    // publish event to back
+                    const msg = esfValidReq.createDto();
+                    msg.data.code = code;
+                    portalBack.publish(msg);
                 });
             }
 

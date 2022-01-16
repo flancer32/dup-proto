@@ -1,5 +1,5 @@
 /**
- * Action to add new message to messages band and reflect it on UI and in IDB.
+ * Action to add new message to message band and reflect it on UI and in IDB.
  * @namespace Fl32_Dup_Front_Act_Band_Msg_Add
  */
 // MODULE'S VARS

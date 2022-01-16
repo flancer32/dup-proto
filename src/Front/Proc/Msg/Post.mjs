@@ -1,26 +1,18 @@
 /**
  * Sender is posted new message to recipient. Transfer this message to backend and wait for confirmation.
- */
-// MODULE'S VARS
-const ATTEMPTS = 4; // number of attempts to get response event from backend
-const TIMEOUT = 65000; // between events messages to backend
-
-/**
  * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
 export default class Fl32_Dup_Front_Proc_Msg_Post {
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {Fl32_Dup_Front_Defaults} */
+        const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
         const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-        const eventsQueue = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-        /** @type {TeqFw_Web_Front_App_Event_Embassy} */
-        const backEmbassy = spec['TeqFw_Web_Front_App_Event_Embassy$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
         const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
@@ -35,52 +27,43 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
         // INSTANCE METHODS
         this.init = async function () { }
         /**
-         *
+         * Post encrypted message to back and wait for post confirmation.
          * @param {string} message
          * @param {number} userId
          * @param {number} recipientId
          * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
          */
         this.run = async function ({message, userId, recipientId}) {
-            const payload = esfPosted.createDto();
-            payload.frontUUID = frontUUID.get();
-            payload.message = message;
-            payload.recipientId = recipientId;
-            payload.userId = userId;
-            // send event to backend first time
-            // noinspection ES6MissingAwait
-            eventsQueue.add(esfPosted.getName(), payload);
-            // wait until response event will come from back
             return await new Promise((resolve) => {
                 // ENCLOSED VARS
-                let i = 1, repeatId;
+                let idFail, subs;
 
                 // ENCLOSED FUNCTIONS
                 /**
-                 *
-                 * {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto}
-                 * @param evt
+                 * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto} data
                  */
-                function onBackResponse(evt) {
-                    if (repeatId) clearInterval(repeatId);
-                    resolve(evt);
-                }
-
-                /**
-                 * Send event message to the back or resolve promise with 'null' if attempts count is too high.
-                 */
-                function repeat() {
-                    if (++i > ATTEMPTS) {
-                        clearInterval(repeatId);
-                        resolve(null);
-                    } else eventsQueue.add(esfPosted.getName(), payload);
+                function onResponse({data}) {
+                    clearTimeout(idFail);
+                    resolve(data);
+                    eventsFront.unsubscribe(subs);
                 }
 
                 // MAIN
-                // repeat event message every 5 sec.
-                repeatId = setInterval(repeat, TIMEOUT);
-                // subscribe to response event from back
-                backEmbassy.subscribe(esbConfirm.getName(), onBackResponse);
+
+                // subscribe to response event from back and create timeout response
+                subs = eventsFront.subscribe(esbConfirm.getEventName(), onResponse);
+                idFail = setTimeout(() => {
+                    eventsFront.unsubscribe(subs);
+                    resolve();
+                }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
+
+                // create event message and publish it to back
+                const msg = esfPosted.createDto();
+                msg.meta.frontUUID = frontUUID.get();
+                msg.data.message = message;
+                msg.data.recipientId = recipientId;
+                msg.data.userId = userId;
+                portalBack.publish(msg);
             });
         }
     }
