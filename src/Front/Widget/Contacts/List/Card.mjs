@@ -27,8 +27,6 @@ export default function (spec) {
 <q-card v-on:click="chat">
     <q-card-section>
         <div class="text-subtitle1">{{nick}} (#{{id}})</div>
-        <div class="text-subtitle3">{{$t('parent')}}: #{{parentId}}</div>
-        <div class="text-body2">{{$t('reg. date')}}: {{dateRegistered}}</div>
     </q-card-section>
 </q-card>
 `;
@@ -43,21 +41,15 @@ export default function (spec) {
         name: NS,
         template,
         props: {
-            /** @type {Fl32_Dup_Front_Dto_Contacts_Card.Dto} */
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
             card: null
         },
         computed: {
-            dateRegistered() {
-                return formatDateTime(this?.card?.wapiCard?.dateRegistered);
-            },
             id() {
-                return this.card?.wapiCard?.userId;
-            },
-            parentId() {
-                return this.card?.wapiCard?.parentId;
+                return this.card?.userId;
             },
             nick() {
-                return this.card?.wapiCard?.nick || 'Anon';
+                return this.card?.nick || 'Anon';
             }
         },
         methods: {

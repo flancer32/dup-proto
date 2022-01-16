@@ -19,6 +19,7 @@ const ATTR = {
 // MODULE'S CLASSES
 /**
  * @memberOf Fl32_Dup_Shared_Dto_Contacts_Card
+ * @deprecated use IDB to store contacts
  */
 class Dto {
     static namespace = NS;
@@ -36,6 +37,7 @@ class Dto {
 
 /**
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_IMeta
+ * @deprecated use IDB to store contacts
  */
 export default class Fl32_Dup_Shared_Dto_Contacts_Card {
 

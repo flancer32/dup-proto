@@ -3,6 +3,7 @@
  * TODO: move reactive attributes to to Rx
  *
  * @namespace Fl32_Dup_Front_Model_Contacts
+ * @deprecated we don't save contacts on the server more
  */
 export default class Fl32_Dup_Front_Model_Contacts {
     constructor(spec) {

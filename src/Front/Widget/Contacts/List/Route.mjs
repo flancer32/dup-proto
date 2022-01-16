@@ -20,6 +20,11 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Model_Contacts} */
     const modContacts = spec['Fl32_Dup_Front_Model_Contacts$'];
 
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
@@ -48,7 +53,23 @@ export default function (spec) {
         },
         methods: {},
         async mounted() {
-            await modContacts.loadFromServer();
+            // await modContacts.loadFromServer();
+            const trx = await idb.startTransaction(idbContact);
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+            const cards = await idb.readSet(trx, idbContact);
+            if (cards.length === 0) {
+                // add fake data to IDB
+                for (let i = 1; i < 10; i++) {
+                    const card = idbContact.createDto();
+                    card.keyPub = 'pub';
+                    card.id = i;
+                    card.userId = i;
+                    card.nick = `nick_${i}`;
+                    await idb.add(trx, idbContact, card);
+                }
+            } else {
+                this.cards = cards;
+            }
         },
     };
 }
