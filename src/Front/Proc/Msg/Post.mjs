@@ -9,6 +9,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
+        const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
         const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -28,12 +30,12 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
         this.init = async function () { }
         /**
          * Post encrypted message to back and wait for post confirmation.
-         * @param {string} message
+         * @param {string} payload
          * @param {number} userId
          * @param {number} recipientId
          * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
          */
-        this.run = async function ({message, userId, recipientId}) {
+        this.run = async function ({payload, userId, recipientId}) {
             return await new Promise((resolve) => {
                 // ENCLOSED VARS
                 let idFail, subs;
@@ -58,12 +60,14 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
                 }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
 
                 // create event message and publish it to back
-                const msg = esfPosted.createDto();
-                msg.meta.frontUUID = frontUUID.get();
-                msg.data.message = message;
-                msg.data.recipientId = recipientId;
-                msg.data.userId = userId;
-                portalBack.publish(msg);
+                const event = esfPosted.createDto();
+                event.meta.frontUUID = frontUUID.get();
+                event.data.message.payload = payload;
+                event.data.message.senderId = userId;
+                event.data.message.recipientId = recipientId;
+                event.data.message.dateSent = new Date();
+                event.data.message.uuid = uuidV4();
+                portalBack.publish(event);
             });
         }
     }

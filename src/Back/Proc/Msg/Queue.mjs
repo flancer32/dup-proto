@@ -6,8 +6,6 @@
 export default class Fl32_Dup_Back_Proc_Msg_Queue {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {Fl32_Dup_Back_Defaults} */
-        const DEF = spec['Fl32_Dup_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
@@ -44,11 +42,11 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
              * Register incoming message in Posted Queue and send response to sender.
              */
             function queueIncoming() {
-                const msgKey = queuePosted.add({data, meta});
+                const msgKey = queuePosted.add(data.message);
                 const msg = esbConfirmPost.createDto();
                 logger.info(`User message is queued as '${msgKey}'.`);
                 msg.meta.frontUUID = meta.frontUUID;
-                msg.data.messageId = msgKey;
+                msg.data.messageId = data.message.uuid;
                 portalFront.publish(msg);
             }
 
@@ -58,19 +56,18 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
              * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
              */
             function transferMessage(data, meta) {
-                const userId = data.recipientId;
+                const post = data.message;
+                const userId = post.recipientId;
                 const streams = regUserStreams.getStreams(userId);
                 if (streams.length === 0)
                     logger.error(`There are no opened event streams for user #${userId}.`);
                 for (const one of streams) {
                     const frontUUID = regStreams.mapUUIDStreamToFront(one);
                     if (frontUUID) {
-                        const msg = esbReceive.createDto();
-                        msg.data.message = data.message;
-                        msg.data.recipientId = data.recipientId;
-                        msg.data.senderId = data.userId;
-                        msg.meta.frontUUID = frontUUID;
-                        portalFront.publish(msg);
+                        const event = esbReceive.createDto();
+                        event.meta.frontUUID = frontUUID;
+                        event.data.message = post;
+                        portalFront.publish(event);
                     }
                 }
             }

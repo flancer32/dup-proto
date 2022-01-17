@@ -1,5 +1,5 @@
 /**
- * Get incoming messages from backend and send confirmation back.
+ * Get incoming messages from backend and send receive confirmation back.
  * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
 export default class Fl32_Dup_Front_Proc_Msg_Receive {
@@ -7,8 +7,12 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Receive} */
         const esbReceived = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
+        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
+        const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
         /** @type {TeqFw_User_Shared_Api_Crypto_IScrambler} */
         const scrambler = spec['TeqFw_User_Shared_Api_Crypto_IScrambler$'];
         /** @type {TeqFw_User_Front_DSource_User} */
@@ -41,24 +45,31 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
             }
 
             // MAIN
-            const encrypted = data.message;
-            const publicKey = await getPublicKey(data.senderId);
+            // decrypt message body
+            const message = data.message;
+            const encrypted = message.payload;
+            const publicKey = await getPublicKey(message.senderId);
             const user = await dsUser.get();
             scrambler.setKeys(publicKey, user.keys.secret);
             const body = scrambler.decryptAndVerify(encrypted);
+            // save message to IDB and push to current band (if required)
             if (body)
-                // save message to IDB and push to current band (if required)
                 actMsgAdd({
-                    authorId: data.senderId,
-                    bandId: data.senderId,
+                    authorId: message.senderId,
+                    bandId: message.senderId,
                     body,
                     date: new Date(),
-                    msgId: meta.uuid,
+                    uuid: message.uuid,
                 });
+            // send receive confirmation back to server
+            const event = new esfConfReceive.createDto();
+            event.data.dateDelivery = new Date();
+            event.data.uuid = message.uuid;
+            portalBack.publish(event);
         }
 
         // INSTANCE METHODS
-        this.init = async function () { }
-        this.run = async function ({}) { }
+        this.init = async function () {}
+        this.run = async function ({}) {}
     }
 }

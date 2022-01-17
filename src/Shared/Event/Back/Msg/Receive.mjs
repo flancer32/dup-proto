@@ -13,14 +13,10 @@ const NS = 'Fl32_Dup_Shared_Event_Back_Msg_Receive';
 class Dto {
     static namespace = NS;
     /**
-     * Message body, encrypted and base64 encoded.
-     * @type {string}
+     * Message structure.
+     * @type {Fl32_Dup_Shared_Dto_Msg.Dto}
      */
     message;
-    /** @type {number} */
-    recipientId;
-    /** @type {number} */
-    senderId;
 }
 
 /**
@@ -31,10 +27,8 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Receive {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
-        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
-        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
+        /** @type {Fl32_Dup_Shared_Dto_Msg} */
+        const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
 
         // ENCLOSED VARS
         const ATTR = dtoBase.getAttributes();
@@ -46,9 +40,7 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Receive {
          */
         function createData(data) {
             const res = new Dto();
-            res.message = castString(data?.message);
-            res.recipientId = castInt(data?.recipientId);
-            res.senderId = castInt(data?.senderId);
+            res.message = dtoMsg.createDto(data?.message);
             return res;
         }
 

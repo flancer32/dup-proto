@@ -20,7 +20,7 @@ const ATTR = {
     BAND_ID: 'bandId',
     BODY: 'body',
     DATE: 'date',
-    MSG_ID: 'msgId',
+    UUID: 'uuid',
 };
 
 /**
@@ -37,7 +37,7 @@ class Dto {
     /** @type {Date} */
     date;
     /** @type {number} */
-    msgId;
+    uuid;
 }
 
 /**
@@ -62,7 +62,7 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
             res.bandId = castInt(data?.bandId);
             res.body = castStr(data?.body);
             res.date = castDate(data?.date);
-            res.msgId = castInt(data?.msgId);
+            res.uuid = castInt(data?.uuid);
             return res;
         }
 
@@ -72,6 +72,6 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
 
         this.getEntityName = () => ENTITY;
 
-        this.getPrimaryKey = () => [ATTR.MSG_ID];
+        this.getPrimaryKey = () => [ATTR.UUID];
     }
 }

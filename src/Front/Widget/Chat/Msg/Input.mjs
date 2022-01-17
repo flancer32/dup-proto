@@ -103,7 +103,7 @@ export default function (spec) {
                     const encrypted = enigma.encryptAndSign(msg);
                     // post message to server
                     const confirm = await procPost.run({
-                        message: encrypted,
+                        payload: encrypted,
                         userId: authorId,
                         recipientId
                     });
@@ -124,7 +124,7 @@ export default function (spec) {
                         bandId: recipientId,
                         body: msg,
                         date: new Date(),
-                        msgId,
+                        uuid: msgId,
                     });
                 } else {
                     logger.info(`Cannot send message to the server`);

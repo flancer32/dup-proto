@@ -1,5 +1,5 @@
 /**
- * Message is saved by recipient.
+ * Message is saved by recipient, return delivery date.
  *
  * @namespace Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive
  */
@@ -12,6 +12,10 @@ const NS = 'Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive';
  */
 class Dto {
     static namespace = NS;
+    /** @type {Date} */
+    dateDelivery;
+    /** @type {string} */
+    uuid;
 }
 
 /**
@@ -22,6 +26,10 @@ export default class Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
+        const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
         // ENCLOSED VARS
         const ATTR = dtoBase.getAttributes();
@@ -33,6 +41,8 @@ export default class Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive {
          */
         function createData(data) {
             const res = new Dto();
+            res.dateDelivery = castDate(data?.dateDelivery);
+            res.uuid = castString(data?.uuid);
             return res;
         }
 

@@ -80,7 +80,7 @@ export default function (spec) {
                     bandId: msg.userId,
                     body,
                     date: new Date(),
-                    msgId,
+                    uuid: msgId,
                 });
             // send delivery confirmation (w/o await)
             confirmDelivery(msgId, userId);

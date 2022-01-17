@@ -19,15 +19,15 @@ export default function (spec) {
      * @return {Promise<void>}
      * @memberOf Fl32_Dup_Front_Act_Band_Msg_Add
      */
-    async function act({authorId, bandId, body, date, msgId}) {
+    async function act({authorId, bandId, body, date, uuid}) {
         // INNER FUNCTIONS
-        async function saveMessage(authorId, bandId, body, date, msgId) {
+        async function saveMessage(authorId, bandId, body, date, uuid) {
             const dto = idbMsg.createDto();
             dto.authorId = authorId;
             dto.bandId = bandId;
             dto.body = body;
             dto.date = date;
-            dto.msgId = msgId;
+            dto.uuid = uuid;
             const trx = await idb.startTransaction(idbMsg);
             const pk = await idb.add(trx, idbMsg, dto);
             await trx.commit();
@@ -50,7 +50,7 @@ export default function (spec) {
         }
 
         // MAIN FUNCTIONALITY
-        await saveMessage(authorId, bandId, body, date, msgId);
+        await saveMessage(authorId, bandId, body, date, uuid);
         const currentBand = parseInt(rxChat.getOtherSideId().value);
         if (currentBand === bandId) {
             // TODO: tmp variant to detect 'sent' attr for user band

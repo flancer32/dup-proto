@@ -37,7 +37,7 @@ export default function (spec) {
         if (!db.objectStoreNames.contains(E_CONTACT_CARD))
             db.createObjectStore(E_CONTACT_CARD, {keyPath: A_CONTACT_CARD.USER_ID});
         if (!db.objectStoreNames.contains(E_MSG)) {
-            const store = db.createObjectStore(E_MSG, {keyPath: A_MSG.MSG_ID});
+            const store = db.createObjectStore(E_MSG, {keyPath: A_MSG.UUID});
             store.createIndex(A_MSG.BAND_ID, A_MSG.BAND_ID);
         }
         if (!db.objectStoreNames.contains(E_MSG_BAND_USER))
