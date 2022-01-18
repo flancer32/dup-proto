@@ -7,10 +7,10 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry} */
         const regStreams = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry$'];
         /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
@@ -20,7 +20,11 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
         const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
         /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
-        const queuePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
+        const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
+        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Delivered} */
+        const queDelivered = spec['Fl32_Dup_Back_Mod_Msg_Queue_Delivered$'];
+        /** @type {Fl32_Dup_Shared_Dto_Msg} */
+        const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
 
         // MAIN
 
@@ -34,13 +38,17 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
          * @return {Promise<void>}
          */
         async function onMessageReceived({data, meta}) {
-            // ENCLOSED FUNCTIONS
-
-            // MAIN
             const uuid = data.uuid;
-            const posted = queuePosted.get(uuid);
+            const posted = quePosted.get(uuid);
             if (posted) {
-                const userId = posted.senderId;
+                const delivery = dtoMsg.createDto();
+                delivery.uuid = uuid;
+                delivery.senderId = posted.senderId;
+                delivery.recipientIdId = posted.recipientId;
+                delivery.dateDelivered = data.dateDelivery;
+                queDelivered.add(delivery);
+                quePosted.remove(uuid);
+                const userId = delivery.senderId;
                 const streamUUIDs = regUserStreams.getStreams(userId);
                 if (streamUUIDs.length === 0)
                     logger.error(`There are no opened event streams for user #${userId}.`);

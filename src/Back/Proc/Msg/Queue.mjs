@@ -23,7 +23,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Receive} */
         const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
         /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
-        const queuePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
+        const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
 
         // MAIN
 
@@ -42,9 +42,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
              * Register incoming message in Posted Queue and send response to sender.
              */
             function queueIncoming() {
-                const msgKey = queuePosted.add(data.message);
+                quePosted.add(data.message);
                 const msg = esbConfirmPost.createDto();
-                logger.info(`User message is queued as '${msgKey}'.`);
                 msg.meta.frontUUID = meta.frontUUID;
                 msg.data.messageId = data.message.uuid;
                 portalFront.publish(msg);

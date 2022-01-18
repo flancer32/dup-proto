@@ -1,10 +1,10 @@
 /**
- * Queue to save posted messages on the server.
- * These messages are not delivered to receivers yet.
+ * Queue to save delivered messages on the server.
+ * These messages are delivered to receivers but have no confirmation from senders about delivery reports receiving.
  *
- * @namespace Fl32_Dup_Back_Mod_Msg_Queue_Posted
+ * @namespace Fl32_Dup_Back_Mod_Msg_Queue_Delivered
  */
-export default class Fl32_Dup_Back_Mod_Msg_Queue_Posted {
+export default class Fl32_Dup_Back_Mod_Msg_Queue_Delivered {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
@@ -29,13 +29,13 @@ export default class Fl32_Dup_Back_Mod_Msg_Queue_Posted {
          */
         this.add = function (data) {
             const uuid = data.uuid;
-            const userId = data.recipientId;
+            const userId = data.senderId; // return delivery report to sender
             if (_store.has(uuid))
-                throw Error(`There is message '${uuid}' in the posted messages queue. Cannot process.`);
+                throw Error(`There is message '${uuid}' in the delivered messages queue. Cannot process.`);
             _store.set(uuid, data);
             if (!_mapUser2Msg[userId]) _mapUser2Msg[userId] = [];
             _mapUser2Msg[userId].push(uuid);
-            logger.info(`Message ${uuid} is added to posted messages queue.`);
+            logger.info(`Message ${uuid} is added to delivered messages queue.`);
             return uuid;
         }
 
@@ -56,17 +56,18 @@ export default class Fl32_Dup_Back_Mod_Msg_Queue_Posted {
             return _mapUser2Msg[userId] || [];
         }
 
+
         /**
          * @param {string} uuid
          */
         this.remove = function (uuid) {
             const item = _store.get(uuid);
             if (item) {
-                const userId = item.recipientId;
+                const userId = item.senderId;
                 _mapUser2Msg[userId] = _mapUser2Msg[userId].filter((one) => one !== uuid);
                 _store.delete(uuid);
                 if (_mapUser2Msg[userId].length === 0) delete _mapUser2Msg[userId];
-                logger.info(`Message ${uuid} is removed from posted messages queue.`);
+                logger.info(`Message ${uuid} is removed from delivered messages queue.`);
             }
         }
     }

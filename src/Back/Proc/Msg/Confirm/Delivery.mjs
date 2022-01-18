@@ -4,14 +4,12 @@
 export default class Fl32_Dup_Back_Proc_Msg_Confirm_Delivery {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery} */
         const esfConfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery$'];
-        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
-        const queuePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
+        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Delivered} */
+        const queDelivered = spec['Fl32_Dup_Back_Mod_Msg_Queue_Delivered$'];
 
         // MAIN
 
@@ -25,15 +23,11 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Delivery {
          * @return {Promise<void>}
          */
         async function onConfirm({data, meta}) {
-            // ENCLOSED FUNCTIONS
-
-            // MAIN
             const uuid = data.uuid;
-            const posted = queuePosted.get(uuid);
-            if (posted) {
-                queuePosted.remove(uuid);
+            const delivery = queDelivered.get(uuid);
+            if (delivery) {
+                queDelivered.remove(uuid);
             }
-            logger.info(`Message '${uuid}' is removed from queue.`);
         }
     }
 }
