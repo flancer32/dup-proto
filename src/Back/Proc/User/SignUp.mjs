@@ -53,7 +53,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         function loadPublicKey() {
             // load key from local file
             const root = config.getBoot().projectRoot;
-            const path = join(root, DEF.FILE_CRYPTO_KEYS);
+            const path = join(root, DEF.MOD_USER.FILE_CRYPTO_KEYS);
             const keys = readJson(path);
             return keys?.publicKey;
         }

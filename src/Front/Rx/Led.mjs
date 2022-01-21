@@ -22,7 +22,6 @@ export default class Fl32_Dup_Front_Rx_Led {
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
         // DEFINE WORKING VARS / PROPS
-        /** @type {{value: Fl32_Dup_Front_Dto_Contacts_Card.Dto[]}} */
         const _data = ref(STATE.OFF);
         let isOffline = false;
         let isConnected = false;
@@ -53,7 +52,6 @@ export default class Fl32_Dup_Front_Rx_Led {
 
         /**
          * Get reactive object.
-         * @return {{value: Fl32_Dup_Front_Dto_Contacts_Card.Dto[]}}
          */
         this.getRef = () => _data;
         this.setOffline = function () {

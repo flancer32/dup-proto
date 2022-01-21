@@ -14,10 +14,6 @@
       "path": "./src"
     },
     "replace": {
-      "Fl32_Dup_Shared_Api_Crypto_Key_IManager": {
-        "back": "Fl32_Dup_Back_Mod_Crypto_Key_Manager",
-        "front": "Fl32_Dup_Front_Model_Crypto_Key_Manager"
-      },
       "TeqFw_Web_Front_Api_Gate_IAjaxLed": {
         "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Gate_IAjaxLed"
       },
@@ -32,9 +28,7 @@
         "TeqFw_Web_Back_App_Server_Handler_Upload"
       ]
     },
-    "services": [
-      "Fl32_Dup_Back_WAPI_User_List"
-    ],
+    "services": [],
     "statics": {
       "/tweetnacl-util/": "/tweetnacl-util/",
       "/tweetnacl/": "/tweetnacl/",
