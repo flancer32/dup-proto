@@ -34,7 +34,10 @@ class Dto {
     bandId;
     /** @type {string} */
     body;
-    /** @type {Date} */
+    /**
+     * UTC date when message (incoming or outgoing) was stored in IDB.
+     * @type {Date}
+     */
     date;
     /** @type {number} */
     uuid;
@@ -61,7 +64,7 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
             res.authorId = castInt(data?.authorId);
             res.bandId = castInt(data?.bandId);
             res.body = castStr(data?.body);
-            res.date = castDate(data?.date);
+            res.date = castDate(data?.date) || new Date();
             res.uuid = castInt(data?.uuid);
             return res;
         }

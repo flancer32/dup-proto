@@ -10,16 +10,24 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
     const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
+    const idbMsgBase = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
+    /** @type {Fl32_Dup_Front_Store_Dto_Msg_Pers_Out} */
+    const dtoPersOut = spec['Fl32_Dup_Front_Store_Dto_Msg_Pers_Out$'];
+    /** @type {Fl32_Dup_Front_Store_Dto_Msg_Pers_In} */
+    const dtoPersIn = spec['Fl32_Dup_Front_Store_Dto_Msg_Pers_In$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {Fl32_Dup_Front_Dto_Message} */
     const dmMsg = spec['Fl32_Dup_Front_Dto_Message$'];
+    /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
+    const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
 
     /**
      * @return {Promise<void>}
      * @memberOf Fl32_Dup_Front_Act_Band_Msg_Add
      */
-    async function act({authorId, bandId, body, date, uuid}) {
+    async function act({authorId, bandId, body, date, uuid, type}) {
         // INNER FUNCTIONS
         async function saveMessage(authorId, bandId, body, date, uuid) {
             const dto = idbMsg.createDto();
@@ -28,8 +36,27 @@ export default function (spec) {
             dto.body = body;
             dto.date = date;
             dto.uuid = uuid;
-            const trx = await idb.startTransaction(idbMsg);
-            const pk = await idb.add(trx, idbMsg, dto);
+            const trx = await idb.startTransaction([idbMsg, idbMsgBase]);
+            await idb.add(trx, idbMsg, dto);
+            // NEW FORMAT
+
+            let dtoNew;
+            if (type === TYPE.PERS_OUT) {
+                dtoNew = dtoPersOut.createDto();
+                dtoNew.type = TYPE.PERS_OUT;
+                dtoNew.recipientId = bandId;
+            } else if (type === TYPE.PERS_IN) {
+                dtoNew = dtoPersIn.createDto();
+                dtoNew.type = TYPE.PERS_IN;
+                dtoNew.senderId = bandId;
+            } else {
+                dtoNew = idbMsgBase.createDto();
+            }
+            dtoNew.body = body;
+            dtoNew.date = new Date();
+            dtoNew.uuid = uuid;
+            const id = await idb.add(trx, idbMsgBase, dtoNew);
+            console.log(`new message id: ${id}.`);
             await trx.commit();
         }
 

@@ -1,5 +1,5 @@
 /**
- * Process delivery report from backend and send confirmation.
+ * Process delivery report from backend and send confirmation to clean up delivery queue on server.
  * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
 export default class Fl32_Dup_Front_Proc_Msg_Delivery {
@@ -13,8 +13,16 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
         const esbDelivered = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery} */
         const esfConfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery$'];
+        /** @type {TeqFw_Web_Front_Store_IDB} */
+        const idb = spec['Fl32_Dup_Front_Store_Db$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
+        const idbMsgBase = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
+        const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
+
 
         // ENCLOSED VARS
+        const I_MSG = idbMsgBase.getIndexes();
 
         // MAIN
         eventsFront.subscribe(esbDelivered.getEventName(), onDelivery);
@@ -32,6 +40,15 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
             const event = new esfConfDelivery.createDto();
             event.data.uuid = data.uuid;
             portalBack.publish(event);
+            // update delivery date for message in IDB
+            const trx = await idb.startTransaction(idbMsgBase);
+            const query = IDBKeyRange.only(data.uuid);
+            /** @type {Fl32_Dup_Front_Store_Dto_Msg_Pers_Out.Dto[]} */
+            const items = await idb.readSet(trx, idbMsgBase, I_MSG.BY_UUID, query);
+            const [first] = items;
+            first.dateDelivered = castDate(data.dateDelivered);
+            await idb.updateOne(trx, idbMsgBase, first);
+            trx.commit();
         }
 
         // INSTANCE METHODS

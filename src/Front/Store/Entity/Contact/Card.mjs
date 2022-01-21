@@ -16,8 +16,8 @@ const ENTITY = '/contact/card';
  * @type {Object}
  */
 const ATTR = {
-    COLOR_BG: 'colorBg',
-    COLOR_TEXT: 'colorText',
+    DATE: 'date',
+    ID: 'id',
     KEY_PUB: 'keyPub',
     NICK: 'nick',
     USER_ID: 'userId',
@@ -26,17 +26,39 @@ const ATTR = {
 /**
  * @memberOf Fl32_Dup_Front_Store_Entity_Contact_Card
  */
+const INDEX = {
+    BY_USER: 'by_user',
+}
+
+/**
+ * @memberOf Fl32_Dup_Front_Store_Entity_Contact_Card
+ */
 class Dto {
     static namespace = NS;
-    /** @type {string} */
-    colorBg;
-    /** @type {string} */
-    colorText;
-    /** @type {string} */
+    /**
+     * UTC date when contact card was stored in IDB.
+     * @type {Date}
+     */
+    date;
+    /**
+     * Internal local ID for object in IDB.
+     * @type {number}
+     */
+    id;
+    /**
+     * User's public key to encrypt data and to verify signature (base64 encoded).
+     * @type {string}
+     */
     keyPub;
-    /** @type {string} */
+    /**
+     * Local label for the contact.
+     * @type {string}
+     */
     nick;
-    /** @type {number} */
+    /**
+     * Backend ID for related user.
+     * @type {number}
+     */
     userId;
 }
 
@@ -49,28 +71,39 @@ export default class Fl32_Dup_Front_Store_Entity_Contact_Card {
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
+        const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
 
         /**
          * @param {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} [data]
          * @return {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto}
          */
         this.createDto = function (data) {
-            const res = new Dto();
-            res.colorBg = castString(data?.colorBg);
-            res.colorText = castString(data?.colorText);
+            const res = Object.assign(new Dto(), data);
+            res.date = castDate(data?.date) || new Date();
+            res.id = castInt(data?.id);
             res.keyPub = castString(data?.keyPub);
             res.nick = castString(data?.nick);
             res.userId = castInt(data?.userId);
             return res;
         }
 
-        this.getAttributes = () => ATTR;
-
-        this.getAttrNames = () => Object.values(ATTR);
-
-        this.getEntityName = () => ENTITY;
-
-        this.getPrimaryKey = () => [ATTR.USER_ID];
     }
 
+    /**
+     * @return {typeof Fl32_Dup_Front_Store_Entity_Contact_Card.ATTR}
+     */
+
+    getAttributes() { return ATTR;}
+
+    getAttrNames() {return Object.values(ATTR);}
+
+    getEntityName() { return ENTITY;}
+
+    /**
+     * @return {typeof Fl32_Dup_Front_Store_Entity_Contact_Card.INDEX}
+     */
+    getIndexes() { return INDEX;}
+
+    getPrimaryKey() { return [ATTR.ID];}
 }

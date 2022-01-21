@@ -21,20 +21,28 @@ export default function (spec) {
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-    /** @type {Fl32_Dup_Front_Act_Band_Msg_Add.act|function} */
-    const actMsgAdd = spec['Fl32_Dup_Front_Act_Band_Msg_Add$'];
     /** @type {Fl32_Dup_Front_Factory_Crypto} */
     const factCrypto = spec['Fl32_Dup_Front_Factory_Crypto$'];
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
+    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
     /** @type {Fl32_Dup_Front_Proc_Msg_Post} */
     const procPost = spec['Fl32_Dup_Front_Proc_Msg_Post$'];
+    /** @type {Fl32_Dup_Front_Model_Msg_Saver} */
+    const modMsgSaver = spec['Fl32_Dup_Front_Model_Msg_Saver$'];
+    /** @type {Fl32_Dup_Front_Dto_Message} */
+    const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
+    /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
+    const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
 
-    // WORKING VARS
+    // ENCLOSED VARS
     /** @type {Fl32_Dup_Shared_Model_Crypto_Enigma_Asym} */
     const enigma = factCrypto.createEnigmaAsym();
+    const I_CONTACT = idbContact.getIndexes();
+    const I_MSG = idbMsg.getIndexes();
 
     const template = `
 <div class="t-grid-cols" style="width:100%; grid-template-columns: 1fr auto; grid-gap: var(--grid-gap);">
@@ -96,7 +104,7 @@ export default function (spec) {
                     // get recipient's public key from IDB
                     const trx = await idb.startTransaction(idbContact, false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
-                    const card = await idb.readOne(trx, idbContact, recipientId);
+                    const card = await idb.readOne(trx, idbContact, recipientId, I_CONTACT.BY_USER);
                     const pub = card.keyPub;
                     // set key and encrypt
                     enigma.setKeys(pub, sec);
@@ -107,6 +115,7 @@ export default function (spec) {
                         userId: authorId,
                         recipientId
                     });
+                    // trx.commit(); - transaction has finished here
                     return confirm?.messageId;
                 }
 
@@ -114,18 +123,26 @@ export default function (spec) {
                 const user = await dsUser.get();
                 const authorId = user.id;
                 const recipientId = this.otherSideId;
-                const msg = this.message;
+                const body = this.message;
                 this.message = null;
-                const msgId = await encryptAndSend(msg, authorId, recipientId);
-                if (msgId) {
-                    logger.info(`Message sent to the server. ID: ${msgId}.`);
-                    actMsgAdd({
-                        authorId,
-                        bandId: recipientId,
-                        body: msg,
-                        date: new Date(),
-                        uuid: msgId,
+                const msgUUID = await encryptAndSend(body, authorId, recipientId);
+                if (msgUUID) {
+                    logger.info(`Message sent to the server. ID: ${msgUUID}.`);
+                    const msgId = await modMsgSaver.savePersonalOut({
+                        uuid: msgUUID,
+                        body,
+                        recipientId,
                     });
+                    // push message to current band
+                    const trx = await idb.startTransaction([idbMsg]);
+                    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base.Dto} */
+                    const one = await idb.readOne(trx, idbMsg, msgUUID, I_MSG.BY_UUID);
+                    await trx.commit();
+                    const dto = dtoMsg.createDto();
+                    dto.body = one.body;
+                    dto.date = one.date;
+                    dto.sent = (one.type === TYPE.PERS_OUT);
+                    rxChat.addMessage(dto);
                 } else {
                     logger.info(`Cannot send message to the server`);
                 }

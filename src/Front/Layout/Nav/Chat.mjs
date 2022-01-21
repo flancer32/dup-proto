@@ -81,6 +81,7 @@ export default function (spec) {
                 for (const one of cards) {
                     this.cards.push(one);
                 }
+                trx.commit();
             }
         },
     };

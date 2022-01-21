@@ -60,6 +60,7 @@ export default function (spec) {
                 enigma.setKeys(pub, sec);
                 res = enigma.decryptAndVerify(encrypted);
             }
+            trx.commit();
             return res;
         }
 
