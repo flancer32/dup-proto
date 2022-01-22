@@ -25,39 +25,38 @@ export default class Fl32_Dup_Front_Model_Chat_User {
 
         // ENCLOSED VARS
         const I_BAND = idbBand.getIndexes();
-        const I_CONTACT = idbContact.getIndexes();
         const I_MSG = idbMsg.getIndexes();
 
         /**
-         * Load messages for chat with user $userId.
-         * @param {number|string} userId
+         * Load messages for chat with $contactId.
+         * @param {number|string} contactId
          * @return {Promise<boolean>}
          */
-        this.loadBand = async function (userId) {
+        this.loadBand = async function (contactId) {
             // ENCLOSED FUNCTIONS
             /**
-             * Lookup for band's local id by user's backend ID.
+             * Lookup for band using contactId.
              * @param {IDBTransaction} trx
-             * @param {number} userId
+             * @param {number} contactId
              * @return {Promise<Fl32_Dup_Front_Store_Entity_Band.Dto>}
              */
-            async function getBandId(trx, userId) {
-                const contact = await idb.readOne(trx, idbContact, userId, I_CONTACT.BY_USER);
-                const contactId = contact?.id; // local ID
+            async function getBandForContact(trx, contactId) {
                 const found = await idb.readOne(trx, idbBand, contactId, I_BAND.BY_CONTACT);
                 if (found) return found;
-                const dto = idbBand.createDto();
-                dto.contactRef = contactId;
-                const id = await idb.add(trx, idbBand, dto);
-                return await idb.readOne(trx, idbBand, id);
+                else {
+                    const dto = idbBand.createDto();
+                    dto.contactRef = contactId;
+                    const id = await idb.add(trx, idbBand, dto);
+                    return await idb.readOne(trx, idbBand, id);
+                }
             }
 
             // MAIN
             let res = false;
-            userId = parseInt(userId);
+            contactId = parseInt(contactId);
             // validate contact card is in IDB
             const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
-            const band = await getBandId(trx, userId);
+            const band = await getBandForContact(trx, contactId);
             if (band) {
                 /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
                 const found = await idb.readOne(trx, idbContact, band.contactRef);
@@ -65,11 +64,12 @@ export default class Fl32_Dup_Front_Model_Chat_User {
                 rxChat.setTypeUser();
                 rxChat.setTitle(found.nick);
                 rxChat.setOtherSideId(contactId);
+                debugger
                 // load keys for messages from IDB
                 const index = I_MSG.BY_BAND;
                 const backward = true;
                 const limit = 20;
-                const query = IDBKeyRange.bound([contactId, new Date(0)], [contactId, new Date()]);
+                const query = IDBKeyRange.bound([band.id, new Date(0)], [band.id, new Date()]);
                 const keys = await idb.readKeys(trx, idbMsg, {index, query, backward, limit});
                 // load messages by keys
                 const messages = [];
@@ -90,16 +90,16 @@ export default class Fl32_Dup_Front_Model_Chat_User {
         }
 
         /**
-         * Get user card from IDB cache or load from server.
-         * @param {number|string} userId
+         * Get contact card from IDB.
+         * @param {number|string} contactId
          * @return {Promise<Fl32_Dup_Front_Store_Entity_Contact_Card.Dto|null>}
          */
-        this.getCard = async function (userId) {
+        this.getCard = async function (contactId) {
             let res;
             // load data from IDB
             const trxRead = await idb.startTransaction([idbContact, idbMsg], false);
             /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
-            res = await idb.readOne(trxRead, idbContact, parseInt(userId), I_CONTACT.BY_USER);
+            res = await idb.readOne(trxRead, idbContact, parseInt(contactId));
             if (!res) {
                 rxChat.setTypeUser();
                 rxChat.setOtherSideId(null);

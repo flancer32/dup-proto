@@ -223,19 +223,9 @@ export default class Fl32_Dup_Front_App {
                 template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App is starting...</div>',
                 async mounted() {
                     await dsHollowIsFree.init();
-
-                    function getPrintoutFn() {
-                        const elDisplay = document.getElementById('printout');
-                        return function (msg) {
-                            if (elDisplay) elDisplay.innerHTML = elDisplay.innerHTML + `<br/>${msg}`;
-                            else console.log(msg);
-                        }
-                    }
-
-                    const printout = getPrintoutFn();
-                    printout(`Started with route: '${JSON.stringify(this.$router.currentRoute.value)}'`);
+                    logger.info(`Started with route: '${JSON.stringify(this.$router.currentRoute.value)}'`);
                     if (dsHollowIsFree.get()) {
-                        printout(`Hollow is not occupied. Goto occupy route.`);
+                        logger.info(`Hollow is not occupied. Goto occupy route.`);
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                     } else {
                         const profile = await dsProfile.get();
@@ -244,7 +234,7 @@ export default class Fl32_Dup_Front_App {
                                 !document.location.href.includes(DEF.ROUTE_HOLLOW_OCCUPY) &&
                                 !document.location.href.includes('/invite/validate/')
                             ) {
-                                printout(`Hollow is occupied but current location is not reg mode location. Goto occupy route.`);
+                                logger.info(`Hollow is occupied but current location is not reg mode location. Goto occupy route.`);
                                 this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                             }
                         }

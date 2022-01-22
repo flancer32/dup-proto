@@ -20,7 +20,7 @@ export default function (spec) {
     const template = `
 <q-card v-on:click="chat">
     <q-card-section>
-        <div class="text-subtitle1">{{nick}} (#{{id}})</div>
+        <div class="text-subtitle1">{{nick}} ({{$t('wg.contact.list.user')}}:#{{id}})</div>
     </q-card-section>
 </q-card>
 `;
@@ -40,11 +40,14 @@ export default function (spec) {
         },
         computed: {
             id() {
-                return this.card?.userId;
+                return this.card?.id;
             },
             nick() {
                 return this.card?.nick || 'Anon';
-            }
+            },
+            userId() {
+                return this.card?.userId;
+            },
         },
         methods: {
             async chat() {

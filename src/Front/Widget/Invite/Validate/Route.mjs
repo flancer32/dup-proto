@@ -228,14 +228,7 @@ export default function (spec) {
                 const trx = await idb.startTransaction(idbCard);
                 await idb.add(trx, idbCard, dto);
                 await trx.commit();
-            }
-
-            function getPrintoutFn() {
-                const elDisplay = document.getElementById('printout');
-                return function (msg) {
-                    if (elDisplay) elDisplay.innerHTML = elDisplay.innerHTML + `<br/>${msg}`;
-                    else console.log(msg);
-                }
+                logger.info(`Contact card for parent #${userId} is added.`)
             }
 
             // MAIN
@@ -244,15 +237,12 @@ export default function (spec) {
                 // redirect authenticated users to the home
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
-                const printout = getPrintoutFn();
-                printout('Started...');
+                logger.info('Invite validation is started.');
                 const res = await validateInvite(this.code);
-                printout(`Response: ${JSON.stringify(res)}`);
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
                     await addParentCard(res.parentId, res.parentNick, res.parentPubKey);
                     this.vapidPubKey = res.webPushKey;
-
                     const sub = await dsSubscript.get();
                     const profile = await dsProfile.get();
                     this.displaySubscribe = !(typeof sub?.endpoint === 'string');
@@ -261,6 +251,7 @@ export default function (spec) {
                         if (!this.displayRegister) this.$router.push(DEF.ROUTE_HOME);
                     }
                 } else {
+                    logger.error(`Invite validation response has no key to subscribe to use Web Push API.`);
                     this.displayCodeWrong = true;
                 }
             }

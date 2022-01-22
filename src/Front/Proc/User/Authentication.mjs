@@ -36,16 +36,19 @@ export default class Fl32_Dup_Front_Proc_User_Authentication {
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onFailure({data, meta}) {
-            await dsHollow.clean();
-            await dsProfile.clean();
-            await dsServerKey.clean();
-            await dsSubscribe.clean();
-            await dsUser.clean();
-            await idb.dropDb();
-            await idb.open();
-            logger.info(`IDB is cleaned up on authentication failure event.`);
-            if (document.location.hash !== '#/hollow/occupy')
-                document.location.href = `${document.location.origin}/#/hollow/occupy`;
+            const user = await dsUser.get();
+            if (user.id) {
+                await dsHollow.clean();
+                await dsProfile.clean();
+                await dsServerKey.clean();
+                await dsSubscribe.clean();
+                await dsUser.clean();
+                await idb.dropDb();
+                await idb.open();
+                logger.info(`IDB is cleaned up on authentication failure event.`);
+                if (document.location.hash !== '#/hollow/occupy')
+                    document.location.reload();
+            }
         }
 
         // INSTANCE METHODS

@@ -19,14 +19,10 @@ export default function (spec) {
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
     const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
-    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
     /** @type {Fl32_Dup_Front_Model_Chat_User} */
     const modChatUser = spec['Fl32_Dup_Front_Model_Chat_User$'];
 
     // DEFINE WORKING VARS
-    /** @type {typeof Fl32_Dup_Front_Store_Entity_Msg.ATTR} */
-    const A_MSG = idbMsg.getAttributes();
     const template = `
 <layout-chat>
     <msg-band/>
@@ -47,7 +43,7 @@ export default function (spec) {
             return {};
         },
         props: {
-            id: Number,
+            id: Number, // contact id
         },
         computed: {},
         methods: {},
@@ -56,7 +52,7 @@ export default function (spec) {
                 if (current !== old)
                     await modChatUser.loadBand(current);
                 else
-                    console.log(`The same ID on message band loading.`);
+                    logger.info(`The same ID on message band loading.`);
             }
         },
         async mounted() {

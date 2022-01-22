@@ -39,7 +39,6 @@ export default function (spec) {
     const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
 
     // ENCLOSED VARS
-    const I_CONTACT = idbContact.getIndexes();
     const I_MSG = idbMsg.getIndexes();
 
     const template = `
@@ -73,12 +72,12 @@ export default function (spec) {
         data() {
             return {
                 message: null,
-                otherSideId: null,
+                otherSideContactId: null,
             };
         },
         computed: {
             enabled() {
-                return this.otherSideId !== null;
+                return this.otherSideContactId !== null;
             },
             placeholder() {
                 return this.enabled ? 'Message...' : 'Please select user to chat...';
@@ -92,17 +91,17 @@ export default function (spec) {
                  * Encrypt and send message to the server. Get message ID from server.
                  * @param {string} msg
                  * @param {number} authorId
-                 * @param {number} recipientId
-                 * @return {Promise<string>}
+                 * @param {number} contactId recipient's contact
+                 * @return {Promise<{msgUUID: string, recipientId: number}>}
                  */
-                async function encryptAndSend(msg, authorId, recipientId) {
+                async function encryptAndSend(msg, authorId, contactId) {
                     // get keys to encrypt
                     const user = await dsUser.get();
                     const sec = user.keys.secret
                     // get recipient's public key from IDB
                     const trx = await idb.startTransaction(idbContact, false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
-                    const card = await idb.readOne(trx, idbContact, recipientId, I_CONTACT.BY_USER);
+                    const card = await idb.readOne(trx, idbContact, contactId);
                     const pub = card.keyPub;
                     // set key and encrypt
                     scrambler.setKeys(pub, sec);
@@ -111,19 +110,19 @@ export default function (spec) {
                     const confirm = await procPost.run({
                         payload: encrypted,
                         userId: authorId,
-                        recipientId
+                        recipientId: card.userId
                     });
                     // trx.commit(); - transaction has finished here
-                    return confirm?.messageId;
+                    return {msgUUID: confirm?.messageId, recipientId: card.userId};
                 }
 
                 // MAIN FUNCTIONALITY
                 const user = await dsUser.get();
                 const authorId = user.id;
-                const recipientId = this.otherSideId;
+                const recipientContactId = this.otherSideContactId;
                 const body = this.message;
                 this.message = null;
-                const msgUUID = await encryptAndSend(body, authorId, recipientId);
+                const {msgUUID, recipientId} = await encryptAndSend(body, authorId, recipientContactId);
                 if (msgUUID) {
                     logger.info(`Message sent to the server. ID: ${msgUUID}.`);
                     const msgId = await modMsgSaver.savePersonalOut({
@@ -147,7 +146,7 @@ export default function (spec) {
             }
         },
         async mounted() {
-            this.otherSideId = rxChat.getOtherSideId();
+            this.otherSideContactId = rxChat.getOtherSideId();
         },
     };
 }

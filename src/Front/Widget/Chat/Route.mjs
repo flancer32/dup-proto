@@ -48,7 +48,7 @@ export default function (spec) {
                 const found = await modUser.getCard(this.id);
                 if (found) {
                     rxChat.setTypeUser();
-                    rxChat.setOtherSideId(found.userId);
+                    rxChat.setOtherSideId(found.id);
                     rxChat.setTitle(found.nick);
                 }
             }

@@ -138,7 +138,8 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
                 // add new user to users stream registry
                 await registerUserStream(userId, meta.frontUUID);
                 // send currently created user data to parent to add to contacts
-                await publishContactAdd(parentId, userId, data.nick, data.keyPub);
+                if (invite)
+                    await publishContactAdd(parentId, userId, data.nick, data.keyPub);
             } catch (error) {
                 await trx.rollback();
                 logger.error(error);
