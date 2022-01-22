@@ -23,26 +23,26 @@ export default class Fl32_Dup_Front_App {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Di_Shared_Container} */
         const container = spec['TeqFw_Di_Shared_Container$'];
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Web_Front_App_Logger} */
+        const logger = spec['TeqFw_Web_Front_App_Logger$'];
         /** @type {TeqFw_I18n_Front_Lib} */
         const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
         const quasar = spec['TeqFw_Ui_Quasar_Front_Lib'];
         /** @type {Fl32_Dup_Front_Layout_Base} */
-        const _layoutBase = spec['Fl32_Dup_Front_Layout_Base$'];
+        const layoutBase = spec['Fl32_Dup_Front_Layout_Base$'];
         /** @type {Fl32_Dup_Front_Layout_Chat} */
-        const _layoutChat = spec['Fl32_Dup_Front_Layout_Chat$'];
+        const layoutChat = spec['Fl32_Dup_Front_Layout_Chat$'];
         /** @type {Fl32_Dup_Front_Layout_Empty} */
-        const _layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
+        const layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
-        const _config = spec['TeqFw_Web_Front_Model_Config$'];
+        const config = spec['TeqFw_Web_Front_Model_Config$'];
         /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-        const _dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
+        const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
-        const _frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
-        const _backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
+        const backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const streamBf = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -52,10 +52,10 @@ export default class Fl32_Dup_Front_App {
         /** @type {Fl32_Dup_Front_DSource_User_Profile} */
         const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // ENCLOSED VARS
         let _root; // root vue component for the application
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
 
         /**
          * Initialize application.
@@ -64,7 +64,7 @@ export default class Fl32_Dup_Front_App {
          * @return {Promise<void>}
          */
         this.init = async function (cssSelector) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCTIONS
 
             /**
              * Create printout function to log application startup events (to page or to console).
@@ -117,8 +117,8 @@ export default class Fl32_Dup_Front_App {
                 return new Promise((resolve) => {
                     streamBf.open();
                     const subscript = eventBus.subscribe(efOpened.getEventName(), (evt) => {
-                        logger.info(`Back-to-front event stream is opened on the front.`);
                         eventBus.unsubscribe(subscript);
+                        logger.info(`Back-to-front event stream is opened on the front.`);
                         resolve(evt);
                     });
                     // TODO: add on error processing
@@ -207,7 +207,7 @@ export default class Fl32_Dup_Front_App {
                 return router;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const print = createPrintout(cssSelector);
             print(`TeqFW App is initializing...`);
 
@@ -222,8 +222,20 @@ export default class Fl32_Dup_Front_App {
                 },
                 template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App is starting...</div>',
                 async mounted() {
-                    await _dsHollowIsFree.init();
-                    if (_dsHollowIsFree.get()) {
+                    await dsHollowIsFree.init();
+
+                    function getPrintoutFn() {
+                        const elDisplay = document.getElementById('printout');
+                        return function (msg) {
+                            if (elDisplay) elDisplay.innerHTML = elDisplay.innerHTML + `<br/>${msg}`;
+                            else console.log(msg);
+                        }
+                    }
+
+                    const printout = getPrintoutFn();
+                    printout(`Started with route: '${JSON.stringify(this.$router.currentRoute.value)}'`);
+                    if (dsHollowIsFree.get()) {
+                        printout(`Hollow is not occupied. Goto occupy route.`);
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                     } else {
                         const profile = await dsProfile.get();
@@ -231,27 +243,30 @@ export default class Fl32_Dup_Front_App {
                             if (
                                 !document.location.href.includes(DEF.ROUTE_HOLLOW_OCCUPY) &&
                                 !document.location.href.includes('/invite/validate/')
-                            )
+                            ) {
+                                printout(`Hollow is occupied but current location is not reg mode location. Goto occupy route.`);
                                 this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
+                            }
                         }
                     }
                     this.canDisplay = true;
                 }
             });
+
             // ... and add global available components
-            _root.component('LayoutBase', _layoutBase);
-            _root.component('LayoutChat', _layoutChat);
-            _root.component('LayoutEmpty', _layoutEmpty);
+            _root.component('LayoutBase', layoutBase);
+            _root.component('LayoutChat', layoutChat);
+            _root.component('LayoutEmpty', layoutEmpty);
 
             // other initialization
             logger.pause(false);
-            await _config.init({}); // this app has no separate 'doors' (entry points)
+            await config.init({}); // this app has no separate 'doors' (entry points)
             print(`Application config is loaded.`);
             await initI18n(_root, I18nLib);
             print(`i18n resources are loaded.`);
-            await _frontUUID.init();
-            await _backUUID.init();
-            print(`Front UUID: ${_frontUUID.get()}<br/>Back UUID: ${_backUUID.get()}.`);
+            await frontUUID.init();
+            await backUUID.init();
+            print(`Front UUID: ${frontUUID.get()}<br/>Back UUID: ${backUUID.get()}.`);
             await initEventStream(container);
             print(`Backend events stream is opened.`);
             await initEventProcessors(container);

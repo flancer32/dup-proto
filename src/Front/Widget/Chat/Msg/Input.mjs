@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Input';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Logger} */
-    const logger = spec['TeqFw_Core_Shared_Logger$'];
+    /** @type {TeqFw_Web_Front_App_Logger} */
+    const logger = spec['TeqFw_Web_Front_App_Logger$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */

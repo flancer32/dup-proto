@@ -7,8 +7,8 @@
 export default class Fl32_Dup_Front_Proc_Connect_Manager {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Web_Front_App_Logger} */
+        const logger = spec['TeqFw_Web_Front_App_Logger$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const stream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */

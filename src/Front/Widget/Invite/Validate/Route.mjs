@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Invite_Validate_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Logger} */
-    const logger = spec['TeqFw_Core_Shared_Logger$'];
+    /** @type {TeqFw_Web_Front_App_Logger} */
+    const logger = spec['TeqFw_Web_Front_App_Logger$'];
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
@@ -230,13 +230,24 @@ export default function (spec) {
                 await trx.commit();
             }
 
+            function getPrintoutFn() {
+                const elDisplay = document.getElementById('printout');
+                return function (msg) {
+                    if (elDisplay) elDisplay.innerHTML = elDisplay.innerHTML + `<br/>${msg}`;
+                    else console.log(msg);
+                }
+            }
+
             // MAIN
             const user = await dsUser.get();
             if (user?.id) {
                 // redirect authenticated users to the home
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
+                const printout = getPrintoutFn();
+                printout('Started...');
                 const res = await validateInvite(this.code);
+                printout(`Response: ${JSON.stringify(res)}`);
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
                     await addParentCard(res.parentId, res.parentNick, res.parentPubKey);

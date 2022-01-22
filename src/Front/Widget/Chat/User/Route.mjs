@@ -15,6 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_User_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Web_Front_App_Logger} */
+    const logger = spec['TeqFw_Web_Front_App_Logger$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
     const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
@@ -58,7 +60,7 @@ export default function (spec) {
             }
         },
         async mounted() {
-            console.log(`Loading message band #${this.id}...`);
+            logger.info(`Loading message band #${this.id}...`);
             await modChatUser.loadBand(this.id);
         },
     };

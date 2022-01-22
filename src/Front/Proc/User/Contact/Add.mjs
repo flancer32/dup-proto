@@ -7,8 +7,8 @@
 export default class Fl32_Dup_Front_Proc_User_Contact_Add {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Web_Front_App_Logger} */
+        const logger = spec['TeqFw_Web_Front_App_Logger$'];
         /** @type {TeqFw_Web_Front_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */

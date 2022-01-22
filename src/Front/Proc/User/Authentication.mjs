@@ -7,8 +7,8 @@
 export default class Fl32_Dup_Front_Proc_User_Authentication {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Web_Front_App_Logger} */
+        const logger = spec['TeqFw_Web_Front_App_Logger$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_User_Shared_Event_Back_Authentication_Failure} */
