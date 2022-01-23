@@ -43,7 +43,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const _publicKey = loadPublicKey();
 
         // MAIN FUNCTIONALITY
-        eventsBack.subscribe(esfUserSignedUp.getEventName(), handler)
+        eventsBack.subscribe(esfUserSignedUp.getEventName(), onRequest)
 
         // DEFINE INNER FUNCTIONS
         /**
@@ -62,7 +62,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
          * @param {Fl32_Dup_Shared_Event_Front_User_SignedUp.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
-        async function handler({data, meta}) {
+        async function onRequest({data, meta}) {
             // ENCLOSED FUNCTIONS
             /**
              * @param {string} frontUUID
@@ -100,6 +100,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
                         msg.data.userNick = userNick;
                         msg.data.userPubKey = userPubKey;
                         portalFront.publish(msg);
+                        logger.info(`New user's data (#${userId}) is send to his parent #${parentId}, front '${frontUUID}'.`);
                     }
                 }
             }
@@ -134,15 +135,19 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
                 if (invite) await actRemove({trx, code: invite.code});
                 await trx.commit();
                 // send user ID back to the front
-                await publishUserId(meta.frontUUID, userId, _publicKey);
+                publishUserId(meta.frontUUID, userId, _publicKey);
                 // add new user to users stream registry
-                await registerUserStream(userId, meta.frontUUID);
+                registerUserStream(userId, meta.frontUUID);
                 // send currently created user data to parent to add to contacts
                 if (invite)
-                    await publishContactAdd(parentId, userId, data.nick, data.keyPub);
+                    publishContactAdd(parentId, userId, data.nick, data.keyPub);
             } catch (error) {
                 await trx.rollback();
                 logger.error(error);
+                // publish empty message to cancel waiting on the front
+                const msg = esbUserRegistered.createDto();
+                msg.meta.frontUUID = meta.frontUUID;
+                portalFront.publish(msg);
             }
         }
     }

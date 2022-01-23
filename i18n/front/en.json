@@ -50,6 +50,11 @@
           "title": "Code life-time"
         },
         "title": "Create sign up code to add new user to the Hollow"
+      },
+      "list": {
+        "contact": "contact",
+        "from": "from",
+        "user": "user"
       }
     },
     "hollow": {

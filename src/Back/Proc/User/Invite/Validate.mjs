@@ -54,9 +54,9 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
             }
 
             // MAIN
+            const msg = esbValidateRes.createDto(); // response message
             const trx = await conn.startTransaction();
             try {
-                const msg = esbValidateRes.createDto(); // response message
                 const code = data.code;
                 await actClean({trx});
                 const invite = await selectInvite(trx, code);
@@ -72,13 +72,13 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
                     msg.data.parentPubKey = user.key_pub;
                 }
                 await trx.commit();
-                // send event message to front
-                msg.meta.frontUUID = meta.frontUUID;
-                portalFront.publish(msg);
             } catch (error) {
                 await trx.rollback();
                 logger.error(error);
             }
+            // send event message to front
+            msg.meta.frontUUID = meta.frontUUID;
+            portalFront.publish(msg);
         }
     }
 }

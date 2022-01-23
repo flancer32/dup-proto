@@ -15,12 +15,17 @@ const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Card';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Util.formatDate|function} */
+    const formatDate = spec['TeqFw_Core_Shared_Util.formatDate'];
 
-    // DEFINE WORKING VARS
+    // ENCLOSED VARS
     const template = `
 <q-card v-on:click="chat">
     <q-card-section>
-        <div class="text-subtitle1">{{nick}} ({{$t('wg.contact.list.user')}}:#{{id}})</div>
+        <div class="text-subtitle1">{{nick}}</div>
+        <div class="text-caption text-right">{{$t('wg.contact.list.contact')}} #{{id}};
+            {{$t('wg.contact.list.user')}} #{{userId}};
+            {{$t('wg.contact.list.from')}} {{date}}</div>
     </q-card-section>
 </q-card>
 `;
@@ -39,6 +44,9 @@ export default function (spec) {
             card: null
         },
         computed: {
+            date() {
+                return formatDate(this.card?.date);
+            },
             id() {
                 return this.card?.id;
             },

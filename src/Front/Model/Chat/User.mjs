@@ -64,7 +64,6 @@ export default class Fl32_Dup_Front_Model_Chat_User {
                 rxChat.setTypeUser();
                 rxChat.setTitle(found.nick);
                 rxChat.setOtherSideId(contactId);
-                debugger
                 // load keys for messages from IDB
                 const index = I_MSG.BY_BAND;
                 const backward = true;

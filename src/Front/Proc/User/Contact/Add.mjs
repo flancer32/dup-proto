@@ -18,6 +18,9 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */
         const esbContactAdd = spec['Fl32_Dup_Shared_Event_Back_User_Contact_Add$'];
 
+        // ENCLOSED VARS
+        const I_CONTACT = idbContact.getIndexes();
+
         // MAIN
         eventsFront.subscribe(esbContactAdd.getEventName(), onContactAdd);
 
@@ -32,9 +35,14 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
             card.nick = data.userNick;
             card.userId = data.userId;
             const trx = await idb.startTransaction(idbContact);
-            await idb.add(trx, idbContact, card);
+            const found = await idb.readOne(trx, idbContact, data.userId, I_CONTACT.BY_USER);
+            if (!found) {
+                await idb.add(trx, idbContact, card);
+                logger.info(`New contact is added: ${card.nick} (#${card.userId}).`);
+            } else {
+                logger.info(`Contact for user ${card.nick} (#${card.userId}) exists in IDB.`)
+            }
             await trx.commit();
-            logger.info(`New contact is added: ${card.nick} (#${card.userId}).`);
         }
 
         // INSTANCE METHODS

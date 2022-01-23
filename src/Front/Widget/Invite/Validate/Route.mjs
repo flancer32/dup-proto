@@ -43,6 +43,7 @@ export default function (spec) {
     const esbValidRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response$'];
 
     // DEFINE WORKING VARS
+    const I_CONTACT = idbCard.getIndexes();
     const template = `
 <layout-empty>
     <q-card class="bg-white" style="min-width:245px">
@@ -142,6 +143,7 @@ export default function (spec) {
             async subscribe() {
                 // ENCLOSED FUNCTIONS
                 async function subscribePush(key) {
+                    logger.info(`Invited user starts subscription to Web Push API.`)
                     /** @type {PushSubscriptionOptionsInit} */
                     const opts = {
                         userVisibleOnly: true,
@@ -160,6 +162,7 @@ export default function (spec) {
                     // noinspection JSCheckFunctionSignatures
                     const dto = dtoSubscript.createDto(obj);
                     await dsSubscript.set(dto);
+                    logger.info(`Web Push API subscription for new user is done. Keys are stored to IDB.`);
                     // switch UI
                     this.displaySubscribe = false;
                     this.displayRegister = true;
@@ -226,21 +229,27 @@ export default function (spec) {
                 dto.nick = nick;
                 dto.keyPub = keyPub;
                 const trx = await idb.startTransaction(idbCard);
-                await idb.add(trx, idbCard, dto);
-                await trx.commit();
-                logger.info(`Contact card for parent #${userId} is added.`)
+                const found = await idb.readOne(trx, idbCard, userId, I_CONTACT.BY_USER);
+                if (!found) {
+                    await idb.add(trx, idbCard, dto);
+                    await trx.commit();
+                    logger.info(`Contact card for parent #${userId} is added.`)
+                } else {
+                    logger.info(`Contact card for parent #${userId} is already added before.`)
+                }
             }
 
             // MAIN
             const user = await dsUser.get();
             if (user?.id) {
-                // redirect authenticated users to the home
+                // this browser already has registered user, redirect to the home
                 this.$router.push(DEF.ROUTE_HOME);
             } else {
-                logger.info('Invite validation is started.');
+                logger.info(`Invite validation is started (code: ${this.code}).`);
                 const res = await validateInvite(this.code);
                 this.displayCodeVerify = false;
                 if (res?.webPushKey) {
+                    logger.info(`Invite code '${this.code}' is valid.`);
                     await addParentCard(res.parentId, res.parentNick, res.parentPubKey);
                     this.vapidPubKey = res.webPushKey;
                     const sub = await dsSubscript.get();
@@ -248,7 +257,12 @@ export default function (spec) {
                     this.displaySubscribe = !(typeof sub?.endpoint === 'string');
                     if (!this.displaySubscribe) {
                         this.displayRegister = (profile?.username === undefined);
-                        if (!this.displayRegister) this.$router.push(DEF.ROUTE_HOME);
+                        if (!this.displayRegister)
+                            this.$router.push(DEF.ROUTE_HOME);
+                        else
+                            logger.info(`Invited user has Web Push subscription but has no backend ID yet.`);
+                    } else {
+                        logger.info(`Invited user should subscribe to Web Push API.`);
                     }
                 } else {
                     logger.error(`Invite validation response has no key to subscribe to use Web Push API.`);
