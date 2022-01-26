@@ -9,82 +9,107 @@
     <link rel="stylesheet" href="./styles_boot.css" type="text/css">
 
     <script>
-        async function bootstrap() {
-            // DEFINE INNER FUNCTIONS
+        self.addEventListener('load', async () => {
+            // ENCLOSED VARS
+            let elLaunchpad; // DOM element to log bootstrap process as inner text.
+
+            // ENCLOSED FUNCTIONS
+            /**
+             * Printout log message to UI and to console.
+             * @param {string} msg
+             */
+            function printout(msg) {
+                elLaunchpad.innerHTML = msg;
+                console.log(`[shell]: ${msg}`);
+            }
 
             /**
-             * Import code, create and setup Dependency Injection container for frontend.
-             *
-             * @returns {Promise<TeqFw_Di_Shared_Container>}
+             * Init DI container, load front application sources, create and run application.
+             * @return {Promise<void>}
              */
-            async function initDiContainer() {
-                const urlWithPath = `${location.origin}${location.pathname}`;
-                const baseUrl = urlWithPath.endsWith('/') ? urlWithPath.slice(0, -1) : urlWithPath;
-                // load sources and create DI Container
-                const module = await import('./src/@teqfw/di/Shared/Container.mjs');
-                /** @type {typeof TeqFw_Di_Shared_Container} */
-                const Container = module.default;
-                /** @type {TeqFw_Di_Shared_Container} */
-                const container = new Container();
-                // load available namespaces from server
-                const res = await fetch('./api/@teqfw/web/load/namespaces');
-                const json = await res.json();
-                // add namespaces to container
-                if (json?.data?.items && Array.isArray(json.data.items))
-                    for (const item of json.data.items)
-                        container.addSourceMapping(item.ns, baseUrl + item.path, true, item.ext);
-                // add replaces to container
-                if (json?.data?.replaces && Array.isArray(json.data.replaces))
-                    for (const item of json.data.replaces)
-                        container.addModuleReplacement(item.orig, item.alter);
-                return container;
+            async function bootstrap() {
+                // ENCLOSED FUNCTIONS
+
+                /**
+                 * Import code, create and setup Dependency Injection container for frontend.
+                 *
+                 * @returns {Promise<TeqFw_Di_Shared_Container>}
+                 */
+                async function initDiContainer() {
+                    const urlWithPath = `${location.origin}${location.pathname}`;
+                    const baseUrl = urlWithPath.endsWith('/') ? urlWithPath.slice(0, -1) : urlWithPath;
+                    // load sources and create DI Container
+                    const module = await import('./src/@teqfw/di/Shared/Container.mjs');
+                    /** @type {typeof TeqFw_Di_Shared_Container} */
+                    const Container = module.default;
+                    /** @type {TeqFw_Di_Shared_Container} */
+                    const container = new Container();
+                    // load available namespaces from server
+                    const res = await fetch('./api/@teqfw/web/load/namespaces');
+                    const json = await res.json();
+                    // add namespaces to container
+                    if (json?.data?.items && Array.isArray(json.data.items))
+                        for (const item of json.data.items)
+                            container.addSourceMapping(item.ns, baseUrl + item.path, true, item.ext);
+                    // add replaces to container
+                    if (json?.data?.replaces && Array.isArray(json.data.replaces))
+                        for (const item of json.data.replaces)
+                            container.addModuleReplacement(item.orig, item.alter);
+                    return container;
+                }
+
+                // MAIN FUNCTIONALITY
+                try {
+                    printout(`Bootstrap is started.`);
+                    // initialize objects loader (Dependency Injection container)
+                    const container = await initDiContainer();
+                    printout(`DI container is initialized.`);
+                    // create Vue application and mount it to the page
+                    /** @type {Fl32_Dup_Front_App} */
+                    const app = await container.get('Fl32_Dup_Front_App$');
+                    await app.init('.launchpad');
+                    printout(`Vue app is created and initialized.`);
+                    await app.mount('BODY > DIV');
+                } catch (e) {
+                    printout(`Error in bootstrap: ${e.message}. ${e.stack}`);
+                }
             }
 
-            // MAIN FUNCTIONALITY
-            try {
-                // initialize objects loader (Dependency Injection container)
-                const container = await initDiContainer();
-                // create Vue application and mount it to the page
-                /** @type {Fl32_Dup_Front_App} */
-                const app = await container.get('Fl32_Dup_Front_App$');
-                await app.init('.launchpad');
-                await app.mount('BODY > DIV');
-            } catch (e) {
-                console.error("Error in bootstrap: " + e + "\n" + e.stack);
-            }
-        }
 
-        if ("serviceWorker" in navigator) { // if browser supports service workers
-            // ... then add event handler to run script after window will be loaded
-            // (https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event)
-            self.addEventListener("load", async () => {
+            // MAIN
+            elLaunchpad = document.querySelector('.launchpad');
+            if ('serviceWorker' in navigator) { // if browser supports service workers
+                // ... then add event handler to run script after window will be loaded
+                // (https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event)
                 const worker = navigator.serviceWorker;
                 if (worker.controller === null) {
-                    // ... to load "sw.js" script and register service worker in navigator
+                    // ... then load 'sw.js' script and register service worker in navigator
                     try {
-                        const reg = await worker.register("sw.js", {type: "module"});
+                        printout(`Try to register new service worker (load 'sw.js').`);
+                        const reg = await worker.register('sw.js', {type: 'module'});
                         if (reg.active) {
-                            console.log("SW is registered and is active.", reg);
+                            printout(`SW is registered and is active. Start app bootstrap.`);
                             await bootstrap();
                         } else {
-                            console.log("SW is registered but is not activated yet.", reg);
+                            printout(`SW is registered but is not activated yet.`);
                             // wait for `controllerchange` (see `clients.claim()` in SW code on `activate` event)
-                            worker.addEventListener("controllerchange", async () => {
-                                // SW just installed (page's first load).
+                            worker.addEventListener('controllerchange', async () => {
+                                printout(`SW just installed (page's first load). Start app bootstrap.`);
                                 await bootstrap();
                             });
                         }
                     } catch (e) {
-                        console.error("SW registration is failed: " + e + "\n" + e.stack)
+                        printout(`SW registration is failed: ${e}\n${e.stack}`)
                     }
                 } else {
                     // SW already installed before (repeated loading of the page).
-                    console.log("SW is already running for this app.");
+                    printout('SW is already installed for this app.');
                     await bootstrap();
                 }
-
-            });
-        }
+            } else {
+                printout(`Cannot start PWA. This browser has no Service Workers support.`);
+            }
+        });
     </script>
 </head>
 <body>
@@ -93,8 +118,7 @@
         <div class="launchpad">TeqFW App is loading...</div>
     </app-root>
 </div>
-<div style="z-index: 1000" id="printout"></div>
-<!-- These scripts are not ESM ready for loading with ES6 'import'. Use old style loading.  -->
+<!-- These scripts are not ready for loading with TeqFW DI. Use old style loading.  -->
 <script type="application/javascript" src="./src/vue/vue.global.prod.js"></script>
 <script type="application/javascript" src="./src/vue-router/vue-router.global.prod.js"></script>
 <script type="application/javascript" src="./src/i18n/i18next.min.js"></script>

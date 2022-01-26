@@ -18,7 +18,7 @@ export default function (spec) {
     /** @type {TeqFw_Web_Front_Model_Sw_Control} */
     const swControl = spec['TeqFw_Web_Front_Model_Sw_Control$'];
 
-    // DEFINE WORKING VARS
+    // ENCLOSED VARS
     const template = `
 <q-card class="bg-white q-mt-xs">
     <q-card-section>
@@ -30,6 +30,10 @@ export default function (spec) {
             <q-btn :label="$t('btn.enable')" v-if="!cacheEnabled" color="primary" v-on:click="cacheEnable"></q-btn>
             <q-btn dense flat round icon="lens" size="8.5px" :color="color" />
         </div>
+        <div class="text-subtitle3">{{$t('wg.cfg.sw.worker.title')}}:</div>
+        <div class="q-gutter-xs">
+            <q-btn :label="$t('btn.uninstall')" color="primary" v-on:click="uninstall"></q-btn>
+        </div>        
     </q-card-section>
 </q-card>
 `;
@@ -65,6 +69,12 @@ export default function (spec) {
             },
             async cacheClean() {
                 await swControl.cacheClean();
+            },
+            async uninstall() {
+                const sw = await navigator.serviceWorker.ready;
+                await sw.unregister();
+                debugger
+                location.reload();
             }
         },
         async mounted() {

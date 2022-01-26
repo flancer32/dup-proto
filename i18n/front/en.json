@@ -5,7 +5,8 @@
     "disable": "Disable",
     "enable": "Enable",
     "ok": "OK",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "uninstall": "Uninstall"
   },
   "navig": {
     "cfg": "Config",
@@ -32,7 +33,10 @@
         "cache": {
           "title": "Cache"
         },
-        "title": "Service Worker Configuration"
+        "title": "Service Worker Configuration",
+        "worker": {
+          "title": "Worker"
+        }
       }
     },
     "contact": {

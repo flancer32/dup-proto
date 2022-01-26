@@ -5,8 +5,9 @@ BODY {
 }
 
 .launchpad {
+    align-items: center;
     display: grid;
     height: 100vh;
-    align-items: center;
     justify-items: center;
+    text-align: center;
 }
