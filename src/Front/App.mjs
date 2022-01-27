@@ -265,17 +265,6 @@ export default class Fl32_Dup_Front_App {
             await initDataSources(container);
             print(`Data sources are initialized.`);
             initRouter(_root, DEF, container);
-            // add sound on WebPush event
-            const bCast = new BroadcastChannel('teqfw-sw');
-            bCast.addEventListener('message', (e) => {
-                const data = e.data;
-                if (data?.name === 'playPushSound') {
-                    const playSound = new Audio(
-                        './sound/push.mp3'
-                    );
-                    playSound.play();
-                }
-            });
         }
 
         /**

@@ -2,7 +2,7 @@
 /** @type {typeof TeqFw_Web_Sw_Worker} */
 import ServiceWorker from './src/@teqfw/web/Sw/Worker.mjs';
 /** @type {typeof TeqFw_Web_Push_Sw_Worker} */
-import WebPushWorker from './src/@teqfw/web-push/Sw/Worker.mjs';
+// import WebPushWorker from './src/@teqfw/web-push/Sw/Worker.mjs';
 
 // MODULE'S VARS
 const DOOR = '';
@@ -33,6 +33,6 @@ log(`[sw.js]: import is done.`);
 const sw = new ServiceWorker();
 sw.setup(self, DOOR);
 log(`[sw.js]: TeqFw_Web_Sw_Worker is created and setup`);
-const swPush = new WebPushWorker();
-swPush.setup(self, DOOR);
-log(`[sw.js]: TeqFw_Web_Push_Sw_Worker is created and setup`);
+// const swPush = new WebPushWorker();
+// swPush.setup(self, DOOR);
+// log(`[sw.js]: TeqFw_Web_Push_Sw_Worker is created and setup`);

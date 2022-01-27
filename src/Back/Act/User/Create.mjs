@@ -70,11 +70,13 @@ export default function (spec) {
         // MAIN FUNCTIONALITY
         const userId = await addUser(trx, nick, keyPub);
         // add Web Push subscription
-        const {code} = await actSubscriptAdd({trx, userId, endpoint, auth: keyAuth, p256dh: keyP256dh});
-        if (
-            (code !== SUB_ADD_CODE.SUCCESS) &&
-            (code !== SUB_ADD_CODE.DUPLICATE)
-        ) throw new Error('Cannot add web push subscription for new user.')
+        if(endpoint) {
+            const {code} = await actSubscriptAdd({trx, userId, endpoint, auth: keyAuth, p256dh: keyP256dh});
+            if (
+                (code !== SUB_ADD_CODE.SUCCESS) &&
+                (code !== SUB_ADD_CODE.DUPLICATE)
+            ) throw new Error('Cannot add web push subscription for new user.')
+        }
         // add app related data
         const parentIdChecked = parentId ?? userId;
         await addUserTree(trx, userId, parentIdChecked);

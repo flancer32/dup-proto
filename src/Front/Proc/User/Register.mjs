@@ -39,11 +39,11 @@ export default class Fl32_Dup_Front_Proc_User_Register {
         this.run = async function ({nick, invite, pubKey, subscription}) {
             const message = esfUserSignedUp.createDto();
             const data = message.data;
-            data.endpoint = subscription.endpoint;
+            data.endpoint = subscription?.endpoint;
             data.invite = invite;
             data.nick = nick;
-            data.keyAuth = subscription.keys.auth;
-            data.keyP256dh = subscription.keys.p256dh;
+            data.keyAuth = subscription?.keys.auth;
+            data.keyP256dh = subscription?.keys.p256dh;
             data.keyPub = pubKey;
             data.frontUUID = frontUUID.get();
             // send event to backend first time

@@ -31,8 +31,6 @@ export default function (spec) {
     const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
     /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
     const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-    /** @type {TeqFw_Web_Push_Shared_Dto_Subscription} */
-    const dtoSubscript = spec['TeqFw_Web_Push_Shared_Dto_Subscription$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
@@ -41,6 +39,8 @@ export default function (spec) {
     const esfValidReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request$'];
     /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response} */
     const esbValidRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response$'];
+    /** @type {Fl32_Dup_Front_Model_WebPush_Subscription} */
+    const modSubscribe = spec['Fl32_Dup_Front_Model_WebPush_Subscription$'];
 
     // DEFINE WORKING VARS
     const I_CONTACT = idbCard.getIndexes();
@@ -99,7 +99,6 @@ export default function (spec) {
                 displaySuccess: false,
                 fldError: null,
                 fldNick: null,
-                vapidPubKey: null,
             };
         },
         props: {
@@ -141,36 +140,16 @@ export default function (spec) {
             },
 
             async subscribe() {
-                // ENCLOSED FUNCTIONS
-                async function subscribePush(key) {
-                    logger.info(`Invited user starts subscription to Web Push API.`)
-                    /** @type {PushSubscriptionOptionsInit} */
-                    const opts = {
-                        userVisibleOnly: true,
-                        applicationServerKey: key
-                    };
-                    const sw = await navigator.serviceWorker.ready;
-                    return await sw.pushManager.subscribe(opts);
-                }
-
-                // MAIN
-                try {
-                    /** @type {PushSubscription} */
-                    const pushSubscription = await subscribePush(this.vapidPubKey);
-                    // save subscription to IDB Store
-                    const obj = pushSubscription.toJSON();
-                    // noinspection JSCheckFunctionSignatures
-                    const dto = dtoSubscript.createDto(obj);
-                    await dsSubscript.set(dto);
-                    logger.info(`Web Push API subscription for new user is done. Keys are stored to IDB.`);
-                    // switch UI
+                const isSubscribed = await modSubscribe.subscribe();
+                // switch UI
+                if (isSubscribed) {
                     this.displaySubscribe = false;
                     this.displayRegister = true;
-                } catch (e) {
-                    this.displaySubscribe = false;
+                } else {
                     this.displayError = true;
-                    this.fldError = `Some error is occurred. See console log for details. ${e}`;
-                    logger.error(this.fldError);
+                    const msg = `Cannot subscribe new user to Web Push API.`;
+                    this.fldError = msg;
+                    logger.error(msg);
                 }
             }
         },
@@ -233,7 +212,7 @@ export default function (spec) {
                 if (!found) {
                     await idb.add(trx, idbCard, dto);
                     await trx.commit();
-                    logger.info(`Contact card for parent #${userId} is added.`)
+                    logger.info(`Contact card for parent #${userId} is added on new user registration.`)
                 } else {
                     logger.info(`Contact card for parent #${userId} is already added before.`)
                 }
@@ -248,19 +227,19 @@ export default function (spec) {
                 logger.info(`Invite validation is started (code: ${this.code}).`);
                 const res = await validateInvite(this.code);
                 this.displayCodeVerify = false;
-                if (res?.webPushKey) {
+                if (res?.parentId) {
                     logger.info(`Invite code '${this.code}' is valid.`);
                     await addParentCard(res.parentId, res.parentNick, res.parentPubKey);
-                    this.vapidPubKey = res.webPushKey;
-                    const sub = await dsSubscript.get();
                     const profile = await dsProfile.get();
-                    this.displaySubscribe = !(typeof sub?.endpoint === 'string');
+                    const canSubscribe = await modSubscribe.canSubscribe();
+                    const hasSubscription = await modSubscribe.hasSubscription();
+                    this.displaySubscribe = canSubscribe && !hasSubscription;
                     if (!this.displaySubscribe) {
                         this.displayRegister = (profile?.username === undefined);
                         if (!this.displayRegister)
                             this.$router.push(DEF.ROUTE_HOME);
                         else
-                            logger.info(`Invited user has Web Push subscription but has no backend ID yet.`);
+                            logger.info(`Invited user has no backend ID yet.`);
                     } else {
                         logger.info(`Invited user should subscribe to Web Push API.`);
                     }

@@ -22,12 +22,8 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         const esfValidateReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response} */
         const esbValidateRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response$'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
-        const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
         /** @type {Fl32_Dup_Back_Act_User_Invite_Clean.act|function} */
         const actClean = spec['Fl32_Dup_Back_Act_User_Invite_Clean$'];
-        /** @type {TeqFw_Web_Push_Back_Act_Subscript_LoadKeys.act|function} */
-        const actLoadWebPushKeys = spec['TeqFw_Web_Push_Back_Act_Subscript_LoadKeys$'];
 
         // ENCLOSED VARS
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
@@ -61,10 +57,6 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
                 await actClean({trx});
                 const invite = await selectInvite(trx, code);
                 if (invite) {
-                    invite.date_expired = castDate(invite.date_expired);
-                    // select WebPush subscription key
-                    const {publicKey} = actLoadWebPushKeys();
-                    msg.data.webPushKey = publicKey;
                     msg.data.parentId = invite.user_ref;
                     msg.data.parentNick = invite.user_nick;
                     /** @type {TeqFw_User_Back_Store_RDb_Schema_User.Dto} */

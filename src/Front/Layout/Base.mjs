@@ -46,7 +46,7 @@ export default function Factory(spec) {
     <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
     <!--    </q-drawer>-->
 
-    <q-page-container class="q-pa-xs">
+    <q-page-container style="display: grid; height: 100vh; justify-items: center;">
         <slot/>
     </q-page-container>
 
