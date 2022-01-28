@@ -14,6 +14,7 @@ class Dto {
 
 /**
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_IEvent
+ * @deprecated this event is not used
  */
 export default class Fl32_Dup_Front_Event_Contact_Card_Added {
     constructor(spec) {

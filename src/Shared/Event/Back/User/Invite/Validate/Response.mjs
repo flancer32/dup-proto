@@ -16,11 +16,6 @@ class Dto {
     parentNick;
     /** @type {string} */
     parentPubKey;
-    /**
-     * VAPID public key for WebPush subscriptions.
-     * @type {string}
-     */
-    webPushKey;
 }
 
 /**
@@ -49,7 +44,6 @@ export default class Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response {
             res.parentId = castInt(data?.parentId);
             res.parentNick = castString(data?.parentNick);
             res.parentPubKey = castString(data?.parentPubKey);
-            res.webPushKey = castString(data?.webPushKey);
             return res;
         }
 

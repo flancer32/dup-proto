@@ -18,6 +18,7 @@ export default class Fl32_Dup_Front_Defaults {
     SHARED;
 
     TIMEOUT_EVENT_RESPONSE = 10000; // default timeout for response event (sent from back as answer to request from front)
+    TIMEOUT_UI_DELAY = 1500; // default timeout for UI delays
 
     constructor(spec) {
         this.SHARED = spec['Fl32_Dup_Shared_Defaults$'];

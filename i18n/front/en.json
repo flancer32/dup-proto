@@ -1,5 +1,6 @@
 {
   "btn": {
+    "accept": "Accept",
     "clean": "Clean",
     "connect": "Connect",
     "disable": "Disable",
@@ -76,6 +77,12 @@
       }
     },
     "invite": {
+      "validate": {
+        "contact": {
+          "added": "New contact is added as #{{id}}",
+          "title": "Invitation from user"
+        }
+      },
       "verify": {
         "msg": {
           "checkCode": "Invite verification...",

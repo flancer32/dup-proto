@@ -1,5 +1,6 @@
 /**
- * Route to check invitation code on the front app and to add new user.
+ * Check invitation code, add sender's card to contacts, create new user data if required,
+ * send own contact card back.
  *
  * @namespace Fl32_Dup_Front_Widget_Invite_Validate_Route
  */
@@ -17,68 +18,53 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
-    /** @type {TeqFw_Web_Front_Store_IDB} */
-    const idb = spec['Fl32_Dup_Front_Store_Db$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
-    const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
     /** @type {Fl32_Dup_Front_DSource_User_Profile} */
     const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
     const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
     /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
     const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-    /** @type {Fl32_Dup_Front_Dto_User} */
-    const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
-    /** @type {Fl32_Dup_Front_Proc_User_Register} */
-    const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
     /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request} */
     const esfValidReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request} */
+    const esfContactAddReq = spec['Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request$'];
     /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response} */
     const esbValidRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response$'];
-    /** @type {Fl32_Dup_Front_Model_WebPush_Subscription} */
-    const modSubscribe = spec['Fl32_Dup_Front_Model_WebPush_Subscription$'];
+    /** @type {Fl32_Dup_Front_Widget_Invite_Validate_Contact} */
+    const wgContact = spec['Fl32_Dup_Front_Widget_Invite_Validate_Contact$'];
+    /** @type {Fl32_Dup_Front_Widget_Invite_Validate_SignUp} */
+    const wgSignUp = spec['Fl32_Dup_Front_Widget_Invite_Validate_SignUp$'];
 
-    // DEFINE WORKING VARS
-    const I_CONTACT = idbCard.getIndexes();
+    // ENCLOSED VARS
     const template = `
 <layout-empty>
+
+    <contact v-if="displayContacts"
+             :nick="senderNick"
+             :publicKey="senderPubKey"
+             :userId="senderUserId"
+             @onDone="contactAccepted"
+    />
+
+    <sign-up v-if="displaySignUp"
+             @onDone="signUpDone"
+    />
+
     <q-card class="bg-white" style="min-width:245px">
-        <q-card-section v-if="displayCodeVerify">
-            <div class="text-subtitle2 text-center">{{$t('wg.invite.verify.msg.checkCode')}}</div>
+        <q-card-section v-if="displayValidation">
+            <div class="text-subtitle2 text-center">{{ $t('wg.invite.verify.msg.checkCode') }}</div>
         </q-card-section>
-        <q-card-section v-if="displayCodeWrong">
-            <div class="text-subtitle2 text-center">{{$t('wg.invite.verify.msg.wrongCode')}}</div>
+        <q-card-section v-if="displayInvalid">
+            <div class="text-subtitle2 text-center">{{ $t('wg.invite.verify.msg.wrongCode') }}</div>
         </q-card-section>
-        <q-card-section v-if="displaySubscribe">
-            <div class="text-subtitle2">{{$t('wg.invite.verify.msg.subscribe')}}</div>
-            <q-card-actions align="center">
-                <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
-            </q-card-actions>
-        </q-card-section>     
-        <q-card-section v-if="displayRegister">
-            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.nick')}}</div>
-            <q-input
-                    :label="$t('wg.hollow.occupy.nick.label')"
-                    outlined
-                    v-model="fldNick"
-            ></q-input>
-            <q-card-actions align="center">
-                <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
-            </q-card-actions>
-        </q-card-section>
-        <q-card-section v-if="displaySuccess">
-            <div class="text-subtitle2 text-center">{{$t('wg.invite.verify.msg.success')}}</div>
-        </q-card-section> 
-        <q-card-section v-if="displayError">
-            <div class="text-subtitle2 text-center">{{fldError}}</div>
-        </q-card-section>           
     </q-card>
+
 </layout-empty>
 `;
+
+    // MAIN
     /**
      * Template to create new component instances using Vue.
      *
@@ -89,68 +75,51 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
+        components: {
+            contact: wgContact,
+            signUp: wgSignUp,
+        },
         data() {
             return {
-                displayCodeVerify: true,
-                displayCodeWrong: false,
-                displayError: false,
-                displayRegister: false,
-                displaySubscribe: false,
-                displaySuccess: false,
-                fldError: null,
-                fldNick: null,
+                displayContacts: false,
+                displayInvalid: false,
+                displaySignUp: false,
+                displayValidation: true,
+                senderUserId: null,
+                senderNick: null,
+                senderPubKey: null,
             };
         },
         props: {
             code: String,
         },
         methods: {
-            async create() {
-                const me = this;
+            /**
+             * Contact is accepted and new contact card is added to IDB.
+             * Create new user if required and send this user's contact back.
+             * @return {Promise<void>}
+             */
+            async contactAccepted() {
+                this.displayContacts = false;
                 const user = await dsUser.get();
-                const sub = await dsSubscript.get();
-                // start process to register user on backend
-                /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
-                const res = await procSignUp.run({
-                    nick: this.fldNick,
-                    invite: this.code,
-                    pubKey: user.keys.public,
-                    subscription: sub
-                });
-                // save user id into IDB
-                if (res?.userId) {
-                    // save/update data in IDB
-                    user.id = res.userId;
-                    await dsUser.set(user);
-                    const profile = dtoProfile.createDto()
-                    profile.username = this.fldNick;
-                    await dsProfile.set(profile);
-                    this.displayRegister = false;
-                    this.displaySuccess = true;
-                    // redirect user to homepage
-                    setTimeout(() => {
-                        me.$router.push(DEF.ROUTE_HOME);
-                    }, 2000);
+                if (user?.id) {
+                    // send this user contact back
+                    const profile = await dsProfile.get();
+                    const event = esfContactAddReq.createDto();
+                    event.data.nick = profile.username;
+                    event.data.publicKey = user.keys.public;
+                    event.data.recipientId = this.senderUserId;
+                    event.data.userId = user.id;
+                    portalBack.publish(event);
+                    this.$router.push(DEF.ROUTE_HOME);
                 } else {
-                    this.displayRegister = false;
-                    this.displayError = true;
-                    this.fldError = `Some error is occurred on the server, cannot get ID for the new user.`;
-                    logger.error(this.fldError);
+                    // display widget to generate new user data (keys & subscription)
+                    this.displaySignUp = true;
                 }
             },
 
-            async subscribe() {
-                const isSubscribed = await modSubscribe.subscribe();
-                // switch UI
-                if (isSubscribed) {
-                    this.displaySubscribe = false;
-                    this.displayRegister = true;
-                } else {
-                    this.displayError = true;
-                    const msg = `Cannot subscribe new user to Web Push API.`;
-                    this.fldError = msg;
-                    logger.error(msg);
-                }
+            async signUpDone() {
+                this.$router.push(DEF.ROUTE_HOME);
             }
         },
         /**
@@ -189,64 +158,25 @@ export default function (spec) {
                     // request data from back
 
                     // publish event to back
-                    const msg = esfValidReq.createDto();
-                    msg.data.code = code;
-                    portalBack.publish(msg);
+                    const event = esfValidReq.createDto();
+                    event.data.code = code;
+                    portalBack.publish(event);
                 });
             }
 
-            /**
-             * Save parent contact.
-             * @param {number} userId
-             * @param {string} nick
-             * @param {string} keyPub
-             * @return {Promise<void>}
-             */
-            async function addParentCard(userId, nick, keyPub) {
-                const dto = idbCard.createDto();
-                dto.userId = userId;
-                dto.nick = nick;
-                dto.keyPub = keyPub;
-                const trx = await idb.startTransaction(idbCard);
-                const found = await idb.readOne(trx, idbCard, userId, I_CONTACT.BY_USER);
-                if (!found) {
-                    await idb.add(trx, idbCard, dto);
-                    await trx.commit();
-                    logger.info(`Contact card for parent #${userId} is added on new user registration.`)
-                } else {
-                    logger.info(`Contact card for parent #${userId} is already added before.`)
-                }
-            }
-
             // MAIN
-            const user = await dsUser.get();
-            if (user?.id) {
-                // this browser already has registered user, redirect to the home
-                this.$router.push(DEF.ROUTE_HOME);
-            } else {
-                logger.info(`Invite validation is started (code: ${this.code}).`);
-                const res = await validateInvite(this.code);
-                this.displayCodeVerify = false;
-                if (res?.parentId) {
-                    logger.info(`Invite code '${this.code}' is valid.`);
-                    await addParentCard(res.parentId, res.parentNick, res.parentPubKey);
-                    const profile = await dsProfile.get();
-                    const canSubscribe = await modSubscribe.canSubscribe();
-                    const hasSubscription = await modSubscribe.hasSubscription();
-                    this.displaySubscribe = canSubscribe && !hasSubscription;
-                    if (!this.displaySubscribe) {
-                        this.displayRegister = (profile?.username === undefined);
-                        if (!this.displayRegister)
-                            this.$router.push(DEF.ROUTE_HOME);
-                        else
-                            logger.info(`Invited user has no backend ID yet.`);
-                    } else {
-                        logger.info(`Invited user should subscribe to Web Push API.`);
-                    }
-                } else {
-                    logger.error(`Invite validation response has no key to subscribe to use Web Push API.`);
-                    this.displayCodeWrong = true;
-                }
+            // get invite sender's data from server
+            const res = await validateInvite(this.code);
+            if (res.parentId) { // valid invite
+                this.senderUserId = res.parentId;
+                this.senderNick = res.parentNick;
+                this.senderPubKey = res.parentPubKey;
+                this.displayValidation = false;
+                this.displayContacts = true;
+            } else { // invalid invite
+                this.displayValidation = false;
+                this.displayInvalid = true;
+                logger.error(`Invite validation response has no sender data.`);
             }
         },
     };
