@@ -13,8 +13,6 @@ export default class Fl32_Dup_Front_Proc_User_Authentication {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_User_Shared_Event_Back_Authentication_Failure} */
         const esbFailure = spec['TeqFw_User_Shared_Event_Back_Authentication_Failure$'];
-        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-        const dsHollow = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
         /** @type {Fl32_Dup_Front_DSource_User_Profile} */
         const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
         /** @type {TeqFw_User_Front_DSource_Server_Key} */
@@ -38,7 +36,6 @@ export default class Fl32_Dup_Front_Proc_User_Authentication {
         async function onFailure({data, meta}) {
             const user = await dsUser.get();
             if (user.id) {
-                await dsHollow.clean();
                 await dsProfile.clean();
                 await dsServerKey.clean();
                 await dsSubscribe.clean();

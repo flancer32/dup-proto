@@ -22,6 +22,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const esbConfirmPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Receive} */
         const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
+        /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
+        const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
         const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
 
@@ -58,15 +60,22 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
                 const post = data.message;
                 const userId = post.recipientId;
                 const streams = regUserStreams.getStreams(userId);
-                if (streams.length === 0)
-                    logger.error(`There are no opened event streams for user #${userId}.`);
-                for (const one of streams) {
-                    const frontUUID = regStreams.mapUUIDStreamToFront(one);
-                    if (frontUUID) {
-                        const event = esbReceive.createDto();
-                        event.meta.frontUUID = frontUUID;
-                        event.data.message = post;
-                        portalFront.publish(event);
+                if (streams.length === 0) {
+                    // send notification about new message to recipient
+                    const event = ebWebPush.createDto();
+                    event.userId = userId;
+                    eventsBack.publish(event);
+                } else {
+                    for (const one of streams) {
+                        const frontUUID = regStreams.mapUUIDStreamToFront(one);
+                        if (frontUUID) {
+                            const event = esbReceive.createDto();
+                            event.meta.frontUUID = frontUUID;
+                            event.data.message = post;
+                            portalFront.publish(event);
+                        } else {
+                            regUserStreams.deleteStream(one);
+                        }
                     }
                 }
             }

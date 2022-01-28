@@ -21,8 +21,8 @@ export default function (spec) {
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
     const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
-    /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-    const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
+    /** @type {Fl32_Dup_Front_Model_Hollow_IsFree} */
+    const modHollowIsFree = spec['Fl32_Dup_Front_Model_Hollow_IsFree$'];
     /** @type {Fl32_Dup_Front_DSource_User_Profile} */
     const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
@@ -111,7 +111,7 @@ export default function (spec) {
                         // save/update data in IDB
                         user.id = res.userId;
                         await dsUser.set(user);
-                        await dsHollowIsFree.set(false);
+                        modHollowIsFree.set(false);
                         const profile = dtoProfile.createDto()
                         profile.username = this.fldNick;
                         await dsProfile.set(profile);
@@ -154,7 +154,7 @@ export default function (spec) {
         async mounted() {
             // get data from IDB and calculate state
             const user = await dsUser.get();
-            if (dsHollowIsFree.get() === true) {
+            if (await modHollowIsFree.get() === true) {
                 const canSubscribe = await modSubscribe.canSubscribe();
                 const hasSubscription = await modSubscribe.hasSubscription();
                 const needSubscribe = canSubscribe && !hasSubscription;

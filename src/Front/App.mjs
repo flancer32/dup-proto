@@ -37,8 +37,8 @@ export default class Fl32_Dup_Front_App {
         const layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const config = spec['TeqFw_Web_Front_Model_Config$'];
-        /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-        const dsHollowIsFree = spec['Fl32_Dup_Front_DSource_Hollow_IsFree$'];
+        /** @type {Fl32_Dup_Front_Model_Hollow_IsFree} */
+        const modHollowIsFree = spec['Fl32_Dup_Front_Model_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
@@ -86,9 +86,6 @@ export default class Fl32_Dup_Front_App {
                 /** @type {TeqFw_User_Front_DSource_User} */
                 const user = await container.get('TeqFw_User_Front_DSource_User$');
                 await user.get();
-                /** @type {Fl32_Dup_Front_DSource_Hollow_IsFree} */
-                const dsHollowIsFree = await container.get('Fl32_Dup_Front_DSource_Hollow_IsFree$');
-                await dsHollowIsFree.init();
             }
 
             /**
@@ -222,9 +219,8 @@ export default class Fl32_Dup_Front_App {
                 },
                 template: '<router-view v-if="canDisplay"/><div class="launchpad" v-if="!canDisplay">App is starting...</div>',
                 async mounted() {
-                    await dsHollowIsFree.init();
                     logger.info(`Started with route: '${JSON.stringify(this.$router.currentRoute.value)}'`);
-                    if (dsHollowIsFree.get()) {
+                    if (await modHollowIsFree.get()) {
                         logger.info(`Hollow is not occupied. Goto occupy route.`);
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                     } else {
