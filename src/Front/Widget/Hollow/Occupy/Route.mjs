@@ -100,7 +100,7 @@ export default function (spec) {
                     const user = await dsUser.get();
                     const sub = await dsSubscript.get();
                     // start process to register user on backend
-                    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Registered.Dto|null} */
+                    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto|null} */
                     const res = await procSignUp.run({
                         nick: this.fldNick,
                         pubKey: user.keys.public,

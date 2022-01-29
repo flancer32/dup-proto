@@ -2,11 +2,11 @@
  * New user is signed up on the front.
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Shared_Event_Front_User_SignedUp';
+const NS = 'Fl32_Dup_Shared_Event_Front_User_SignUp_Request';
 
 // MODULE'S CLASSES
 /**
- * @memberOf Fl32_Dup_Shared_Event_Front_User_SignedUp
+ * @memberOf Fl32_Dup_Shared_Event_Front_User_SignUp_Request
  */
 class Dto {
     static namespace = NS;
@@ -29,7 +29,7 @@ class Dto {
 /**
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_IEvent
  */
-export default class Fl32_Dup_Shared_Event_Front_User_SignedUp {
+export default class Fl32_Dup_Shared_Event_Front_User_SignUp_Request {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
@@ -42,8 +42,8 @@ export default class Fl32_Dup_Shared_Event_Front_User_SignedUp {
 
         // ENCLOSED FUNCTIONS
         /**
-         * @param {Fl32_Dup_Shared_Event_Front_User_SignedUp.Dto} [data]
-         * @return {Fl32_Dup_Shared_Event_Front_User_SignedUp.Dto}
+         * @param {Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto} [data]
+         * @return {Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto}
          */
         function createData(data) {
             const res = new Dto();
@@ -59,8 +59,8 @@ export default class Fl32_Dup_Shared_Event_Front_User_SignedUp {
 
         // INSTANCE METHODS
         /**
-             * @param {{data: Fl32_Dup_Shared_Event_Front_User_SignedUp.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}} [data]
-         * @return {{data: Fl32_Dup_Shared_Event_Front_User_SignedUp.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}}
+             * @param {{data: Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}} [data]
+         * @return {{data: Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}}
          */
         this.createDto = function (data) {
             const res = dtoBase.createDto({[ATTR.META]: data?.[ATTR.META]});

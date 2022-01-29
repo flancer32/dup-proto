@@ -49,6 +49,7 @@ export default function (spec) {
     />
 
     <sign-up v-if="displaySignUp"
+             :inviteCode="code"
              @onDone="signUpDone"
     />
 

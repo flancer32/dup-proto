@@ -1,7 +1,7 @@
 /**
  * Process to send hollow state to the front.
  */
-export default class Fl32_Dup_Back_Proc_Hollow_State_Request {
+export default class Fl32_Dup_Back_Proc_Hollow_State {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */

@@ -37,9 +37,9 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
                     if (frontUUID) {
                         const event = esbAdd.createDto();
                         event.meta.frontUUID = frontUUID;
-                        event.data.nick = data.nick;
+                        event.data.userNick = data.nick;
                         event.data.userId = data.userId;
-                        event.data.publicKey = data.publicKey;
+                        event.data.userPubKey = data.publicKey;
                         portalFront.publish(event);
                     } else {
                         regUserStreams.deleteStream(one);
