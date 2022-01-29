@@ -166,15 +166,13 @@ export default class Fl32_Dup_Front_App {
                     path: DEF.ROUTE_CHAT,
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$'),
                     props: true,
-                    children: [{
-                        path: DEF.ROUTE_CHAT_USER,
-                        component: () => container.get('Fl32_Dup_Front_Widget_Chat_User_Route$'),
-                        props: true
-                    }, {
-                        path: DEF.ROUTE_CHAT_ROOM,
-                        component: () => container.get('Fl32_Dup_Front_Widget_Chat_Room_Route$'),
-                        props: true
-                    }]
+                    children: [
+                        {
+                            path: DEF.ROUTE_CHAT_BAND,
+                            component: () => container.get('Fl32_Dup_Front_Widget_Chat_Band_Route$'),
+                            props: true
+                        }
+                    ]
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CONTACTS_ADD,

@@ -19,10 +19,13 @@ export default function (spec) {
     const card = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Band} */
+    const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
 
     // DEFINE WORKING VARS
+    const I_BAND = idbBand.getIndexes();
     const template = `
 <q-list bordered padding class="rounded-borders text-primary">
 
@@ -65,20 +68,23 @@ export default function (spec) {
         },
         methods: {
             /**
+             * Dto is modified in 'mounted'
              * @param {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} card
              */
             chat(card) {
-                const id = card?.userId;
-                return DEF.ROUTE_CHAT_USER.replace(':id', String(id));
+                return DEF.ROUTE_CHAT_BAND.replace(':id', String(card.bandId)); // see mounted
             }
         },
         async mounted() {
             // this code is called twice on widget mount cause widget is mounted twice (Vue Router ???)
             if (this.cards.length === 0) {
-                const trx = await idb.startTransaction(idbContact, false);
+                const trx = await idb.startTransaction([idbBand, idbContact], false);
                 /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
                 const cards = await idb.readSet(trx, idbContact);
                 for (const one of cards) {
+                    /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
+                    const found = await idb.readOne(trx, idbBand, one.id, I_BAND.BY_CONTACT);
+                    one.bandId = found?.id;
                     this.cards.push(one);
                 }
                 trx.commit();

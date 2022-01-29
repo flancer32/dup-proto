@@ -24,46 +24,28 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
         const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
 
         // ENCLOSED VARS
-        const I_BAND = idbBand.getIndexes();
         const I_MSG = idbMsg.getIndexes();
 
         /**
-         * Load messages for chat with $contactId.
-         * @param {number|string} contactId
+         * Load messages for chat with $bandId.
+         * @param {number|string} bandId
          * @return {Promise<boolean>}
          */
-        this.loadBand = async function (contactId) {
+        this.loadBand = async function (bandId) {
             // ENCLOSED FUNCTIONS
-            /**
-             * Lookup for band using contactId.
-             * @param {IDBTransaction} trx
-             * @param {number} contactId
-             * @return {Promise<Fl32_Dup_Front_Store_Entity_Band.Dto>}
-             */
-            async function getBandForContact(trx, contactId) {
-                const found = await idb.readOne(trx, idbBand, contactId, I_BAND.BY_CONTACT);
-                if (found) return found;
-                else {
-                    const dto = idbBand.createDto();
-                    dto.contactRef = contactId;
-                    const id = await idb.add(trx, idbBand, dto);
-                    return await idb.readOne(trx, idbBand, id);
-                }
-            }
 
             // MAIN
             let res = false;
-            contactId = parseInt(contactId);
+            bandId = parseInt(bandId);
             // validate contact card is in IDB
             const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
-            const band = await getBandForContact(trx, contactId);
-            if (band) {
+            const band = await idb.readOne(trx, idbBand, bandId);
+            if (bandId) {
                 /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
                 const found = await idb.readOne(trx, idbContact, band.contactRef);
-                const contactId = found.id;
                 rxChat.setTypeUser();
                 rxChat.setTitle(found.nick);
-                rxChat.setOtherSideId(contactId);
+                rxChat.setBandId(bandId);
                 // load keys for messages from IDB
                 const index = I_MSG.BY_BAND;
                 const backward = true;
@@ -101,7 +83,7 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
             res = await idb.readOne(trxRead, idbContact, parseInt(contactId));
             if (!res) {
                 rxChat.setTypeUser();
-                rxChat.setOtherSideId(null);
+                rxChat.setBandId(null);
                 rxChat.setTitle(null);
             }
             trxRead.commit();

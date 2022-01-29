@@ -9,9 +9,9 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
         // DEFINE WORKING VARS / PROPS
+        const _bandId = ref(null);
         const _messages = ref([]);
         const _messagesCount = ref(0);
-        const _otherSideId = ref(null);
         const _title = ref();
         const _typeRoom = ref(false);
         const _typeUser = ref(false);
@@ -39,12 +39,12 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
 
         this.getMessages = () => _messages;
         this.getMessagesCount = () => _messagesCount;
-        this.getOtherSideId = () => _otherSideId;
+        this.getBandId = () => _bandId;
         this.getTitle = () => _title;
         this.getTypeRoom = () => _typeRoom;
         this.getTypeUser = () => _typeUser;
 
-        this.setOtherSideId = (id) => _otherSideId.value = id;
+        this.setBandId = (id) => _bandId.value = id;
         this.setTitle = (value) => _title.value = value;
         this.setTypeRoom = () => {
             _typeRoom.value = true;

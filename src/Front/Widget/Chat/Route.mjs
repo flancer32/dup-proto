@@ -41,29 +41,33 @@ export default function (spec) {
             return {};
         },
         props: {
-            id: String,
+            id: String, // deprecated
         },
         methods: {
             async switchCard() {
-                const found = await modUser.getCard(this.id);
-                if (found) {
-                    rxChat.setTypeUser();
-                    rxChat.setOtherSideId(found.id);
-                    rxChat.setTitle(found.nick);
-                }
+                // deprecated
+                // const found = await modUser.getCard(this.id);
+                // if (found) {
+                //     rxChat.setTypeUser();
+                //     rxChat.setBandId(found.id);
+                //     rxChat.setTitle(found.nick);
+                // }
             }
         },
         watch: {
             async id(current, old) {
+                // deprecated
                 // load card data on user changing
-                if (current !== old) {
-                    await this.switchCard();
-                }
+                // if (current !== old) {
+                //     await this.switchCard();
+                // }
             }
         },
         async mounted() {
+            // TODO: what this widget does??? This is up level widget for route hierarchy
+            // TODO: it should give integrated report for all bands
             // load card data on the first entry to the route
-            await this.switchCard();
+            // await this.switchCard();
         },
     };
 }

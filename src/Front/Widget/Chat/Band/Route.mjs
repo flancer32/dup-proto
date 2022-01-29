@@ -1,16 +1,16 @@
 /**
- * Route widget to chat with other user.
+ * Route widget to chat with others.
  *
- * @namespace Fl32_Dup_Front_Widget_Chat_User_Route
+ * @namespace Fl32_Dup_Front_Widget_Chat_Band_Route
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Chat_User_Route';
+const NS = 'Fl32_Dup_Front_Widget_Chat_Band_Route';
 
 // MODULE'S FUNCTIONS
 /**
  * TeqFW DI factory function to get dependencies for the object.
  *
- * @returns {Fl32_Dup_Front_Widget_Chat_User_Route.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Chat_Band_Route.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -32,7 +32,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_Chat_User_Route
+     * @memberOf Fl32_Dup_Front_Widget_Chat_Band_Route
      */
     return {
         teq: {package: DEF.SHARED.NAME},
@@ -43,7 +43,7 @@ export default function (spec) {
             return {};
         },
         props: {
-            id: Number, // contact id
+            id: Number, // band id
         },
         computed: {},
         methods: {},

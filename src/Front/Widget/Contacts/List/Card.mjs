@@ -15,10 +15,15 @@ const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Card';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Web_Front_Store_IDB} */
+    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Band} */
+    const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {TeqFw_Core_Shared_Util.formatDate|function} */
     const formatDate = spec['TeqFw_Core_Shared_Util.formatDate'];
 
     // ENCLOSED VARS
+    const I_BAND = idbBand.getIndexes();
     const template = `
 <q-card v-on:click="chat">
     <q-card-section>
@@ -59,7 +64,12 @@ export default function (spec) {
         },
         methods: {
             async chat() {
-                const route = DEF.ROUTE_CHAT_USER.replace(':id', this.id);
+                const trx = await idb.startTransaction([idbBand], false);
+                /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
+                const found = await idb.readOne(trx, idbBand, this.id, I_BAND.BY_CONTACT);
+                trx.commit();
+                const bandId = String(found?.id);
+                const route = DEF.ROUTE_CHAT_BAND.replace(':id', bandId);
                 this.$router.push(route);
             }
         },

@@ -25,6 +25,8 @@ export default function (spec) {
     const scrambler = spec['TeqFw_User_Shared_Api_Crypto_IScrambler$'];
     /** @type {TeqFw_Web_Front_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Band} */
+    const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
@@ -72,12 +74,12 @@ export default function (spec) {
         data() {
             return {
                 message: null,
-                otherSideContactId: null,
+                otherSideBandId: null,
             };
         },
         computed: {
             enabled() {
-                return this.otherSideContactId !== null;
+                return this.otherSideBandId !== null;
             },
             placeholder() {
                 return this.enabled ? 'Message...' : 'Please select user to chat...';
@@ -91,17 +93,19 @@ export default function (spec) {
                  * Encrypt and send message to the server. Get message ID from server.
                  * @param {string} msg
                  * @param {number} authorId
-                 * @param {number} contactId recipient's contact
+                 * @param {number} bandId current band ID (=> contactId => userId)
                  * @return {Promise<{msgUUID: string, recipientId: number}>}
                  */
-                async function encryptAndSend(msg, authorId, contactId) {
+                async function encryptAndSend(msg, authorId, bandId) {
                     // get keys to encrypt
                     const user = await dsUser.get();
                     const sec = user.keys.secret
                     // get recipient's public key from IDB
-                    const trx = await idb.startTransaction(idbContact, false);
+                    const trx = await idb.startTransaction([idbContact, idbBand], false);
+                    /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
+                    const band = await idb.readOne(trx, idbBand, bandId);
                     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
-                    const card = await idb.readOne(trx, idbContact, contactId);
+                    const card = await idb.readOne(trx, idbContact, band?.contactRef);
                     const pub = card.keyPub;
                     // set key and encrypt
                     scrambler.setKeys(pub, sec);
@@ -112,17 +116,16 @@ export default function (spec) {
                         userId: authorId,
                         recipientId: card.userId
                     });
-                    // trx.commit(); - transaction has finished here
+                    // trx.commit(); // transaction has finished here (cause read only??)
                     return {msgUUID: confirm?.messageId, recipientId: card.userId};
                 }
 
-                // MAIN FUNCTIONALITY
+                // MAIN
                 const user = await dsUser.get();
                 const authorId = user.id;
-                const recipientContactId = this.otherSideContactId;
                 const body = this.message;
                 this.message = null;
-                const {msgUUID, recipientId} = await encryptAndSend(body, authorId, recipientContactId);
+                const {msgUUID, recipientId} = await encryptAndSend(body, authorId, this.otherSideBandId);
                 if (msgUUID) {
                     logger.info(`Message sent to the server. ID: ${msgUUID}.`);
                     const msgId = await modMsgSaver.savePersonalOut({
@@ -146,7 +149,7 @@ export default function (spec) {
             }
         },
         async mounted() {
-            this.otherSideContactId = rxChat.getOtherSideId();
+            this.otherSideBandId = rxChat.getBandId();
         },
     };
 }
