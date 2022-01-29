@@ -37,8 +37,8 @@ export default class Fl32_Dup_Front_App {
         const layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
         /** @type {TeqFw_Web_Front_Model_Config} */
         const config = spec['TeqFw_Web_Front_Model_Config$'];
-        /** @type {Fl32_Dup_Front_Model_Hollow_IsFree} */
-        const modHollowIsFree = spec['Fl32_Dup_Front_Model_Hollow_IsFree$'];
+        /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
+        const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */

@@ -26,8 +26,8 @@ export default function (spec) {
     const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
     /** @type {TeqFw_User_Front_DSource_User} */
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {Fl32_Dup_Front_Model_WebPush_Subscription} */
-    const modSubscribe = spec['Fl32_Dup_Front_Model_WebPush_Subscription$'];
+    /** @type {Fl32_Dup_Front_Mod_WebPush_Subscription} */
+    const modSubscribe = spec['Fl32_Dup_Front_Mod_WebPush_Subscription$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
 

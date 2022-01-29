@@ -19,8 +19,8 @@ export default function (spec) {
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
     const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
-    /** @type {Fl32_Dup_Front_Model_Chat_User} */
-    const modChatUser = spec['Fl32_Dup_Front_Model_Chat_User$'];
+    /** @type {Fl32_Dup_Front_Mod_Chat_User} */
+    const modChatUser = spec['Fl32_Dup_Front_Mod_Chat_User$'];
 
     // DEFINE WORKING VARS
     const template = `

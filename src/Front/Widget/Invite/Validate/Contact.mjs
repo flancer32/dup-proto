@@ -16,8 +16,8 @@ const EVT_DONE = 'onDone';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Model_Contacts} */
-    const modContacts = spec['Fl32_Dup_Front_Model_Contacts$'];
+    /** @type {Fl32_Dup_Front_Mod_Contacts} */
+    const modContacts = spec['Fl32_Dup_Front_Mod_Contacts$'];
 
     // ENCLOSED VARS
     const template = `

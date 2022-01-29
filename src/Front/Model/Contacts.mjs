@@ -1,7 +1,7 @@
 /**
  * Model to represent contacts book in the app.
  */
-export default class Fl32_Dup_Front_Model_Contacts {
+export default class Fl32_Dup_Front_Mod_Contacts {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_App_Logger} */

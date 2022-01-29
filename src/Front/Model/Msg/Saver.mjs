@@ -1,15 +1,7 @@
 /**
  * Model to save messages to IDB.
- *
- * @namespace Fl32_Dup_Front_Model_Msg_Saver
  */
-// MODULE'S IMPORT
-
-// MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Model_Msg_Saver';
-
-// MODULE'S CLASSES
-export default class Fl32_Dup_Front_Model_Msg_Saver {
+export default class Fl32_Dup_Front_Mod_Msg_Saver {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_Store_IDB} */

@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-    /** @type {Fl32_Dup_Front_Model_Chat_User} */
-    const modUser = spec['Fl32_Dup_Front_Model_Chat_User$'];
+    /** @type {Fl32_Dup_Front_Mod_Chat_User} */
+    const modUser = spec['Fl32_Dup_Front_Mod_Chat_User$'];
 
     // WORKING VARS
     const template = `

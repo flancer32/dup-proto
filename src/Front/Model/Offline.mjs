@@ -1,9 +1,9 @@
 /**
  * Model to control offline/online mode switching in browser.
  *
- * @namespace Fl32_Dup_Front_Model_Offline
+ * @namespace Fl32_Dup_Front_Mod_Offline
  */
-export default class Fl32_Dup_Front_Model_Offline {
+export default class Fl32_Dup_Front_Mod_Offline {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Rx_Led} */

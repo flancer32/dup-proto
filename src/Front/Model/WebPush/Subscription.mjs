@@ -1,9 +1,9 @@
 /**
  * Encapsulate logic to work with Web Push API.
  *
- * @namespace Fl32_Dup_Front_Model_WebPush_Subscription
+ * @namespace Fl32_Dup_Front_Mod_WebPush_Subscription
  */
-export default class Fl32_Dup_Front_Model_WebPush_Subscription {
+export default class Fl32_Dup_Front_Mod_WebPush_Subscription {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Defaults} */

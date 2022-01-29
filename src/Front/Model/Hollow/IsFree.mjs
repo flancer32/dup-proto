@@ -1,7 +1,7 @@
 /**
  * Model for hollow state (free or occupied).
  */
-export default class Fl32_Dup_Front_Model_Hollow_IsFree {
+export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Defaults} */

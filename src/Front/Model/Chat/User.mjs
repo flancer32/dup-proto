@@ -3,9 +3,9 @@
  *
  * Access to locally stored data (IDB) and to syncing local data with remote.
  *
- * @namespace Fl32_Dup_Front_Model_Chat_User
+ * @namespace Fl32_Dup_Front_Mod_Chat_User
  */
-export default class Fl32_Dup_Front_Model_Chat_User {
+export default class Fl32_Dup_Front_Mod_Chat_User {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_Store_IDB} */

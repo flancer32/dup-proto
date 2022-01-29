@@ -23,8 +23,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
         const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
-        /** @type {Fl32_Dup_Front_Model_Msg_Saver} */
-        const modMsgSaver = spec['Fl32_Dup_Front_Model_Msg_Saver$'];
+        /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */
+        const modMsgSaver = spec['Fl32_Dup_Front_Mod_Msg_Saver$'];
         /** @type {Fl32_Dup_Front_Dto_Message} */
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */

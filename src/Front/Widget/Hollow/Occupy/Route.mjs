@@ -21,16 +21,16 @@ export default function (spec) {
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
     const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
-    /** @type {Fl32_Dup_Front_Model_Hollow_IsFree} */
-    const modHollowIsFree = spec['Fl32_Dup_Front_Model_Hollow_IsFree$'];
+    /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
+    const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
     /** @type {Fl32_Dup_Front_DSource_User_Profile} */
     const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
-    /** @type {Fl32_Dup_Front_Model_WebPush_Subscription} */
-    const modSubscribe = spec['Fl32_Dup_Front_Model_WebPush_Subscription$'];
+    /** @type {Fl32_Dup_Front_Mod_WebPush_Subscription} */
+    const modSubscribe = spec['Fl32_Dup_Front_Mod_WebPush_Subscription$'];
 
     // DEFINE WORKING VARS
     const template = `
