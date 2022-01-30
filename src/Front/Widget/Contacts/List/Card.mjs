@@ -64,11 +64,19 @@ export default function (spec) {
         },
         methods: {
             async chat() {
-                const trx = await idb.startTransaction([idbBand], false);
+                let bandId;
+                const trx = await idb.startTransaction([idbBand]);
                 /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
                 const found = await idb.readOne(trx, idbBand, this.id, I_BAND.BY_CONTACT);
+                if (!found) { // we need to create new band object
+                    const dto = idbBand.createDto();
+                    dto.contactRef = this.id;
+                    const id = await idb.add(trx, idbBand, dto);
+                    bandId = String(id);
+                } else {
+                    bandId = String(found?.id);
+                }
                 trx.commit();
-                const bandId = String(found?.id);
                 const route = DEF.ROUTE_CHAT_BAND.replace(':id', bandId);
                 this.$router.push(route);
             }

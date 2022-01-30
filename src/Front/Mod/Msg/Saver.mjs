@@ -25,9 +25,6 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
         const I_BAND = idbBand.getIndexes();
         const I_CONTACT = idbContact.getIndexes();
 
-        // MAIN
-
-        // ENCLOSED FUNCTIONS
         // ENCLOSED FUNCTIONS
 
         async function _getBandId(trx, userId) {
