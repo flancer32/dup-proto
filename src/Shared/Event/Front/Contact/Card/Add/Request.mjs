@@ -11,6 +11,11 @@ const NS = 'Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request';
 class Dto {
     static namespace = NS;
     /**
+     * Invitation code to remove one-time invites after usage.
+     * @type {string}
+     */
+    inviteCode;
+    /**
      * User's own nickname for contact.
      * @type {string}
      */
@@ -55,6 +60,7 @@ export default class Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request {
          */
         function createData(data) {
             const res = new Dto();
+            res.inviteCode = castString(data?.inviteCode);
             res.nick = castString(data?.nick);
             res.publicKey = castString(data?.publicKey);
             res.recipientId = castInt(data?.recipientId);

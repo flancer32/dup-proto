@@ -107,6 +107,7 @@ export default function (spec) {
                     // send this user contact back
                     const profile = await dsProfile.get();
                     const event = esfContactAddReq.createDto();
+                    event.data.inviteCode = this.code;
                     event.data.nick = profile.username;
                     event.data.publicKey = user.keys.public;
                     event.data.recipientId = this.senderUserId;
