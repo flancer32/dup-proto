@@ -15,7 +15,7 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_Store';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_Store_IDB} */
+    /** @type {TeqFw_Web_Front_App_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
 
     // DEFINE WORKING VARS

@@ -7,11 +7,11 @@ const IDB_VERSION = 1;
 /**
  * Factory to create connector to application level IDB
  * @param spec
- * @return {TeqFw_Web_Front_Store_IDB}
+ * @return {TeqFw_Web_Front_App_Store_IDB}
  */
 export default function (spec) {
-    /** @type {TeqFw_Web_Front_Store_IDB} */
-    const idb = spec['TeqFw_Web_Front_Store_IDB$$']; // new instance
+    /** @type {TeqFw_Web_Front_App_Store_IDB} */
+    const idb = spec['TeqFw_Web_Front_App_Store_IDB$$']; // new instance
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */

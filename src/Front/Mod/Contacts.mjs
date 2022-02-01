@@ -6,7 +6,7 @@ export default class Fl32_Dup_Front_Mod_Contacts {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Front_App_Logger} */
         const logger = spec['TeqFw_Web_Front_App_Logger$'];
-        /** @type {TeqFw_Web_Front_Store_IDB} */
+        /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
         const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];

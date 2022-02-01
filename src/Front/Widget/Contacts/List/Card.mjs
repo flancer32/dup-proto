@@ -15,7 +15,7 @@ const NS = 'Fl32_Dup_Front_Widget_Contacts_List_Card';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_Store_IDB} */
+    /** @type {TeqFw_Web_Front_App_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];

@@ -78,17 +78,16 @@ export default class Fl32_Dup_Front_Store_Entity_Band {
     /**
      * @return {typeof Fl32_Dup_Front_Store_Entity_Band.ATTR}
      */
+    getAttributes = () => ATTR;
 
-    getAttributes() { return ATTR;}
+    getAttrNames = () => Object.values(ATTR);
 
-    getAttrNames() {return Object.values(ATTR);}
-
-    getEntityName() { return ENTITY;}
+    getEntityName = () => ENTITY;
 
     /**
      * @return {typeof Fl32_Dup_Front_Store_Entity_Band.INDEX}
      */
-    getIndexes() { return INDEX;}
+    getIndexes = () => INDEX;
 
-    getPrimaryKey() { return [ATTR.ID];}
+    getPrimaryKey = () => [ATTR.ID];
 }

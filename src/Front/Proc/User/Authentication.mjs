@@ -21,7 +21,7 @@ export default class Fl32_Dup_Front_Proc_User_Authentication {
         const dsSubscribe = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
         /** @type {TeqFw_User_Front_DSource_User} */
         const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-        /** @type {TeqFw_Web_Front_Store_IDB} */
+        /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
 
         // MAIN

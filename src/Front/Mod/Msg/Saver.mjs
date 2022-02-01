@@ -4,7 +4,7 @@
 export default class Fl32_Dup_Front_Mod_Msg_Saver {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Web_Front_Store_IDB} */
+        /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Band} */
         const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];

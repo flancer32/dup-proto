@@ -13,7 +13,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
         const esbDelivered = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery} */
         const esfConfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Delivery$'];
-        /** @type {TeqFw_Web_Front_Store_IDB} */
+        /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
         const idbMsgBase = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];

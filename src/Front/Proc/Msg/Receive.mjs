@@ -17,7 +17,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const scrambler = spec['TeqFw_User_Shared_Api_Crypto_IScrambler$'];
         /** @type {TeqFw_User_Front_DSource_User} */
         const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-        /** @type {TeqFw_Web_Front_Store_IDB} */
+        /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
         const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
