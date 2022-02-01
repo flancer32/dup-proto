@@ -17,14 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_DSource_User_Profile} */
     const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
-    /** @type {Fl32_Dup_Front_Rx_Led} */
-    const _led = spec['Fl32_Dup_Front_Rx_Led$'];
-    /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
-    const eventStreamReverse = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
 
     // WORKING VARS
-    /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */
-    const STATES = _led.getStates();
     const template = `
 <layout-base>
     <div class="row justify-center items-center" style="height: calc(100vh - 100px)">
@@ -34,9 +28,6 @@ export default function (spec) {
                 <div>DUPLO is a secured messenger.</div>
                 <div>Welcome to the hollow, {{name}}!</div>
             </q-card-section>
-            <q-card-actions align="center" v-if="enableConnect">
-                <q-btn :label="$t('btn.connect')" padding="xs lg" v-on:click="connect"></q-btn>
-            </q-card-actions>
         </q-card>
 
     </div>
@@ -52,19 +43,10 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
         data() {
             return {
                 name: null
             };
-        },
-        computed: {
-            enableConnect: () => _led.getRef().value === STATES.NET_OK,
-        },
-        methods: {
-            connect() {
-                eventStreamReverse.open();
-            }
         },
         async mounted() {
             const user = await dsProfile.get();

@@ -1,5 +1,9 @@
 /**
- * Reactive element, LED indicator in header.
+ * Reactive element, LED indicator in header for network state and activities.
+ * There are 3 states:
+ *  - offline: front is not connected to back (browser is in offline or server is down);
+ *  - online: front has opened reverse connection to get server events;
+ *  - active: some outgoing activity is performed (front to back requests);
  *
  * @namespace Fl32_Dup_Front_Rx_Led
  */
@@ -8,26 +12,27 @@
  * @memberOf Fl32_Dup_Front_Rx_Led
  */
 const STATE = {
-    AJAX_ON: 'ajax',
-    NET_OK: 'net',
-    OFF: 'off',
-    SERVER_OK: 'server',
+    ACTIVE: 'active',
+    OFF: 'offline',
+    SERVER_OK: 'online',
 }
 Object.freeze(STATE);
 
 // MODULE'S CLASSES
+/**
+ * @implements TeqFw_Web_Front_Api_Mod_Server_IConnect
+ */
 export default class Fl32_Dup_Front_Rx_Led {
     constructor(spec) {
         // EXTRACT DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
-        // DEFINE WORKING VARS / PROPS
+        // ENCLOSED VARS
         const _data = ref(STATE.OFF);
-        let isOffline = false;
-        let isConnected = false;
+        let isOffline = true;
         let isAjax = false;
 
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCTIONS
         /**
          * Calculate LED state and set reactive element.
          */
@@ -37,49 +42,40 @@ export default class Fl32_Dup_Front_Rx_Led {
             if (isOffline) {
                 next = STATE.OFF;
             } else {
-                next = STATE.NET_OK;
-                if (isConnected) {
-                    next = STATE.SERVER_OK;
-                    if (isAjax) {
-                        next = STATE.AJAX_ON;
-                    }
+                next = STATE.SERVER_OK;
+                if (isAjax) {
+                    next = STATE.ACTIVE;
                 }
             }
             if (current !== next) _data.value = next;
         }
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
 
         /**
          * Get reactive object.
          */
         this.getRef = () => _data;
-        this.setOffline = function () {
-            isOffline = true;
-            calcState();
-        }
-        this.setOnline = function () {
-            isOffline = false;
-            calcState();
-        }
-        this.setServerConnected = function () {
-            isConnected = true;
-            calcState();
-        }
-        this.setServerDisconnected = function () {
-            isConnected = false;
-            calcState();
-        }
-        this.setAjaxOn = function () {
+
+        this.startActivity = function () {
             isAjax = true;
             calcState();
         }
-        this.setAjaxOff = function () {
+
+        this.stopActivity = function () {
             isAjax = false;
             calcState();
         }
 
-        // MAIN FUNCTIONALITY
+        this.setOffline = function () {
+            isOffline = true;
+            calcState();
+        }
+
+        this.setOnline = function () {
+            isOffline = false;
+            calcState();
+        }
 
     }
 

@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_SWorker';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_Model_Sw_Control} */
-    const swControl = spec['TeqFw_Web_Front_Model_Sw_Control$'];
+    /** @type {TeqFw_Web_Front_Mod_Sw_Control} */
+    const swControl = spec['TeqFw_Web_Front_Mod_Sw_Control$'];
 
     // ENCLOSED VARS
     const template = `

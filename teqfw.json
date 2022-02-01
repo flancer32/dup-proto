@@ -14,11 +14,8 @@
       "path": "./src"
     },
     "replace": {
-      "TeqFw_Web_Front_Api_Gate_IAjaxLed": {
-        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Gate_IAjaxLed"
-      },
-      "TeqFw_Web_Front_Api_Event_Stream_Reverse_IState": {
-        "front": "Fl32_Dup_Front_Redo_TeqFw_Web_Front_Api_Event_Stream_Reverse_State"
+      "TeqFw_Web_Front_Api_Mod_Server_IConnect": {
+        "front": "Fl32_Dup_Front_Rx_Led"
       }
     }
   },
