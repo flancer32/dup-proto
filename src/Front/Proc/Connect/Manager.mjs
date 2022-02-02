@@ -4,11 +4,15 @@
  *
  * @namespace Fl32_Dup_Front_Proc_Connect_Manager
  */
+// MODULE'S VARS
+const TIMEOUT_SMALL = 5000; // 5 sec
+const TIMEOUT_NORM = 60000; // 1 min
+const INTERVAL_TO_SWITCH = 120000 // 2 min
+
+// MODULE'S CLASSES
 export default class Fl32_Dup_Front_Proc_Connect_Manager {
     constructor(spec) {
-        // EXTRACT DEPS
-        /** @type {TeqFw_Web_Front_App_Logger} */
-        const logger = spec['TeqFw_Web_Front_App_Logger$'];
+        // DEPS
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const stream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -18,31 +22,61 @@ export default class Fl32_Dup_Front_Proc_Connect_Manager {
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
 
-        // DEFINE WORKING VARS / PROPS
-        let _isOpened = false;
-        let _idIntervalTry;
+        // ENCLOSED VARS
+        let _frequent = true; // retry every 5 sec or every 1 min
+        let _idIntervalTry; // save ID for running watchdog function
+        let _isOpened = false; // 'true' if reverse stream is opened
+        /** @type {Date} */
+        let _timeStarted; // save watchdog starting time to select wait interval (5 sec or 1 min)
 
-        // MAIN FUNCTIONALITY
-        eventsFront.subscribe(efOpened.getEventName(), () => {
+        // MAIN
+        eventsFront.subscribe(efOpened.getEventName(), onReverseOpened);
+        eventsFront.subscribe(efClosed.getEventName(), onReverseClosed);
+
+
+        // ENCLOSED FUNCS
+        /**
+         * Clean up watchdog function on stream opening.
+         */
+        function onReverseOpened() {
             _isOpened = true;
             if (_idIntervalTry) {
                 clearInterval(_idIntervalTry);
                 _idIntervalTry = null;
             }
-            logger.info(`New back-to-front event stream is opened by Connection Manager.`);
-        });
+        }
 
-        eventsFront.subscribe(efClosed.getEventName(), () => {
-            logger.info(`Back-to-front event stream is closed. Try to re-connect.`);
-            if (!_idIntervalTry)
-                _idIntervalTry = setInterval(() => {
-                    stream.open();
-                    logger.info(`Connection Manager tries to open back-to-front event stream.`);
-                }, 1000 * 5)
-        });
+        /**
+         * Startup watchdog function on stream closing.
+         */
+        function onReverseClosed() {
+            _isOpened = false;
+            if (!_idIntervalTry) {
+                _frequent = true;
+                _timeStarted = new Date();
+                _idIntervalTry = setInterval(retryStreamOpening, TIMEOUT_SMALL);
+            }
+        }
 
-        // INSTANCE METHODS
-        this.init = function () {
+        /**
+         * Watchdog function.
+         */
+        function retryStreamOpening() {
+            if (_isOpened && _idIntervalTry) { // stop processing if stream is  opened
+                clearInterval(_idIntervalTry);
+                _idIntervalTry = null;
+            } else if (window.navigator.onLine) {
+                if (_frequent) {
+                    // frequent retries
+                    const now = new Date();
+                    if ((now.getTime() - _timeStarted.getTime()) > INTERVAL_TO_SWITCH) {
+                        // switch to normal retries
+                        clearInterval(_idIntervalTry);
+                        _idIntervalTry = setInterval(retryStreamOpening, TIMEOUT_NORM);
+                    }
+                }
+                stream.open();
+            }
         }
     }
 }
