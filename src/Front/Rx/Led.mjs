@@ -21,6 +21,7 @@ Object.freeze(STATE);
 // MODULE'S CLASSES
 /**
  * @implements TeqFw_Web_Front_Api_Mod_Server_IConnect
+ * TODO: we need proxy here - model is not RX, we have misunderstanding in DI
  */
 export default class Fl32_Dup_Front_Rx_Led {
     constructor(spec) {
@@ -56,6 +57,10 @@ export default class Fl32_Dup_Front_Rx_Led {
          * Get reactive object.
          */
         this.getRef = () => _data;
+
+        this.isOnline = function () {
+            return !isOffline;
+        }
 
         this.startActivity = function () {
             isAjax = true;

@@ -37,7 +37,7 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
             const trx = await idb.startTransaction(idbContact);
             const found = await idb.readOne(trx, idbContact, data.userId, I_CONTACT.BY_USER);
             if (!found) {
-                await idb.add(trx, idbContact, card);
+                await idb.create(trx, idbContact, card);
                 logger.info(`New contact is added: ${card.nick} (#${card.userId}).`);
             } else {
                 logger.info(`Contact for user ${card.nick} (#${card.userId}) exists in IDB.`)

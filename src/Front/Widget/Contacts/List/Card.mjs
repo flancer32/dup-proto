@@ -71,7 +71,7 @@ export default function (spec) {
                 if (!found) { // we need to create new band object
                     const dto = idbBand.createDto();
                     dto.contactRef = this.id;
-                    const id = await idb.add(trx, idbBand, dto);
+                    const id = await idb.create(trx, idbBand, dto);
                     bandId = String(id);
                 } else {
                     bandId = String(found?.id);

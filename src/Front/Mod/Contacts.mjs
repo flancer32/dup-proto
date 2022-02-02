@@ -36,7 +36,7 @@ export default class Fl32_Dup_Front_Mod_Contacts {
             /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
             const found = await idb.readOne(trx, idbCard, userId, I_CONTACT.BY_USER);
             if (!found) {
-                const res = await idb.add(trx, idbCard, dto);
+                const res = await idb.create(trx, idbCard, dto);
                 await trx.commit();
                 logger.info(`Contact card for parent #${userId} is added on new user registration.`)
                 contactId = res;

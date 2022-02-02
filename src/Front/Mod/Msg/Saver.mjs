@@ -37,7 +37,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
                 // we need to create new band object
                 const dto = idbBand.createDto();
                 dto.contactRef = contactId;
-                res = await idb.add(trx, idbBand, dto);
+                res = await idb.create(trx, idbBand, dto);
             }
             return res;
         }
@@ -83,7 +83,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             dto.senderId = senderId;
             dto.type = TYPE.PERS_IN;
             dto.uuid = uuid;
-            const id = await idb.add(trx, idbMsgBase, dto);
+            const id = await idb.create(trx, idbMsgBase, dto);
             await trx.commit();
             return {id};
         }
@@ -105,7 +105,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             dto.recipientId = recipientId;
             dto.type = TYPE.PERS_OUT;
             dto.uuid = uuid;
-            const id = await idb.add(trx, idbMsgBase, dto);
+            const id = await idb.create(trx, idbMsgBase, dto);
             await trx.commit();
             return {id};
         }
