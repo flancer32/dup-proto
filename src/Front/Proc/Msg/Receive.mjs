@@ -13,8 +13,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const esbReceived = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
         const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
-        /** @type {TeqFw_User_Shared_Api_Crypto_IScrambler} */
-        const scrambler = spec['TeqFw_User_Shared_Api_Crypto_IScrambler$'];
+        /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
+        const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
         /** @type {TeqFw_User_Front_DSource_User} */
         const dsUser = spec['TeqFw_User_Front_DSource_User$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */

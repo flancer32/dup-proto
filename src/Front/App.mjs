@@ -41,6 +41,8 @@ export default class Fl32_Dup_Front_App {
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_App_UUID} */
         const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Identity} */
+        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Identity$'];
         /** @type {TeqFw_Web_Front_App_Back_UUID} */
         const backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
@@ -249,6 +251,7 @@ export default class Fl32_Dup_Front_App {
             await initI18n(_root, I18nLib);
             print(`i18n resources are loaded.`);
             await frontUUID.init();
+            await appIdentity.init();
             await backUUID.init();
             print(`Front UUID: ${frontUUID.get()}<br/>Back UUID: ${backUUID.get()}.`);
             await initEventStream(container);

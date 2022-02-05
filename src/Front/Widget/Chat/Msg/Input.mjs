@@ -21,8 +21,8 @@ export default function (spec) {
     const dsUser = spec['TeqFw_User_Front_DSource_User$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-    /** @type {TeqFw_User_Shared_Api_Crypto_IScrambler} */
-    const scrambler = spec['TeqFw_User_Shared_Api_Crypto_IScrambler$'];
+    /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
+    const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
     /** @type {TeqFw_Web_Front_App_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
