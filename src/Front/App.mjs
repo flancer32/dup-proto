@@ -39,18 +39,14 @@ export default class Fl32_Dup_Front_App {
         const config = spec['TeqFw_Web_Front_Mod_Config$'];
         /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
-        /** @type {TeqFw_Web_Front_App_UUID} */
-        const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
-        /** @type {TeqFw_Web_Front_Mod_App_Identity} */
-        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Identity$'];
-        /** @type {TeqFw_Web_Front_App_Back_UUID} */
-        const backUUID = spec['TeqFw_Web_Front_App_Back_UUID$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const streamBf = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventBus = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
-        const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
+        /** @type {TeqFw_Web_Shared_Event_Back_Stream_Reverse_Authenticated} */
+        const esbAuthenticated = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Authenticated$'];
         /** @type {Fl32_Dup_Front_DSource_User_Profile} */
         const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
 
@@ -106,7 +102,7 @@ export default class Fl32_Dup_Front_App {
             }
 
             /**
-             * Wait until back-to-front events stream will be open before continue.
+             * Wait until back-to-front events stream will be opened and authenticated before continue.
              * @param {TeqFw_Di_Shared_Container} container
              * @return {Promise<TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened.Dto>}
              */
@@ -115,9 +111,9 @@ export default class Fl32_Dup_Front_App {
                 await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
                 return new Promise((resolve) => {
                     streamBf.open();
-                    const subscript = eventBus.subscribe(efOpened.getEventName(), (evt) => {
+                    const subscript = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
                         eventBus.unsubscribe(subscript);
-                        logger.info(`Back-to-front event stream is opened on the front.`);
+                        logger.info(`Back-to-front event stream is opened on the front and authenticated by back.`);
                         resolve(evt);
                     });
                     // TODO: add on error processing
@@ -250,10 +246,8 @@ export default class Fl32_Dup_Front_App {
             print(`Application config is loaded.`);
             await initI18n(_root, I18nLib);
             print(`i18n resources are loaded.`);
-            await frontUUID.init();
             await appIdentity.init();
-            await backUUID.init();
-            print(`Front UUID: ${frontUUID.get()}<br/>Back UUID: ${backUUID.get()}.`);
+            print(`Front UUID: ${appIdentity.getUuid()}.`);
             await initEventStream(container);
             print(`Backend events stream is opened.`);
             await initEventProcessors(container);

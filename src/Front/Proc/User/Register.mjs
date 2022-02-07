@@ -7,8 +7,8 @@ export default class Fl32_Dup_Front_Proc_User_Register {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Defaults} */
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
-        /** @type {TeqFw_Web_Front_App_UUID} */
-        const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
         const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -62,7 +62,7 @@ export default class Fl32_Dup_Front_Proc_User_Register {
                 data.keyAuth = subscription?.keys.auth;
                 data.keyP256dh = subscription?.keys.p256dh;
                 data.keyPub = pubKey;
-                data.frontUUID = frontUUID.get();
+                data.frontUUID = appIdentity.getUuid();
                 portalBack.publish(event);
             });
         }

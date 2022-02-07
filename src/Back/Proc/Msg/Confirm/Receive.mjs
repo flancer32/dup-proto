@@ -11,8 +11,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry} */
-        const regStreams = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry$'];
+        /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
+        const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
         /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
         const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */

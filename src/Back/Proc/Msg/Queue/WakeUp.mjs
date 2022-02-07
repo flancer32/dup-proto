@@ -4,8 +4,8 @@
 export default class Fl32_Dup_Back_Proc_Msg_Queue_WakeUp {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry} */
-        const regStreams = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Registry$'];
+        /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
+        const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
         /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
         const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */

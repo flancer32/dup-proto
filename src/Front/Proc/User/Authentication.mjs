@@ -1,5 +1,6 @@
 /**
  * Clean up IDB on authentication failure.
+ * TODO: should we clean up DB or re-submit user data to register once more?
  *
  * @namespace Fl32_Dup_Front_Proc_User_Authentication
  * @implements TeqFw_Core_Shared_Api_Event_IProcess

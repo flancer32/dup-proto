@@ -7,8 +7,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Front_Defaults} */
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
-        /** @type {TeqFw_Web_Front_App_UUID} */
-        const frontUUID = spec['TeqFw_Web_Front_App_UUID$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
         const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
@@ -61,7 +61,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Post {
 
                 // create event message and publish it to back
                 const event = esfPosted.createDto();
-                event.meta.frontUUID = frontUUID.get();
+                event.meta.frontUUID = appIdentity.getUuid();
                 event.data.message.payload = payload;
                 event.data.message.senderId = userId;
                 event.data.message.recipientId = recipientId;
