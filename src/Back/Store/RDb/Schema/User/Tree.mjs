@@ -15,8 +15,8 @@ const ENTITY = '/app/user/tree';
  * @type {Object}
  */
 const ATTR = {
+    FRONT_REF: 'front_ref',
     PARENT_REF: 'parent_ref',
-    USER_REF: 'user_ref',
 };
 
 // MODULE'S CLASSES
@@ -26,14 +26,14 @@ const ATTR = {
 class Dto {
     static namespace = NS;
     /**
+     * @type {number}
+     */
+    front_ref;
+    /**
      * User who invites this user.
      * @type {number}
      */
     parent_ref;
-    /**
-     * @type {number}
-     */
-    user_ref;
 }
 
 // noinspection JSClosureCompilerSyntax
@@ -50,7 +50,7 @@ export default class Fl32_Dup_Back_Store_RDb_Schema_User_Tree {
         return base.create(this,
             `${DEF.SHARED.NAME}${ENTITY}`,
             ATTR,
-            [ATTR.USER_REF],
+            [ATTR.FRONT_REF],
             Dto
         );
     }

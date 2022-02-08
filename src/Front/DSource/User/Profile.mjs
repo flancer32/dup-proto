@@ -1,5 +1,6 @@
 /**
  * DataSource for user profile data (application level) stored in IDB.
+ * @deprecated use model instead
  */
 export default class Fl32_Dup_Front_DSource_User_Profile {
     constructor(spec) {

@@ -1,6 +1,7 @@
 /**
  * Register new user on the back and wait for response.
  * @implements TeqFw_Core_Shared_Api_Event_IProcess
+ * @deprecated use Fl32_Dup_Front_Proc_User_RegNew
  */
 export default class Fl32_Dup_Front_Proc_User_Register {
     constructor(spec) {

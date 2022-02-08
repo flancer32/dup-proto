@@ -148,7 +148,7 @@ export default function (spec) {
                         message.data.dateExpired = date;
                         message.data.onetime = onetime;
                         message.data.userId = userId;
-                        message.data.userNick = profile.username;
+                        message.data.userNick = profile.nick;
                         portalBack.publish(message);
                     });
                 }

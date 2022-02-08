@@ -17,9 +17,9 @@ const ENTITY = '/app/user/invite';
 const ATTR = {
     CODE: 'code',
     DATE_EXPIRED: 'date_expired',
+    FRONT_REF: 'front_ref',
     ONETIME: 'onetime',
     USER_NICK: 'user_nick',
-    USER_REF: 'user_ref',
 };
 
 // MODULE'S CLASSES
@@ -39,6 +39,11 @@ class Dto {
      */
     date_expired;
     /**
+     * User who creates this sign up code.
+     * @type {number}
+     */
+    front_ref;
+    /**
      * 'true' - this code is available for one time registration only.
      * @type {boolean}
      */
@@ -48,11 +53,6 @@ class Dto {
      * @type {string}
      */
     user_nick;
-    /**
-     * User who creates this sign up code.
-     * @type {number}
-     */
-    user_ref;
 }
 
 // noinspection JSClosureCompilerSyntax

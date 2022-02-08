@@ -50,7 +50,7 @@ export default function (spec) {
         },
         async mounted() {
             const user = await dsProfile.get();
-            this.name = user?.username;
+            this.name = user?.nick;
         }
     };
 }

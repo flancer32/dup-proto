@@ -19,7 +19,7 @@ const ATTR = {
 class Dto {
     static namespace = NS;
     /** @type {string} */
-    username;
+    nick;
 }
 
 /**
@@ -38,7 +38,7 @@ export default class Fl32_Dup_Front_Dto_User {
          */
         this.createDto = function (data = null) {
             const res = new Dto();
-            res.username = castString(data?.username);
+            res.nick = castString(data?.nick);
             return res;
         }
 

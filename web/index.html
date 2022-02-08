@@ -68,7 +68,6 @@
                     /** @type {Fl32_Dup_Front_App} */
                     const app = await container.get('Fl32_Dup_Front_App$');
                     await app.init('.launchpad');
-                    printout(`Vue app is created and initialized.`);
                     await app.mount('BODY > DIV');
                 } catch (e) {
                     printout(`Error in bootstrap: ${e.message}. ${e.stack}`);

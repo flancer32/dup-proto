@@ -23,10 +23,10 @@
         "user": {
           "entity": {
             "invite": {
-              "comment": "Invitation codes for users registration.",
+              "comment": "Invitation codes for new users registration.",
               "attr": {
                 "code": {"type": "string"},
-                "user_ref": {"type": "ref"},
+                "front_ref": {"type": "ref"},
                 "user_nick": {
                   "comment": "Parent nick for first contact card of new user.",
                   "type": "string"
@@ -38,9 +38,9 @@
                 "PK": {"type": "primary", "attrs": ["code"]}
               },
               "relation": {
-                "user": {
-                  "attrs": ["user_ref"],
-                  "ref": {"path": "/user", "attrs": ["id"]},
+                "front": {
+                  "attrs": ["front_ref"],
+                  "ref": {"path": "/web/front", "attrs": ["id"]},
                   "action": {"delete": "cascade", "update": "cascade"}
                 }
               }
@@ -48,21 +48,21 @@
             "tree": {
               "comment": "Users relations (parent - child).",
               "attr": {
-                "user_ref": {"type": "ref"},
+                "front_ref": {"type": "ref"},
                 "parent_ref": {"type": "ref"}
               },
               "index": {
-                "PK": {"type": "primary", "attrs": ["user_ref"]}
+                "PK": {"type": "primary", "attrs": ["front_ref"]}
               },
               "relation": {
-                "user": {
-                  "attrs": ["user_ref"],
-                  "ref": {"path": "/user", "attrs": ["id"]},
+                "front": {
+                  "attrs": ["front_ref"],
+                  "ref": {"path": "/web/front", "attrs": ["id"]},
                   "action": {"delete": "cascade", "update": "cascade"}
                 },
                 "parent": {
                   "attrs": ["parent_ref"],
-                  "ref": {"path": "/app/user/tree", "attrs": ["user_ref"]},
+                  "ref": {"path": "/app/user/tree", "attrs": ["front_ref"]},
                   "action": {"delete": "cascade", "update": "cascade"}
                 }
               }
@@ -114,6 +114,6 @@
     }
   },
   "refs": {
-    "/user": ["id"]
+    "/web/front": ["id"]
   }
 }

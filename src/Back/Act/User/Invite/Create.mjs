@@ -66,7 +66,7 @@ export default function (spec) {
         dto.date_expired = dateExp;
         dto.onetime = onetime;
         dto.user_nick = userNick;
-        dto.user_ref = userId;
+        dto.front_ref = userId;
         await crud.create(trx, metaInvite, dto);
         return {code};
 

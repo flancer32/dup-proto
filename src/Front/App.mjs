@@ -40,18 +40,21 @@ export default class Fl32_Dup_Front_App {
         /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
-        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+        const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
         const streamBf = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventBus = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Shared_Event_Back_Stream_Reverse_Authenticated} */
         const esbAuthenticated = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Authenticated$'];
+        /** @type {TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed} */
+        const esbFailed = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed$'];
         /** @type {Fl32_Dup_Front_DSource_User_Profile} */
         const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
 
         // ENCLOSED VARS
         let _root; // root vue component for the application
+        let _isInitialized = false;
 
         // INSTANCE METHODS
 
@@ -78,15 +81,6 @@ export default class Fl32_Dup_Front_App {
             }
 
             /**
-             * Create and initialize data sources.
-             */
-            async function initDataSources(container) {
-                /** @type {TeqFw_User_Front_DSource_User} */
-                const user = await container.get('TeqFw_User_Front_DSource_User$');
-                await user.get();
-            }
-
-            /**
              * Create processes that start on events.
              * TODO: this should be done using 'teqfw.json' descriptor
              * @param {TeqFw_Di_Shared_Container} container
@@ -109,14 +103,17 @@ export default class Fl32_Dup_Front_App {
             async function initEventStream(container) {
                 await container.get('TeqFw_User_Front_Proc_Authenticate$');
                 await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
-                return new Promise((resolve) => {
+                return new Promise((resolve, reject) => {
                     streamBf.open();
-                    const subscript = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
-                        eventBus.unsubscribe(subscript);
-                        logger.info(`Back-to-front event stream is opened on the front and authenticated by back.`);
+                    const subsSuccess = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
+                        eventBus.unsubscribe(subsSuccess);
+                        logger.info(`Events reverse stream is opened on the front and authenticated by back.`);
                         resolve(evt);
                     });
-                    // TODO: add on error processing
+                    const subsFailed = eventBus.subscribe(esbFailed.getEventName(), (evt) => {
+                        eventBus.unsubscribe(subsFailed);
+                        reject(new Error(evt?.data?.reason));
+                    });
                 });
             }
 
@@ -221,7 +218,7 @@ export default class Fl32_Dup_Front_App {
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                     } else {
                         const profile = await dsProfile.get();
-                        if (!profile?.username) {
+                        if (!profile?.nick) {
                             if (
                                 !document.location.href.includes(DEF.ROUTE_HOLLOW_OCCUPY) &&
                                 !document.location.href.includes('/invite/validate/')
@@ -246,16 +243,21 @@ export default class Fl32_Dup_Front_App {
             print(`Application config is loaded.`);
             await initI18n(_root, I18nLib);
             print(`i18n resources are loaded.`);
-            await appIdentity.init();
-            print(`Front UUID: ${appIdentity.getUuid()}.`);
-            await initEventStream(container);
-            print(`Backend events stream is opened.`);
-            await initEventProcessors(container);
-            print(`Frontend processes are created.`);
-            initQuasarUi(_root, quasar);
-            await initDataSources(container);
-            print(`Data sources are initialized.`);
-            initRouter(_root, DEF, container);
+            await frontIdentity.init();
+            print(`Front UUID: ${frontIdentity.getUuid()}.`);
+            try {
+                await initEventStream(container);
+                print(`Backend events stream is opened.`);
+                await initEventProcessors(container);
+                print(`Frontend processes are created.`);
+                initQuasarUi(_root, quasar);
+                print(`Data sources are initialized.`);
+                initRouter(_root, DEF, container);
+                print(`Vue app is created and initialized.`);
+                _isInitialized = true;
+            } catch (e) {
+                print(e.message);
+            }
         }
 
         /**
@@ -264,10 +266,9 @@ export default class Fl32_Dup_Front_App {
          * @see https://v3.vuejs.org/api/application-api.html#mount
          *
          * @param {Element|string} elRoot
-         * @return {Object} the root component instance
          */
         this.mount = function (elRoot) {
-            return _root.mount(elRoot);
+            if (_isInitialized) _root.mount(elRoot);
         }
     }
 }

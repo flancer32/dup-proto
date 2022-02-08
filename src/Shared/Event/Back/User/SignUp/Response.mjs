@@ -1,6 +1,5 @@
 /**
- * New user is registered on backend.
- * Message with user id and server key for created user.
+ * Message with success flag if new user is registered on backend.
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Shared_Event_Back_User_SignUp_Response';
@@ -11,10 +10,8 @@ const NS = 'Fl32_Dup_Shared_Event_Back_User_SignUp_Response';
  */
 class Dto {
     static namespace = NS;
-    /** @type {string} */
-    serverPublicKey;
-    /** @type {number} */
-    userId;
+    /** @type {boolean} */
+    success;
 }
 
 /**
@@ -25,10 +22,8 @@ export default class Fl32_Dup_Shared_Event_Back_User_SignUp_Response {
         // EXTRACT DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
-        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
-        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */
+        const castBoolean = spec['TeqFw_Core_Shared_Util_Cast.castBoolean'];
 
         // ENCLOSED VARS
         const ATTR = dtoBase.getAttributes();
@@ -40,8 +35,7 @@ export default class Fl32_Dup_Shared_Event_Back_User_SignUp_Response {
          */
         function createData(data) {
             const res = new Dto();
-            res.serverPublicKey = castString(data?.serverPublicKey);
-            res.userId = castInt(data?.userId);
+            res.success = castBoolean(data?.success);
             return res;
         }
 

@@ -1,21 +1,11 @@
 /**
- * Register new user in DB.
+ * Register new 'user' in RDB.
  */
-// MODULE'S IMPORT
-import {join} from "path";
-
-// MODULE'S CLASSES
 export default class Fl32_Dup_Back_Proc_User_SignUp {
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {Fl32_Dup_Back_Defaults} */
-        const DEF = spec['Fl32_Dup_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
-        /** @type {TeqFw_Core_Back_Config} */
-        const config = spec['TeqFw_Core_Back_Config$'];
-        /** @type {TeqFw_Core_Back_Util.readJson|function} */
-        const readJson = spec['TeqFw_Core_Back_Util.readJson'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
@@ -40,43 +30,34 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const actGetInvite = spec['Fl32_Dup_Back_Act_User_Invite_Get$'];
         /** @type {Fl32_Dup_Back_Act_User_Invite_Remove.act|function} */
         const actRemove = spec['Fl32_Dup_Back_Act_User_Invite_Remove$'];
-        /** @type {TeqFw_User_Back_Store_RDb_Schema_User} */
-        const metaUser = spec['TeqFw_User_Back_Store_RDb_Schema_User$'];
+        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUUID.act|function} */
+        const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUUID$'];
+        /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front} */
+        const rdbFront = spec['TeqFw_Web_Back_Store_RDb_Schema_Front$'];
 
-        // DEFINE WORKING VARS / PROPS
-        const _publicKey = loadPublicKey();
-
-        // MAIN FUNCTIONALITY
+        // MAIN
         eventsBack.subscribe(esfSignUpReq.getEventName(), onRequest)
 
-        // DEFINE INNER FUNCTIONS
-        /**
-         * Load server's public key from the file
-         * @return {string}
-         */
-        function loadPublicKey() {
-            // load key from local file
-            const root = config.getBoot().projectRoot;
-            const path = join(root, DEF.MOD_USER.FILE_CRYPTO_KEYS);
-            const keys = readJson(path);
-            return keys?.publicKey;
-        }
+        // ENCLOSED FUNCS
 
         /**
          * @param {Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onRequest({data, meta}) {
-            // ENCLOSED FUNCTIONS
+            // ENCLOSED FUNCS
 
             /**
              * 'true' if there are no users in the hollow yet.
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
+             * @param {string} frontUUID
              * @return {Promise<boolean>}
              */
-            async function isHollowFree(trx) {
-                const items = await crud.readSet(trx, metaUser, null, null, null, 1);
-                return items.length === 0;
+            async function isHollowFree(trx, frontUUID) {
+                /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front.Dto[]} */
+                const items = await crud.readSet(trx, rdbFront, null, null, null, 1);
+                return ((items.length === 1) && (items[0].uuid === frontUUID));
+
             }
 
             /**
@@ -91,18 +72,15 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
             }
 
             /**
+             * Success event if user is registered.
              * @param {string} frontUUID
-             * @param {number} userId
-             * @param {string} pubKey
              * @return {Promise<void>}
              */
-            async function publishUserId(frontUUID, userId, pubKey) {
-                const msg = esbSignUpRes.createDto();
-                msg.meta.frontUUID = frontUUID;
-                const payload = msg.data;
-                payload.userId = userId;
-                payload.serverPublicKey = pubKey;
-                portalFront.publish(msg);
+            async function publishSuccess(frontUUID) {
+                const event = esbSignUpRes.createDto();
+                event.meta.frontUUID = frontUUID;
+                event.data.success = true;
+                portalFront.publish(event);
             }
 
             /**
@@ -132,80 +110,59 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
             }
 
             /**
-             * Register stream as authenticated user stream.
-             * @param userId
-             * @param frontUUID
-             * @return {Promise<void>}
+             * Add the first user to users tree (without parent).
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
+             * @param {number} frontId front ID from RDB
+             * @return {Promise<boolean>}
              */
-            async function registerUserStream(userId, frontUUID) {
-                const stream = regStreams.getByFrontUUID(frontUUID);
-                const streamUUID = stream?.streamId;
-                if (streamUUID) regUserStreams.add(userId, streamUUID);
+            async function signUpFirstUser(trx, frontId) {
+                const {success} = await actCreate({trx, frontId});
+                return success;
             }
 
             /**
+             * Get parent data by invite and add new user to users tree.
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @param {Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto} data
-             * @return {Promise<number>}
+             * @param {number} frontId front ID from RDB
+             * @param {string} invite invitation code
+             * @return {Promise<number>} parentId if invite is valid and user is added to the hollow.
              */
-            async function signUpFirstUser(trx, data) {
-                const {userId} = await actCreate({
-                    trx,
-                    nick: data.nick,
-                    keyPub: data.keyPub,
-                    endpoint: data.endpoint,
-                    keyAuth: data.keyAuth,
-                    keyP256dh: data.keyP256dh,
-                });
-                return userId;
-            }
-
-            async function signUpByInvite(trx, data) {
-                let userId, parentId;
+            async function signUpByInvite(trx, frontId, invite) {
+                let parentId;
                 /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite.Dto} */
-                const invite = (data?.invite) ? await actGetInvite({trx, code: data.invite}) : null;
-                if (invite) {
-                    parentId = invite.user_ref;
-                    const {userId: newId} = await actCreate({
-                        trx,
-                        parentId,
-                        nick: data.nick,
-                        keyPub: data.keyPub,
-                        endpoint: data.endpoint,
-                        keyAuth: data.keyAuth,
-                        keyP256dh: data.keyP256dh,
-                    });
-                    await actRemove({trx, code: invite.code});
-                    userId = newId;
+                const inviteData = await actGetInvite({trx, code: invite});
+                if (inviteData) {
+                    parentId = inviteData.front_ref;
+                    await actCreate({trx, frontId, parentId});
+                    await actRemove({trx, code: inviteData.code});
                 }
-                return [userId, parentId];
+                return parentId;
             }
 
             // MAIN
+            const uuid = meta.frontUUID;
             const trx = await conn.startTransaction();
             try {
-                let userId, parentId;
-                if (await isHollowFree(trx))
-                    userId = await signUpFirstUser(trx, data);
-                else
-                    [userId, parentId] = await signUpByInvite(trx, data);
-                await trx.commit();
-                // publish events with results
-                if (userId) {
-                    // send user ID back to the front
-                    publishUserId(meta.frontUUID, userId, _publicKey);
-                    // add new user to users stream registry
-                    registerUserStream(userId, meta.frontUUID);
+                let parentId;
+                const {id: frontId} = await actGetId({trx, uuid});
+                if (frontId) {
+                    if (await isHollowFree(trx, uuid))
+                        await signUpFirstUser(trx, frontId);
+                    else
+                        parentId = await signUpByInvite(trx, frontId, data.invite);
+                    await trx.commit();
+                    // publish events with results
+                    publishSuccess(uuid);
                     // send currently created user data to parent to add to contacts
                     if (parentId)
-                        publishContactAdd(parentId, userId, data.nick, data.keyPub);
+                        publishContactAdd(parentId, frontId, data.nick, data.keyPub);
                 } else {
-                    publishFail(meta.frontUUID);
+                    publishFail(uuid);
                 }
             } catch (error) {
                 await trx.rollback();
                 logger.error(error);
-                publishFail(meta.frontUUID);
+                publishFail(uuid);
             }
         }
     }

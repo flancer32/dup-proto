@@ -108,7 +108,7 @@ export default function (spec) {
                     const profile = await dsProfile.get();
                     const event = esfContactAddReq.createDto();
                     event.data.inviteCode = this.code;
-                    event.data.nick = profile.username;
+                    event.data.nick = profile.nick;
                     event.data.publicKey = user.keys.public;
                     event.data.recipientId = this.senderUserId;
                     event.data.userId = user.id;

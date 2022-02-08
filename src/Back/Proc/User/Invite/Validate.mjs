@@ -57,10 +57,10 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
                 await actClean({trx});
                 const invite = await selectInvite(trx, code);
                 if (invite) {
-                    msg.data.parentId = invite.user_ref;
+                    msg.data.parentId = invite.front_ref;
                     msg.data.parentNick = invite.user_nick;
                     /** @type {TeqFw_User_Back_Store_RDb_Schema_User.Dto} */
-                    const user = await crud.readOne(trx, rdbUser, invite.user_ref);
+                    const user = await crud.readOne(trx, rdbUser, invite.front_ref);
                     msg.data.parentPubKey = user.key_pub;
                 }
                 await trx.commit();

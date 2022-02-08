@@ -36,7 +36,7 @@ export default function (spec) {
 
         // MAIN FUNCTIONALITY
         /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.Dto[]} */
-        const all = await crud.readSet(trx, rdbSubscription, {[A_SUB.USER_REF]: userId});
+        const all = await crud.readSet(trx, rdbSubscription, {[A_SUB.FRONT_REF]: userId});
         for (const one of all) {
             const title = 'DUPLO calling for you!';
             const res = await actPushSend({

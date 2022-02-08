@@ -17,20 +17,16 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
-    /** @type {TeqFw_User_Front_DSource_User} */
-    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
-    const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
     /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
     const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
-    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
-    /** @type {Fl32_Dup_Front_Proc_User_Register} */
-    const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
-    /** @type {Fl32_Dup_Front_Mod_WebPush_Subscription} */
-    const modSubscribe = spec['Fl32_Dup_Front_Mod_WebPush_Subscription$'];
+    /** @type {Fl32_Dup_Front_Proc_User_RegNew.process|function} */
+    const procRegNew = spec['Fl32_Dup_Front_Proc_User_RegNew$'];
+    /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
+    const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -92,37 +88,26 @@ export default function (spec) {
         },
         methods: {
             async create() {
-                // MAIN FUNCTIONALITY
                 const me = this;
                 this.freezeRegister = true;
                 this.displayError = false;
                 try {
-                    const user = await dsUser.get();
-                    const sub = await dsSubscript.get();
-                    // start process to register user on backend
-                    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto|null} */
-                    const res = await procSignUp.run({
-                        nick: this.fldNick,
-                        pubKey: user.keys.public,
-                        subscription: sub
-                    });
-                    // save user id into IDB
-                    if (res?.userId) {
-                        // save/update data in IDB
-                        user.id = res.userId;
-                        await dsUser.set(user);
+                    // start process to register the first user on backend
+                    const {success} = await procRegNew();
+                    // create profile in IDB and update hollow state
+                    if (success) {
                         modHollowIsFree.set(false);
                         const profile = dtoProfile.createDto()
-                        profile.username = this.fldNick;
-                        await dsProfile.set(profile);
+                        profile.nick = this.fldNick;
+                        await modProfile.set(profile);
                         this.displayRegister = false;
                         this.displaySuccess = true;
                         // redirect user to homepage
                         setTimeout(() => {
                             me.$router.push(DEF.ROUTE_HOME);
-                        }, 2000);
+                        }, DEF.TIMEOUT_UI_DELAY);
                     } else {
-                        this.fldError = `Some error is occurred on the server, cannot get ID for new user.`;
+                        this.fldError = `Some error is occurred on the server, cannot add user to the user tree.`;
                         logger.error(this.fldError);
                         this.displayError = true;
                     }
@@ -136,7 +121,7 @@ export default function (spec) {
 
             async subscribe() {
                 this.freezeSubscribe = true;
-                const isSubscribed = await modSubscribe.subscribe();
+                const isSubscribed = await modSubscript.subscribe();
                 // switch UI
                 if (isSubscribed) {
                     this.displaySubscribe = false;
@@ -153,17 +138,18 @@ export default function (spec) {
          */
         async mounted() {
             // get data from IDB and calculate state
-            const user = await dsUser.get();
+            /** @type {Fl32_Dup_Front_Dto_User.Dto} */
+            const profile = await modProfile.get();
             if (await modHollowIsFree.get() === true) {
-                const canSubscribe = await modSubscribe.canSubscribe();
-                const hasSubscription = await modSubscribe.hasSubscription();
+                const canSubscribe = await modSubscript.canSubscribe();
+                const hasSubscription = await modSubscript.hasSubscription();
                 const needSubscribe = canSubscribe && !hasSubscription;
                 this.displaySubscribe = needSubscribe;
-                this.displayRegister = (!needSubscribe) && (user?.id === undefined);
+                this.displayRegister = (!needSubscribe) && (profile?.nick === undefined);
             } else {
                 // user is authenticated, goto home page
                 this.displayIsOccupied = true;
-                if (user.id) this.$router.push(DEF.ROUTE_HOME);
+                if (profile?.nick) this.$router.push(DEF.ROUTE_HOME);
             }
         },
     };
