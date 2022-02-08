@@ -27,10 +27,9 @@ export default class Fl32_Dup_Front_Proc_User_Register {
          * @param {string} nick
          * @param {string} invite
          * @param {string} pubKey
-         * @param {Fl32_Dup_Front_Dto_User_Subscription.Dto} subscription
          * @return {Promise<Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto>}
          */
-        this.run = async function ({nick, invite, pubKey, subscription}) {
+        this.run = async function ({nick, invite, pubKey}) {
             return await new Promise((resolve) => {
                 // ENCLOSED VARS
                 let idFail, subs;
@@ -57,13 +56,9 @@ export default class Fl32_Dup_Front_Proc_User_Register {
                 // create event message and publish it to back
                 const event = esfUserSignedUp.createDto();
                 const data = event.data;
-                data.endpoint = subscription?.endpoint;
                 data.invite = invite;
                 data.nick = nick;
-                data.keyAuth = subscription?.keys.auth;
-                data.keyP256dh = subscription?.keys.p256dh;
                 data.keyPub = pubKey;
-                data.frontUUID = appIdentity.getUuid();
                 portalBack.publish(event);
             });
         }

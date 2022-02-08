@@ -19,10 +19,10 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
-    /** @type {TeqFw_User_Front_DSource_User} */
-    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Front_Api_Dto_Config} */
     const config = spec['TeqFw_Web_Front_Api_Dto_Config$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -121,7 +121,7 @@ export default function (spec) {
                  * @return {Promise<unknown>}
                  */
                 async function createInvite(userId, date, onetime) {
-                    const profile = await dsProfile.get();
+                    const profile = await modProfile.get();
                     return new Promise((resolve) => {
                         // ENCLOSED VARS
                         let idFail, subs;
@@ -154,8 +154,7 @@ export default function (spec) {
                 }
 
                 // MAIN
-                const userCurrent = await dsUser.get();
-                const userId = userCurrent.id;
+                const userId = frontIdentity.getFrontId();
                 const date = new Date();
                 if (this.lifeTime === LIFE_TIME.HOUR) {
                     date.setHours(date.getHours() + 1);

@@ -1,5 +1,5 @@
 /**
- * New user is signed up on the front.
+ * Request to sign up new 'user'.
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Shared_Event_Front_User_SignUp_Request';
@@ -11,15 +11,7 @@ const NS = 'Fl32_Dup_Shared_Event_Front_User_SignUp_Request';
 class Dto {
     static namespace = NS;
     /** @type {string} */
-    endpoint;
-    /** @type {string} */
-    frontUUID;
-    /** @type {string} */
     invite;
-    /** @type {string} */
-    keyAuth;
-    /** @type {string} */
-    keyP256dh;
     /** @type {string} */
     keyPub;
     /** @type {string} */
@@ -47,11 +39,7 @@ export default class Fl32_Dup_Shared_Event_Front_User_SignUp_Request {
          */
         function createData(data) {
             const res = new Dto();
-            res.endpoint = castString(data?.endpoint);
-            res.frontUUID = castString(data?.frontUUID);
             res.invite = castString(data?.invite);
-            res.keyAuth = castString(data?.keyAuth);
-            res.keyP256dh = castString(data?.keyP256dh);
             res.keyPub = castString(data?.keyPub);
             res.nick = castString(data?.nick);
             return res;

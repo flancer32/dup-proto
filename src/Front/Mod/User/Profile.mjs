@@ -3,8 +3,6 @@
  *
  * @namespace Fl32_Dup_Front_Mod_User_Profile
  */
-// MODULE'S IMPORT
-
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Mod_User_Profile';
 

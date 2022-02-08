@@ -18,16 +18,14 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
+    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
+    /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
+    const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
-    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
-    /** @type {TeqFw_Web_Push_Front_DSource_Subscription} */
-    const dsSubscript = spec['TeqFw_Web_Push_Front_DSource_Subscription$'];
-    /** @type {TeqFw_User_Front_DSource_User} */
-    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
-    const modSubscribe = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register} */
     const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
 
@@ -87,24 +85,19 @@ export default function (spec) {
         },
         methods: {
             async create() {
-                const user = await dsUser.get();
-                const sub = await dsSubscript.get();
                 // start process to register user on backend
                 /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto|null} */
                 const res = await procSignUp.run({
                     nick: this.fldNick,
                     invite: this.inviteCode,
-                    pubKey: user.keys.public,
-                    subscription: sub
+                    pubKey: frontIdentity.getPublicKey(),
                 });
                 // save user id into IDB
-                if (res?.userId) {
-                    // save/update data in IDB
-                    user.id = res.userId;
-                    await dsUser.set(user);
+                if (res?.success) {
+                    // save profile in IDB
                     const profile = dtoProfile.createDto()
                     profile.nick = this.fldNick;
-                    await dsProfile.set(profile);
+                    await modProfile.set(profile);
                     this.displayRegister = false;
                     this.displaySuccess = true;
                     // redirect user to homepage
@@ -124,7 +117,7 @@ export default function (spec) {
              * @return {Promise<void>}
              */
             async subscribe() {
-                const isSubscribed = await modSubscribe.subscribe();
+                const isSubscribed = await modSubscript.subscribe();
                 // switch UI
                 if (isSubscribed) {
                     this.displaySubscribe = false;
@@ -140,8 +133,8 @@ export default function (spec) {
         emits: [EVT_DONE],
         async mounted() {
             // check can we subscribe new user to Web Push API?
-            const canSubscribe = await modSubscribe.canSubscribe();
-            const hasSubscription = await modSubscribe.hasSubscription();
+            const canSubscribe = await modSubscript.canSubscribe();
+            const hasSubscription = await modSubscript.hasSubscription();
             this.displaySubscribe = canSubscribe && !hasSubscription;
             if (this.displaySubscribe) {
                 logger.info(`Invited user should subscribe to Web Push API.`);

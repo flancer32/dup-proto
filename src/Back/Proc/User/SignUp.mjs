@@ -84,29 +84,22 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
             }
 
             /**
-             * Send contact data of the new user to the parent.
-             * @param {number} parentId
+             * Send contact data of the new 'user' to the parent.
+             * @param {string} parentUUID
              * @param {number} userId
              * @param {string} userNick
              * @param {string} userPubKey
              * @return {Promise<void>}
              */
-            async function publishContactAdd(parentId, userId, userNick, userPubKey) {
-                const streamsUUIDs = regUserStreams.getStreams(parentId);
-                if (streamsUUIDs.length === 0)
-                    logger.error(`There are no opened event streams for user #${parentId}.`);
-                for (const one of streamsUUIDs) {
-                    const msg = esbContactAdd.createDto();
-                    const frontUUID = regStreams.mapUUIDStreamToFront(one);
-                    if (frontUUID) {
-                        msg.meta.frontUUID = frontUUID;
-                        msg.data.userId = userId;
-                        msg.data.userNick = userNick;
-                        msg.data.userPubKey = userPubKey;
-                        portalFront.publish(msg);
-                        logger.info(`New user's data (#${userId}) is send to his parent #${parentId}, front '${frontUUID}'.`);
-                    }
-                }
+            async function publishContactAdd(parentUUID, userId, userNick, userPubKey) {
+                const msg = esbContactAdd.createDto();
+                msg.meta.frontUUID = parentUUID;
+                msg.data.userId = userId;
+                msg.data.userNick = userNick;
+                msg.data.userPubKey = userPubKey;
+                // noinspection ES6MissingAwait
+                portalFront.publish(msg);
+                logger.info(`New user's data (#${userId}) is send to his parent #${parentUUID}.`);
             }
 
             /**
@@ -125,37 +118,40 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @param {number} frontId front ID from RDB
              * @param {string} invite invitation code
-             * @return {Promise<number>} parentId if invite is valid and user is added to the hollow.
+             * @return {Promise<string>} parent data if invite is valid and user is added to the hollow.
              */
             async function signUpByInvite(trx, frontId, invite) {
-                let parentId;
+                let parentUUID;
                 /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite.Dto} */
                 const inviteData = await actGetInvite({trx, code: invite});
                 if (inviteData) {
-                    parentId = inviteData.front_ref;
+                    const parentId = inviteData.front_ref;
                     await actCreate({trx, frontId, parentId});
                     await actRemove({trx, code: inviteData.code});
+                    /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front.Dto} */
+                    const found = await crud.readOne(trx, rdbFront, parentId);
+                    parentUUID = found?.uuid;
                 }
-                return parentId;
+                return parentUUID;
             }
 
             // MAIN
             const uuid = meta.frontUUID;
             const trx = await conn.startTransaction();
             try {
-                let parentId;
+                let parentUUID;
                 const {id: frontId} = await actGetId({trx, uuid});
                 if (frontId) {
                     if (await isHollowFree(trx, uuid))
                         await signUpFirstUser(trx, frontId);
                     else
-                        parentId = await signUpByInvite(trx, frontId, data.invite);
+                        parentUUID = await signUpByInvite(trx, frontId, data.invite);
                     await trx.commit();
                     // publish events with results
                     publishSuccess(uuid);
                     // send currently created user data to parent to add to contacts
-                    if (parentId)
-                        publishContactAdd(parentId, frontId, data.nick, data.keyPub);
+                    if (parentUUID)
+                        publishContactAdd(parentUUID, frontId, data.nick, data.keyPub);
                 } else {
                     publishFail(uuid);
                 }

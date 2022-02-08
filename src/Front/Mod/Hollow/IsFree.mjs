@@ -1,5 +1,6 @@
 /**
  * Model for hollow state (free or occupied).
+ * IDB is the first data source for the model. If IDB has no data then ask the back.
  */
 export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
     constructor(spec) {
@@ -16,8 +17,11 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
         const esbRes = spec['Fl32_Dup_Shared_Event_Back_Hollow_State_Response$'];
         /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
         const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+        /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+        const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
         // ENCLOSED VARS
+        /** @type {boolean} */
         let _cache;
 
         // ENCLOSED FUNCTIONS
@@ -59,22 +63,20 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
         // INSTANCE METHODS
 
         /**
-         * 'true' if there is any user on the server.
+         * 'true' if there is a local user profile in IDB or there is one only user on the server.
          * @return {Promise<boolean>}
          */
         this.get = async () => {
             if (_cache === undefined) {
-                const res = await requestHollowState();
-                _cache = res?.hollowIsFree;
+                /** @type {Fl32_Dup_Front_Dto_User.Dto} */
+                const profile = await modProfile.get();
+                if (profile?.nick) _cache = false;
+                else {
+                    const res = await requestHollowState();
+                    _cache = res?.hollowIsFree;
+                }
             }
             return _cache;
-        }
-
-        /**
-         * @param {boolean} data
-         */
-        this.set = (data) => {
-            _cache = data;
         }
     }
 }

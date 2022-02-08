@@ -96,7 +96,6 @@ export default function (spec) {
                     const {success} = await procRegNew();
                     // create profile in IDB and update hollow state
                     if (success) {
-                        modHollowIsFree.set(false);
                         const profile = dtoProfile.createDto()
                         profile.nick = this.fldNick;
                         await modProfile.set(profile);

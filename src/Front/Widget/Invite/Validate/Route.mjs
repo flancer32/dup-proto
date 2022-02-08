@@ -18,10 +18,10 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
-    /** @type {TeqFw_User_Front_DSource_User} */
-    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
-    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
     const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
     /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
@@ -102,16 +102,16 @@ export default function (spec) {
              */
             async contactAccepted() {
                 this.displayContacts = false;
-                const user = await dsUser.get();
-                if (user?.id) {
+                /** @type {Fl32_Dup_Front_Dto_User.Dto} */
+                const profile = await modProfile.get();
+                if (profile?.nick) {
                     // send this user contact back
-                    const profile = await dsProfile.get();
                     const event = esfContactAddReq.createDto();
                     event.data.inviteCode = this.code;
                     event.data.nick = profile.nick;
-                    event.data.publicKey = user.keys.public;
+                    event.data.publicKey = frontIdentity.getPublicKey();
                     event.data.recipientId = this.senderUserId;
-                    event.data.userId = user.id;
+                    event.data.userId = frontIdentity.getFrontId();
                     portalBack.publish(event);
                     this.$router.push(DEF.ROUTE_HOME);
                 } else {

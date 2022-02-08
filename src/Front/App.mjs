@@ -49,8 +49,8 @@ export default class Fl32_Dup_Front_App {
         const esbAuthenticated = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Authenticated$'];
         /** @type {TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed} */
         const esbFailed = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed$'];
-        /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-        const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+        /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+        const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
         // ENCLOSED VARS
         let _root; // root vue component for the application
@@ -217,7 +217,7 @@ export default class Fl32_Dup_Front_App {
                         logger.info(`Hollow is not occupied. Goto occupy route.`);
                         this.$router.push(DEF.ROUTE_HOLLOW_OCCUPY);
                     } else {
-                        const profile = await dsProfile.get();
+                        const profile = await modProfile.get();
                         if (!profile?.nick) {
                             if (
                                 !document.location.href.includes(DEF.ROUTE_HOLLOW_OCCUPY) &&
