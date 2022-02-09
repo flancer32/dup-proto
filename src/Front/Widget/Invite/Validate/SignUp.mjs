@@ -26,8 +26,8 @@ export default function (spec) {
     const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
-    /** @type {Fl32_Dup_Front_Proc_User_Register} */
-    const procSignUp = spec['Fl32_Dup_Front_Proc_User_Register$'];
+    /** @type {Fl32_Dup_Front_Proc_User_Register.process|function} */
+    const procReg = spec['Fl32_Dup_Front_Proc_User_Register$'];
 
     // ENCLOSED VARS
     const template = `
@@ -86,14 +86,14 @@ export default function (spec) {
         methods: {
             async create() {
                 // start process to register user on backend
-                /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto|null} */
-                const res = await procSignUp.run({
+                const {success} = await procReg({
                     nick: this.fldNick,
                     invite: this.inviteCode,
                     pubKey: frontIdentity.getPublicKey(),
                 });
+
                 // save user id into IDB
-                if (res?.success) {
+                if (success) {
                     // save profile in IDB
                     const profile = dtoProfile.createDto()
                     profile.nick = this.fldNick;

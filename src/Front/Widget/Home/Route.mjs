@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Home_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_DSource_User_Profile} */
-    const dsProfile = spec['Fl32_Dup_Front_DSource_User_Profile$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
     // WORKING VARS
     const template = `
@@ -49,8 +49,8 @@ export default function (spec) {
             };
         },
         async mounted() {
-            const user = await dsProfile.get();
-            this.name = user?.nick;
+            const profile = await modProfile.get();
+            this.name = profile?.nick;
         }
     };
 }

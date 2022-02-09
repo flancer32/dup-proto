@@ -21,8 +21,8 @@ export default function (spec) {
     const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
-    /** @type {Fl32_Dup_Front_Proc_User_RegNew.process|function} */
-    const procRegNew = spec['Fl32_Dup_Front_Proc_User_RegNew$'];
+    /** @type {Fl32_Dup_Front_Proc_User_Register.process|function} */
+    const procReg = spec['Fl32_Dup_Front_Proc_User_Register$'];
     /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
     const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
@@ -93,7 +93,7 @@ export default function (spec) {
                 this.displayError = false;
                 try {
                     // start process to register the first user on backend
-                    const {success} = await procRegNew();
+                    const {success} = await procReg();
                     // create profile in IDB and update hollow state
                     if (success) {
                         const profile = dtoProfile.createDto()

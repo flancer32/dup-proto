@@ -1,66 +1,71 @@
 /**
- * Register new user on the back and wait for response.
- * @implements TeqFw_Core_Shared_Api_Event_IProcess
- * @deprecated use Fl32_Dup_Front_Proc_User_RegNew
+ * On-demand process to register new 'user' on the back.
+ *
+ * @namespace Fl32_Dup_Front_Proc_User_Register
  */
-export default class Fl32_Dup_Front_Proc_User_Register {
-    constructor(spec) {
-        // EXTRACT DEPS
-        /** @type {Fl32_Dup_Front_Defaults} */
-        const DEF = spec['Fl32_Dup_Front_Defaults$'];
-        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
-        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response} */
-        const esbUserRegistered = spec['Fl32_Dup_Shared_Event_Back_User_SignUp_Response$'];
-        /** @type {Fl32_Dup_Shared_Event_Front_User_SignUp_Request} */
-        const esfUserSignedUp = spec['Fl32_Dup_Shared_Event_Front_User_SignUp_Request$'];
+// MODULE'S VARS
+const NS = 'Fl32_Dup_Front_Proc_User_Register';
 
-        // INSTANCE METHODS
-        this.init = async function () { }
+// MODULE'S FUNCTIONS
+export default function (spec) {
+    // DEPS
+    /** @type {Fl32_Dup_Front_Defaults} */
+    const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Front_App_Event_Bus} */
+    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response} */
+    const esbUserRegistered = spec['Fl32_Dup_Shared_Event_Back_User_SignUp_Response$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_User_SignUp_Request} */
+    const esfUserSignedUp = spec['Fl32_Dup_Shared_Event_Front_User_SignUp_Request$'];
 
-        /**
-         * Register new user on back then save it to local store.
-         * @param {string} nick
-         * @param {string} invite
-         * @param {string} pubKey
-         * @return {Promise<Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto>}
-         */
-        this.run = async function ({nick, invite, pubKey}) {
-            return await new Promise((resolve) => {
-                // ENCLOSED VARS
-                let idFail, subs;
+    // ENCLOSED FUNCS
+    /**
+     * @param {string} nick
+     * @param {string} invite invitation code if this is not the first user.
+     * @param {string} pubKey
+     * @return {Promise<{success: boolean}>}
+     * @memberOf Fl32_Dup_Front_Proc_User_Register
+     */
+    async function process({nick, invite, pubKey} = {}) {
+        return new Promise((resolve) => {
+            // ENCLOSED VARS
+            let idFail, subs, success = false;
 
-                // ENCLOSED FUNCTIONS
-                /**
-                 * @param {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto} data
-                 */
-                function onBackResponse({data}) {
-                    clearTimeout(idFail);
-                    resolve(data);
-                    eventsFront.unsubscribe(subs);
-                }
+            // ENCLOSED FUNCS
+            /**
+             * @param {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto} data
+             */
+            function onBackResponse({data}) {
+                clearTimeout(idFail);
+                eventsFront.unsubscribe(subs);
+                resolve({success: data?.success});
+            }
 
-                // MAIN
+            /**
+             * Unsubscribe callback handler and return.
+             */
+            function onTimeout() {
+                eventsFront.unsubscribe(subs);
+                resolve({success});
+            }
 
-                // subscribe to response event from back and create timeout response
-                subs = eventsFront.subscribe(esbUserRegistered.getEventName(), onBackResponse);
-                idFail = setTimeout(() => {
-                    eventsFront.unsubscribe(subs);
-                    resolve();
-                }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
-
-                // create event message and publish it to back
-                const event = esfUserSignedUp.createDto();
-                const data = event.data;
-                data.invite = invite;
-                data.nick = nick;
-                data.keyPub = pubKey;
-                portalBack.publish(event);
-            });
-        }
+            // MAIN
+            // subscribe to response event from back and setup timeout response
+            subs = eventsFront.subscribe(esbUserRegistered.getEventName(), onBackResponse);
+            idFail = setTimeout(onTimeout, DEF.TIMEOUT_EVENT_RESPONSE); // return after timeout
+            // create event message and publish it to back
+            const event = esfUserSignedUp.createDto();
+            const data = event.data;
+            data.invite = invite;
+            data.keyPub = pubKey;
+            data.nick = nick;
+            portalBack.publish(event);
+        });
     }
+
+    // MAIN
+    Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    return process;
 }

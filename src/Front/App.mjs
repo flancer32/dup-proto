@@ -91,7 +91,6 @@ export default class Fl32_Dup_Front_App {
                 await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
                 await container.get('Fl32_Dup_Front_Proc_Msg_Delivery$');
                 await container.get('Fl32_Dup_Front_Proc_Msg_Receive$');
-                await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
                 await container.get('Fl32_Dup_Front_Proc_User_Contact_Add$');
             }
 
@@ -101,8 +100,6 @@ export default class Fl32_Dup_Front_App {
              * @return {Promise<TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened.Dto>}
              */
             async function initEventStream(container) {
-                await container.get('TeqFw_User_Front_Proc_Authenticate$');
-                await container.get('Fl32_Dup_Front_Proc_User_Authentication$');
                 return new Promise((resolve, reject) => {
                     streamBf.open();
                     const subsSuccess = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
@@ -256,6 +253,7 @@ export default class Fl32_Dup_Front_App {
                 print(`Vue app is created and initialized.`);
                 _isInitialized = true;
             } catch (e) {
+                // TODO: place IDB cleanup here for re-installs
                 print(e.message);
             }
         }
