@@ -17,12 +17,6 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
         const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
-        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
-        const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
-        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Delivered} */
-        const queDelivered = spec['Fl32_Dup_Back_Mod_Msg_Queue_Delivered$'];
-        /** @type {Fl32_Dup_Shared_Dto_Msg} */
-        const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
@@ -38,31 +32,20 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
          * @return {Promise<void>}
          */
         async function onMessageReceived({data, meta}) {
-            const uuid = data.uuid;
-            const posted = quePosted.get(uuid);
-            if (posted) {
-                const delivery = dtoMsg.createDto();
-                delivery.uuid = uuid;
-                delivery.senderId = posted.senderId;
-                delivery.recipientIdId = posted.recipientId;
-                delivery.dateDelivered = data.dateDelivery;
-                queDelivered.add(delivery);
-                quePosted.remove(uuid);
-                const frontId = delivery.senderId;
-
-                const trx = await rdb.startTransaction();
-                try {
-                    // get UUID for recipient's front
-                    const {uuid: frontUuid} = await actGetUuidById({trx, id: frontId});
-                    await trx.commit();
-                    const event = esbDelivery.createDto();
-                    event.meta.frontUUID = frontUuid;
-                    event.data.dateDelivered = data.dateDelivery;
-                    event.data.uuid = uuid;
-                    portalFront.publish(event);
-                } catch (e) {
-                    await trx.rollback();
-                }
+            const uuid = data.messageUuid;
+            const trx = await rdb.startTransaction();
+            try {
+                // get UUID for recipient's front (sender of original message)
+                const {uuid: frontUuid} = await actGetUuidById({trx, id: data?.senderFrontId});
+                await trx.commit();
+                const event = esbDelivery.createDto();
+                event.meta.frontUUID = frontUuid;
+                event.data.dateDelivered = data.dateDelivery;
+                event.data.uuid = uuid;
+                // noinspection ES6MissingAwait
+                portalFront.publish(event);
+            } catch (e) {
+                await trx.rollback();
             }
         }
     }

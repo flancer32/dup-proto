@@ -56,6 +56,14 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                 return one?.keyPub;
             }
 
+            function publishConfirmation(messageUuid, senderId) {
+                const event = new esfConfReceive.createDto();
+                event.data.dateDelivery = new Date();
+                event.data.messageUuid = message.uuid;
+                event.data.senderFrontId = senderId;
+                portalBack.publish(event);
+            }
+
             // MAIN
             // decrypt message body
             const message = data.message;
@@ -84,10 +92,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                 rxChat.addMessage(dto);
             }
             // send receive confirmation back to server
-            const event = new esfConfReceive.createDto();
-            event.data.dateDelivery = new Date();
-            event.data.uuid = message.uuid;
-            portalBack.publish(event);
+            publishConfirmation(message.uuid, message.senderId);
         }
 
         // INSTANCE METHODS

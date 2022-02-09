@@ -14,8 +14,6 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
-        const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
         const esfMsgPost = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
@@ -24,13 +22,10 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
         /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
-        /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
-        const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
         // MAIN
-
         eventsBack.subscribe(esfMsgPost.getEventName(), onMessagePost)
 
         // ENCLOSED FUNCTIONS
@@ -43,13 +38,14 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         async function onMessagePost({data, meta}) {
             // ENCLOSED FUNCTIONS
             /**
-             * Register incoming message in Posted Queue and send response to sender.
+             * Send received report to sender.
+             * @param {string} frontUuid
+             * @param {string} eventUuid
              */
-            function queueIncoming() {
-                quePosted.add(data.message);
+            function respondReceived(frontUuid, eventUuid) {
                 const msg = esbConfirmPost.createDto();
-                msg.meta.frontUUID = meta.frontUUID;
-                msg.data.messageId = data.message.uuid;
+                msg.meta.frontUUID = frontUuid;
+                msg.data.messageId = eventUuid;
                 portalFront.publish(msg);
             }
 
@@ -69,34 +65,16 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
                     const event = esbReceive.createDto();
                     event.meta.frontUUID = frontUuid;
                     event.data.message = post;
+                    // noinspection ES6MissingAwait
                     portalFront.publish(event);
                 } catch (e) {
                     await trx.rollback();
                 }
-
-                // const streams = regUserStreams.getStreams(userId);
-                // if (streams.length === 0) {
-                //     // send Web Push notification about new message to recipient
-                //     const event = ebWebPush.createDto();
-                //     event.userId = userId;
-                //     eventsBack.publish(event);
-                // } else {
-                //     for (const one of streams) {
-                //         const frontUUID = regStreams.mapUUIDStreamToFront(one);
-                //         if (frontUUID) {
-                //             const event = esbReceive.createDto();
-                //             event.meta.frontUUID = frontUUID;
-                //             event.data.message = post;
-                //             portalFront.publish(event);
-                //         } else {
-                //             regUserStreams.deleteStream(one);
-                //         }
-                //     }
-                // }
             }
 
             // MAIN
-            queueIncoming();
+            respondReceived(meta.frontUUID, data.message.uuid);
+            // noinspection ES6MissingAwait
             transferMessage(data, meta);
         }
     }

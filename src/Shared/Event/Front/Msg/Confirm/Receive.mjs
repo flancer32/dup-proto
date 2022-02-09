@@ -15,7 +15,12 @@ class Dto {
     /** @type {Date} */
     dateDelivery;
     /** @type {string} */
-    uuid;
+    messageUuid;
+    /**
+     * Backend ID for front that sent original message.
+     * @type {number}
+     */
+    senderFrontId;
 }
 
 /**
@@ -28,6 +33,8 @@ export default class Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive {
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
+        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
@@ -42,7 +49,8 @@ export default class Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive {
         function createData(data) {
             const res = new Dto();
             res.dateDelivery = castDate(data?.dateDelivery);
-            res.uuid = castString(data?.uuid);
+            res.messageUuid = castString(data?.messageUuid);
+            res.senderFrontId = castInt(data?.senderFrontId);
             return res;
         }
 
