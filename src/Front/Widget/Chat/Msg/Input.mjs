@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Logger} */
     const logger = spec['TeqFw_Web_Front_App_Logger$'];
-    /** @type {TeqFw_User_Front_DSource_User} */
-    const dsUser = spec['TeqFw_User_Front_DSource_User$'];
+    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
@@ -31,7 +31,7 @@ export default function (spec) {
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
     const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
-    /** @type {Fl32_Dup_Front_Proc_Msg_Post} */
+    /** @type {Fl32_Dup_Front_Proc_Msg_Post.process|function} */
     const procPost = spec['Fl32_Dup_Front_Proc_Msg_Post$'];
     /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */
     const modMsgSaver = spec['Fl32_Dup_Front_Mod_Msg_Saver$'];
@@ -98,8 +98,7 @@ export default function (spec) {
                  */
                 async function encryptAndSend(msg, authorId, bandId) {
                     // get keys to encrypt
-                    const user = await dsUser.get();
-                    const sec = user.keys.secret
+                    const sec = frontIdentity.getSecretKey();
                     // get recipient's public key from IDB
                     const trx = await idb.startTransaction([idbContact, idbBand], false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
@@ -111,7 +110,7 @@ export default function (spec) {
                     scrambler.setKeys(pub, sec);
                     const encrypted = scrambler.encryptAndSign(msg);
                     // post message to server
-                    const confirm = await procPost.run({
+                    const confirm = await procPost({
                         payload: encrypted,
                         userId: authorId,
                         recipientId: card.userId
@@ -121,8 +120,7 @@ export default function (spec) {
                 }
 
                 // MAIN
-                const user = await dsUser.get();
-                const authorId = user.id;
+                const authorId = frontIdentity.getFrontId();
                 const body = this.message;
                 this.message = null;
                 const {msgUUID, recipientId} = await encryptAndSend(body, authorId, this.otherSideBandId);

@@ -15,8 +15,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
         const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
-        /** @type {TeqFw_User_Front_DSource_User} */
-        const dsUser = spec['TeqFw_User_Front_DSource_User$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+        const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
@@ -61,8 +61,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
             const message = data.message;
             const encrypted = message.payload;
             const publicKey = await getPublicKey(message.senderId);
-            const user = await dsUser.get();
-            scrambler.setKeys(publicKey, user.keys.secret);
+            const secretKey = frontIdentity.getSecretKey();
+            scrambler.setKeys(publicKey, secretKey);
             const body = scrambler.decryptAndVerify(encrypted);
             // save message to IDB and push to current band (if required)
             if (body) {

@@ -1,74 +1,79 @@
 /**
- * Sender is posted new message to recipient. Transfer this message to backend and wait for confirmation.
- * @implements TeqFw_Core_Shared_Api_Event_IProcess
+ * On-demand process to transfer new user message to backend and wait for confirmation.
+ * @namespace Fl32_Dup_Front_Proc_Msg_Post
  */
-export default class Fl32_Dup_Front_Proc_Msg_Post {
-    constructor(spec) {
-        // EXTRACT DEPS
-        /** @type {Fl32_Dup_Front_Defaults} */
-        const DEF = spec['Fl32_Dup_Front_Defaults$'];
-        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
-        const appIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
-        /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
-        const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
-        const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
-        const esbConfirm = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
+// MODULE'S VARS
+const NS = 'Fl32_Dup_Front_Proc_Msg_Post';
 
-        // ENCLOSED VARS
+// MODULE'S FUNCTIONS
+export default function (spec) {
+    // DEPS
+    /** @type {Fl32_Dup_Front_Defaults} */
+    const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+    /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
+    const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Front_App_Event_Bus} */
+    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
+    const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
+    const esbConfirm = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
 
-        // MAIN
+    // ENCLOSED FUNCS
 
-        // ENCLOSED FUNCTIONS
+    /**
+     * Post encrypted message to back and wait for post confirmation.
+     * @param {string} payload encrypted data
+     * @param {number} userId TODO: remove this input argument, back should use stream UUID to identify sender
+     * @param {number} recipientId
+     * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
+     *
+     * @memberOf Fl32_Dup_Front_Proc_Msg_Post
+     */
+    async function process({payload, userId, recipientId} = {}) {
+        return new Promise((resolve) => {
+            // ENCLOSED VARS
+            let idFail, subs, msgUUID = uuidV4();
 
-        // INSTANCE METHODS
-        this.init = async function () { }
-        /**
-         * Post encrypted message to back and wait for post confirmation.
-         * @param {string} payload
-         * @param {number} userId
-         * @param {number} recipientId
-         * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
-         */
-        this.run = async function ({payload, userId, recipientId}) {
-            return await new Promise((resolve) => {
-                // ENCLOSED VARS
-                let idFail, subs;
+            // ENCLOSED FUNCTIONS
+            /**
+             * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto} data
+             */
+            function onResponse({data}) {
+                clearTimeout(idFail);
+                eventsFront.unsubscribe(subs);
+                // tmp code to catch wrong answers
+                const theSameMsg = (data?.messageId === msgUUID);
+                if (!theSameMsg) debugger;
+                resolve(data);
+            }
 
-                // ENCLOSED FUNCTIONS
-                /**
-                 * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto} data
-                 */
-                function onResponse({data}) {
-                    clearTimeout(idFail);
-                    resolve(data);
-                    eventsFront.unsubscribe(subs);
-                }
+            // MAIN
 
-                // MAIN
+            // subscribe to response event from back and create timeout response
+            subs = eventsFront.subscribe(esbConfirm.getEventName(), onResponse);
+            idFail = setTimeout(() => {
+                eventsFront.unsubscribe(subs);
+                resolve();
+            }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
 
-                // subscribe to response event from back and create timeout response
-                subs = eventsFront.subscribe(esbConfirm.getEventName(), onResponse);
-                idFail = setTimeout(() => {
-                    eventsFront.unsubscribe(subs);
-                    resolve();
-                }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
-
-                // create event message and publish it to back
-                const event = esfPosted.createDto();
-                event.meta.frontUUID = appIdentity.getUuid();
-                event.data.message.payload = payload;
-                event.data.message.senderId = userId;
-                event.data.message.recipientId = recipientId;
-                event.data.message.dateSent = new Date();
-                event.data.message.uuid = uuidV4();
-                portalBack.publish(event);
-            });
-        }
+            // create event message and publish it to back
+            const event = esfPosted.createDto();
+            event.meta.frontUUID = frontIdentity.getUuid();
+            event.data.message.payload = payload;
+            event.data.message.senderId = userId;
+            event.data.message.recipientId = recipientId;
+            event.data.message.dateSent = new Date();
+            event.data.message.uuid = msgUUID;
+            portalBack.publish(event);
+        });
     }
+
+    // MAIN
+    Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    return process;
 }

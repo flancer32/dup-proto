@@ -8,14 +8,14 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Db_Back_RDb_IConnect} */
+        const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
         const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
-        /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
-        const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
         const esfMsgPost = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
@@ -26,6 +26,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {Fl32_Dup_Back_Mod_Msg_Queue_Posted} */
         const quePosted = spec['Fl32_Dup_Back_Mod_Msg_Queue_Posted$'];
+        /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
+        const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
         // MAIN
 
@@ -56,28 +58,41 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
              * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} data
              * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
              */
-            function transferMessage(data, meta) {
+            async function transferMessage(data, meta) {
                 const post = data.message;
-                const userId = post.recipientId;
-                const streams = regUserStreams.getStreams(userId);
-                if (streams.length === 0) {
-                    // send notification about new message to recipient
-                    const event = ebWebPush.createDto();
-                    event.userId = userId;
-                    eventsBack.publish(event);
-                } else {
-                    for (const one of streams) {
-                        const frontUUID = regStreams.mapUUIDStreamToFront(one);
-                        if (frontUUID) {
-                            const event = esbReceive.createDto();
-                            event.meta.frontUUID = frontUUID;
-                            event.data.message = post;
-                            portalFront.publish(event);
-                        } else {
-                            regUserStreams.deleteStream(one);
-                        }
-                    }
+                const frontId = post.recipientId;
+                const trx = await rdb.startTransaction();
+                try {
+                    // get UUID for recipient's front
+                    const {uuid: frontUuid} = await actGetUuidById({trx, id: frontId});
+                    await trx.commit();
+                    const event = esbReceive.createDto();
+                    event.meta.frontUUID = frontUuid;
+                    event.data.message = post;
+                    portalFront.publish(event);
+                } catch (e) {
+                    await trx.rollback();
                 }
+
+                // const streams = regUserStreams.getStreams(userId);
+                // if (streams.length === 0) {
+                //     // send Web Push notification about new message to recipient
+                //     const event = ebWebPush.createDto();
+                //     event.userId = userId;
+                //     eventsBack.publish(event);
+                // } else {
+                //     for (const one of streams) {
+                //         const frontUUID = regStreams.mapUUIDStreamToFront(one);
+                //         if (frontUUID) {
+                //             const event = esbReceive.createDto();
+                //             event.meta.frontUUID = frontUUID;
+                //             event.data.message = post;
+                //             portalFront.publish(event);
+                //         } else {
+                //             regUserStreams.deleteStream(one);
+                //         }
+                //     }
+                // }
             }
 
             // MAIN

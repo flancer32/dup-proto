@@ -7,14 +7,12 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Db_Back_RDb_IConnect} */
+        const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
-        /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
-        const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
-        /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
-        const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
         const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
@@ -25,6 +23,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         const queDelivered = spec['Fl32_Dup_Back_Mod_Msg_Queue_Delivered$'];
         /** @type {Fl32_Dup_Shared_Dto_Msg} */
         const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
+        /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
+        const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
         // MAIN
 
@@ -48,21 +48,20 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
                 delivery.dateDelivered = data.dateDelivery;
                 queDelivered.add(delivery);
                 quePosted.remove(uuid);
-                const userId = delivery.senderId;
-                const streamUUIDs = regUserStreams.getStreams(userId);
-                if (streamUUIDs.length === 0)
-                    logger.error(`There are no opened event streams for user #${userId}.`);
-                for (const one of streamUUIDs) {
-                    const frontUUID = regStreams.mapUUIDStreamToFront(one);
-                    if (frontUUID) {
-                        const event = esbDelivery.createDto();
-                        event.meta.frontUUID = frontUUID;
-                        event.data.dateDelivered = data.dateDelivery;
-                        event.data.uuid = uuid;
-                        portalFront.publish(event);
-                    } else {
-                        regUserStreams.deleteStream(one);
-                    }
+                const frontId = delivery.senderId;
+
+                const trx = await rdb.startTransaction();
+                try {
+                    // get UUID for recipient's front
+                    const {uuid: frontUuid} = await actGetUuidById({trx, id: frontId});
+                    await trx.commit();
+                    const event = esbDelivery.createDto();
+                    event.meta.frontUUID = frontUuid;
+                    event.data.dateDelivered = data.dateDelivery;
+                    event.data.uuid = uuid;
+                    portalFront.publish(event);
+                } catch (e) {
+                    await trx.rollback();
                 }
             }
         }

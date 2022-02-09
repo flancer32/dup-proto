@@ -14,10 +14,6 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_User_Back_Mod_Event_Stream_Registry} */
-        const regUserStreams = spec['TeqFw_User_Back_Mod_Event_Stream_Registry$'];
-        /** @type {TeqFw_Web_Back_Mod_Event_Reverse_Registry} */
-        const regStreams = spec['TeqFw_Web_Back_Mod_Event_Reverse_Registry$'];
         /** @type {Fl32_Dup_Shared_Event_Front_User_SignUp_Request} */
         const esfSignUpReq = spec['Fl32_Dup_Shared_Event_Front_User_SignUp_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response} */
@@ -30,8 +26,8 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const actGetInvite = spec['Fl32_Dup_Back_Act_User_Invite_Get$'];
         /** @type {Fl32_Dup_Back_Act_User_Invite_Remove.act|function} */
         const actRemove = spec['Fl32_Dup_Back_Act_User_Invite_Remove$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUUID.act|function} */
-        const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUUID$'];
+        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
+        const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
         /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front} */
         const rdbFront = spec['TeqFw_Web_Back_Store_RDb_Schema_Front$'];
 
