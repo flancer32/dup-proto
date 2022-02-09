@@ -1,5 +1,6 @@
 /**
  * Check messages queues on users authentication and try to re-send delayed messages.
+ * @deprecated we have no more users stream
  */
 export default class Fl32_Dup_Back_Proc_Msg_Queue_WakeUp {
     constructor(spec) {
