@@ -1,6 +1,6 @@
 /**
  * Re-open events reverse stream if it was closed by server.
- * Try to open stream every 1 min until stream will be opened.
+ * Try to open stream every 5 sec. for first 2 min. then every 1 min until stream will be opened.
  *
  * @namespace Fl32_Dup_Front_Proc_Connect_Manager
  */

@@ -51,10 +51,12 @@ export default class Fl32_Dup_Front_App {
         const esbFailed = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed$'];
         /** @type {Fl32_Dup_Front_Mod_User_Profile} */
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
+        /** @type {TeqFw_Web_Front_Mod_App_Alive} */
+        const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
 
         // ENCLOSED VARS
+        let _isInitialized = false; // application is initialized and can be mounted
         let _root; // root vue component for the application
-        let _isInitialized = false;
 
         // INSTANCE METHODS
 
@@ -98,6 +100,7 @@ export default class Fl32_Dup_Front_App {
              * Wait until back-to-front events stream will be opened and authenticated before continue.
              * @param {TeqFw_Di_Shared_Container} container
              * @return {Promise<TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened.Dto>}
+             * @memberOf Fl32_Dup_Front_App.init
              */
             async function initEventStream(container) {
                 return new Promise((resolve, reject) => {
@@ -108,7 +111,9 @@ export default class Fl32_Dup_Front_App {
                         resolve(evt);
                     });
                     const subsFailed = eventBus.subscribe(esbFailed.getEventName(), (evt) => {
+                        // TODO: this event is not published by back yet
                         eventBus.unsubscribe(subsFailed);
+                        debugger
                         reject(new Error(evt?.data?.reason));
                     });
                 });
@@ -236,25 +241,29 @@ export default class Fl32_Dup_Front_App {
 
             // other initialization
             logger.pause(false);
-            await config.init({}); // this app has no separate 'doors' (entry points)
-            print(`Application config is loaded.`);
-            await initI18n(_root, I18nLib);
-            print(`i18n resources are loaded.`);
-            await frontIdentity.init();
-            print(`Front UUID: ${frontIdentity.getUuid()}.`);
-            try {
-                await initEventStream(container);
-                print(`Backend events stream is opened.`);
-                await initEventProcessors(container);
-                print(`Frontend processes are created.`);
-                initQuasarUi(_root, quasar);
-                print(`Data sources are initialized.`);
-                initRouter(_root, DEF, container);
-                print(`Vue app is created and initialized.`);
-                _isInitialized = true;
-            } catch (e) {
-                // TODO: place IDB cleanup here for re-installs
-                print(e.message);
+            if (await modAlive.check()) {
+                await config.init({}); // this app has no separate 'doors' (entry points)
+                print(`Application config is loaded.`);
+                await initI18n(_root, I18nLib);
+                print(`i18n resources are loaded.`);
+                await frontIdentity.init();
+                print(`Front UUID: ${frontIdentity.getUuid()}.`);
+                try {
+                    await initEventStream(container);
+                    print(`Backend events stream is opened.`);
+                    await initEventProcessors(container);
+                    print(`Frontend processes are created.`);
+                    initQuasarUi(_root, quasar);
+                    print(`Data sources are initialized.`);
+                    initRouter(_root, DEF, container);
+                    print(`Vue app is created and initialized.`);
+                    _isInitialized = true;
+                } catch (e) {
+                    // TODO: place IDB cleanup here for re-installs
+                    print(e.message);
+                }
+            } else {
+                print(`Backend server is not alive. Cannot continue.`);
             }
         }
 
