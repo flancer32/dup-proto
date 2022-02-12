@@ -22,8 +22,8 @@ export default function (spec) {
 
     // WORKING VARS
     const template = `
-<q-card>
-    <q-card-section class="q-gutter-xs">
+<q-card class="col">
+    <q-card-section class="q-gutter-xs" v-on:click="goToChat">
         <div class="row items-center q-gutter-xs">
             <div class="col-auto">
                 <q-avatar color="primary" text-color="white">{{ avatarLetter }}</q-avatar>
@@ -90,6 +90,12 @@ export default function (spec) {
             unread() {
                 return this?.item?.unread;
             },
+        },
+        methods: {
+            goToChat() {
+                const route = DEF.ROUTE_CHAT_BAND.replace(':id', this.item.bandId);
+                this.$router.push(route);
+            }
         },
         async mounted() {
 

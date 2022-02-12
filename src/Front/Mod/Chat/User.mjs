@@ -22,6 +22,8 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
         const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
+        /** @type {Fl32_Dup_Front_Rx_Title} */
+        const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
         // ENCLOSED VARS
         const I_MSG = idbMsg.getIndexes();
@@ -44,8 +46,9 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
                 /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
                 const found = await idb.readOne(trx, idbContact, band.contactRef);
                 rxChat.setTypeUser();
-                rxChat.setTitle(found.nick);
+                // rxChat.setTitle(found.nick);
                 rxChat.setBandId(bandId);
+                rxTitle.set(found.nick);
                 // load keys for messages from IDB
                 const index = I_MSG.BY_BAND;
                 const backward = true;

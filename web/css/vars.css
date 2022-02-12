@@ -7,6 +7,12 @@
     --color-lightest: #F4CFBC;
 }
 
+:root {
+    /* dimensions */
+    --dim-bottomBar-h: 50px;
+    --dim-topBar-h: 50px;
+}
+
 .t-grid-rows, .t-grid-cols {
     --grid-gap: 5px;
 }

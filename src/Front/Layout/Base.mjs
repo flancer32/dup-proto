@@ -22,6 +22,10 @@ export default function Factory(spec) {
     const navigator = spec['Fl32_Dup_Front_Layout_Nav_Base$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
+    /** @type {Fl32_Dup_Front_Layout_Base_BottomBar.vueCompTmpl} */
+    const bottomBar = spec['Fl32_Dup_Front_Layout_Base_BottomBar$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
     // DEFINE WORKING VARS & PROPS
     const template = `
@@ -29,31 +33,21 @@ export default function Factory(spec) {
 
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
-            <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
+            <q-btn dense flat round icon="menu" to="${DEF.ROUTE_HOME}"/>
             <q-space></q-space>
-            <q-toolbar-title></q-toolbar-title>
+            <q-toolbar-title>{{title}}</q-toolbar-title>
             <q-space></q-space>
             <leds/>
             <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
-        <navigator/>
-    </q-drawer>
-
-    <!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
-    <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
-    <!--    </q-drawer>-->
-
     <q-page-container style="display: grid; height: 100vh; justify-items: center;">
         <slot/>
     </q-page-container>
 
     <q-footer class="bg-primary text-white">
-        <q-toolbar>
-
-        </q-toolbar>
+        <bottom-bar/>
     </q-footer>
 
 </q-layout>
@@ -70,10 +64,11 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {navigator, leds},
+        components: {navigator, bottomBar, leds},
         data() {
             return {
-                menuOpen: false
+                menuOpen: false,
+                title: rxTitle.getRef(),
             };
         },
         methods: {
@@ -82,6 +77,7 @@ export default function Factory(spec) {
             }
         },
         setup() {
+            // TODO: clean up or move menuOpenHere
             const leftDrawerOpen = ref(false)
             const rightDrawerOpen = ref(false)
 

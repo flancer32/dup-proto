@@ -24,8 +24,8 @@ export default function Factory(spec) {
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Input.vueCompTmpl} */
     const messageInput = spec['Fl32_Dup_Front_Widget_Chat_Msg_Input$'];
-    /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
-    const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
     // DEFINE WORKING VARS & PROPS
     const template = `
@@ -33,23 +33,12 @@ export default function Factory(spec) {
 
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
-            <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
-            <q-toolbar-title>
-            {{title}}
-            </q-toolbar-title>
+            <q-btn dense flat round icon="menu" to="${DEF.ROUTE_HOME}"/>
+            <q-toolbar-title>{{title}}</q-toolbar-title>
             <q-space></q-space>
             <leds/>
-            <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile" bordered>
-        <navigator/>
-    </q-drawer>
-
-    <!--    <q-drawer v-model="rightDrawerOpen" side="right" overlay behavior="mobile" bordered>-->
-    <!--        &lt;!&ndash; drawer content &ndash;&gt;-->
-    <!--    </q-drawer>-->
 
     <q-page-container class="absolute-bottom">
         <slot/>
@@ -87,9 +76,10 @@ export default function Factory(spec) {
             }
         },
         setup() {
+            // TODO: clean up or move menuOpenHere
             const leftDrawerOpen = ref(false)
             const rightDrawerOpen = ref(false)
-            const title = rxChat.getTitle();
+            const title = rxTitle.getRef();
 
             return {
                 title,

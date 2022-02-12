@@ -21,13 +21,19 @@ export default function (spec) {
     const conversation = spec['Fl32_Dup_Front_Widget_Home_Conversation$'];
     /** @type {Fl32_Dup_Front_Mod_Home_Bands} */
     const modBands = spec['Fl32_Dup_Front_Mod_Home_Bands$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
     // WORKING VARS
     const template = `
 <layout-base>
-<div class="fit column q-gutter-md q-pa-md" style="max-width: 480px">
-  <conversation v-for="(one) in bands"  :item="one" />
-</div>
+    <q-scroll-area style="width:100%; height: calc(100vh - var(--dim-topBar-h)- var(--dim-bottomBar-h))"
+    >
+        <div class="column q-pa-xs q-gutter-xs">
+            <conversation v-for="(one) in bands" :item="one"/>
+        </div>
+
+    </q-scroll-area>
 </layout-base>
 `;
     /**
@@ -43,13 +49,12 @@ export default function (spec) {
         components: {conversation},
         data() {
             return {
-                name: null,
                 bands: [],
             };
         },
         async mounted() {
             const profile = await modProfile.get();
-            this.name = profile?.nick;
+            rxTitle.set(profile?.nick);
             this.bands = await modBands.load();
 
         }
