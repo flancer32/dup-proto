@@ -17,20 +17,17 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
+    /** @type {Fl32_Dup_Front_Widget_Home_Conversation.vueCompTmpl} */
+    const conversation = spec['Fl32_Dup_Front_Widget_Home_Conversation$'];
+    /** @type {Fl32_Dup_Front_Mod_Home_Bands} */
+    const modBands = spec['Fl32_Dup_Front_Mod_Home_Bands$'];
 
     // WORKING VARS
     const template = `
 <layout-base>
-    <div class="row justify-center items-center" style="height: calc(100vh - 100px)">
-
-        <q-card class="bg-white q-mt-xs col text-center" style="max-width:300px">
-            <q-card-section class="text-subtitle1">
-                <div>DUPLO is a secured messenger.</div>
-                <div>Welcome to the hollow, {{name}}!</div>
-            </q-card-section>
-        </q-card>
-
-    </div>
+<div class="fit column q-gutter-md q-pa-md" style="max-width: 480px">
+  <conversation v-for="(one) in bands"  :item="one" />
+</div>
 </layout-base>
 `;
     /**
@@ -43,14 +40,18 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
+        components: {conversation},
         data() {
             return {
-                name: null
+                name: null,
+                bands: [],
             };
         },
         async mounted() {
             const profile = await modProfile.get();
             this.name = profile?.nick;
+            this.bands = await modBands.load();
+
         }
     };
 }
