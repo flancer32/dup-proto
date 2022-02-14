@@ -22,8 +22,8 @@ export default function Factory(spec) {
     // EXTRACT DEPS
     /** @type {Fl32_Dup_Back_Defaults} */
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Logger} */
-    const logger = spec['TeqFw_Core_Shared_Logger$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Back_Api_Dto_Command.Factory} */
@@ -43,7 +43,7 @@ export default function Factory(spec) {
         // DEFINE INNER FUNCTIONS
 
         // MAIN FUNCTIONALITY
-        logger.pause(false);
+        // logger.pause(false);
         const testData = opts[OPT_TEST];
         // const trx = await conn.startTransaction();
         // recreate DB structure

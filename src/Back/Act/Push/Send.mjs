@@ -10,8 +10,8 @@ const NS = 'Fl32_Dup_Back_Act_Push_Send';
 // MODULE'S FUNCTIONS
 export default function (spec) {
     // EXTRACT DEPS
-    /** @type {TeqFw_Core_Shared_Logger} */
-    const logger = spec['TeqFw_Core_Shared_Logger$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
     const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
     /** @type {TeqFw_Web_Push_Back_Act_Subscript_SendMsg.act|function} */

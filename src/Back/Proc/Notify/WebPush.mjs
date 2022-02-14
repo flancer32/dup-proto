@@ -6,8 +6,8 @@ export default class Fl32_Dup_Back_Proc_Notify_WebPush {
         // EXTRACT DEPS
         /** @type {Fl32_Dup_Back_Defaults} */
         const DEF = spec['Fl32_Dup_Back_Defaults$'];
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {Fl32_Dup_Back_Act_Push_Send.act|function} */

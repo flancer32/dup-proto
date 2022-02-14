@@ -240,7 +240,7 @@ export default class Fl32_Dup_Front_App {
             _root.component('LayoutEmpty', layoutEmpty);
 
             // other initialization
-            logger.pause(false);
+            // logger.pause(false);
             if (await modAlive.check()) {
                 await config.init({}); // this app has no separate 'doors' (entry points)
                 print(`Application config is loaded.`);

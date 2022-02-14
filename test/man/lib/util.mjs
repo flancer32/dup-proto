@@ -16,8 +16,8 @@ const DEF = {
  * @return {Promise<{cfg: TeqFw_Db_Back_Dto_Config_Schema, dem: TeqFw_Db_Back_Dto_Dem}>}
  */
 export async function loadRoot(container, path) {
-    /** @type {TeqFw_Core_Back_App_Scan_Plugin} */
-    const pluginScan = await container.get('TeqFw_Core_Back_App_Scan_Plugin$');
+    /** @type {TeqFw_Core_Back_App_Init_Plugin} */
+    const pluginScan = await container.get('TeqFw_Core_Back_App_Init_Plugin$');
     /** @type {TeqFw_Db_Back_Dem_Load} */
     const demLoad = await container.get('TeqFw_Db_Back_Dem_Load$');
 
