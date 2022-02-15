@@ -21,13 +21,16 @@ export default function Factory(spec) {
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
-    const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Core_Back_Config} */
     const config = spec['TeqFw_Core_Back_Config$'];
     /** @type {TeqFw_Db_Back_Api_RDb_ISchema} */
     const dbSchema = spec['TeqFw_Db_Back_Api_RDb_ISchema$'];
     /** @type {TeqFw_Db_Back_Dem_Load} */
     const demLoad = spec['TeqFw_Db_Back_Dem_Load$'];
+
+    // MAIN
+    logger.setNamespace(NS);
 
     // ENCLOSED FUNCS
     /**

@@ -23,7 +23,7 @@ export default function Factory(spec) {
     /** @type {Fl32_Dup_Back_Defaults} */
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
-    const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Back_Api_Dto_Command.Factory} */
@@ -32,6 +32,9 @@ export default function Factory(spec) {
     const fOpt = spec['TeqFw_Core_Back_Api_Dto_Command_Option#Factory$'];
     /** @type {Fl32_Dup_Back_Cli_Db_Z_Restruct.action|function} */
     const actRestruct = spec['Fl32_Dup_Back_Cli_Db_Z_Restruct$'];
+
+    // MAIN
+    logger.setNamespace(NS);
 
     // ENCLOSED FUNCS
     /**

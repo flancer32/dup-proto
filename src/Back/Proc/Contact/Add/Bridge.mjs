@@ -7,7 +7,7 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
-        const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
+        const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
@@ -24,6 +24,7 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
         // MAIN
+        logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfAddReq.getEventName(), onRequest)
 
         // ENCLOSED FUNCTIONS
