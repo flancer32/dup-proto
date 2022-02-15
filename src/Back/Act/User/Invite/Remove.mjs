@@ -8,7 +8,7 @@ const NS = 'Fl32_Dup_Back_Act_User_Invite_Remove';
 
 // MODULE'S FUNCTIONS
 export default function (spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
@@ -21,7 +21,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
     const ATTR = metaInvite.getAttributes();
 
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {string} code invite code
@@ -39,7 +39,7 @@ export default function (spec) {
         }
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     Object.defineProperty(act, 'name', {value: `${NS}.act`});
     return act;
 }

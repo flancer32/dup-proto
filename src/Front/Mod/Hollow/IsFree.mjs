@@ -4,7 +4,7 @@
  */
 export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {Fl32_Dup_Front_Defaults} */
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */

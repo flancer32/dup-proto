@@ -31,7 +31,7 @@ class Dto {
      */
     key;
     /**
-     * Any value stored as text..
+     * Any value stored as text.
      * @type {string}
      */
     value;

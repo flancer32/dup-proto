@@ -16,7 +16,7 @@ const NS = 'Fl32_Dup_Front_App';
 // MODULE'S CLASSES
 export default class Fl32_Dup_Front_App {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         const {createApp} = spec['TeqFw_Vue_Front_Lib_Vue'];
         const {createRouter, createWebHashHistory} = spec['TeqFw_Vue_Front_Lib_Router'];
         /** @type {Fl32_Dup_Front_Defaults} */

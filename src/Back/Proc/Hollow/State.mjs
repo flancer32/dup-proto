@@ -3,7 +3,7 @@
  */
 export default class Fl32_Dup_Back_Proc_Hollow_State {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
@@ -24,7 +24,7 @@ export default class Fl32_Dup_Back_Proc_Hollow_State {
         // MAIN
         eventsBack.subscribe(esfStateRequested.getEventName(), handler)
 
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

@@ -14,7 +14,7 @@ const NS = 'Fl32_Dup_Front_Layout_Empty';
  * @returns {Fl32_Dup_Front_Layout_Empty.vueCompTmpl}
  */
 export default function Factory(spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
 

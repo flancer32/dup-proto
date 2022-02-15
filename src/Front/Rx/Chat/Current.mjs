@@ -5,7 +5,7 @@
  */
 export default class Fl32_Dup_Front_Rx_Chat_Current {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
         // DEFINE WORKING VARS / PROPS
@@ -16,7 +16,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         const _typeRoom = ref(false);
         const _typeUser = ref(false);
 
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCS
 
         // DEFINE INSTANCE METHODS
         /**

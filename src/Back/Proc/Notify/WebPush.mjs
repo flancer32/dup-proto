@@ -3,7 +3,7 @@
  */
 export default class Fl32_Dup_Back_Proc_Notify_WebPush {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {Fl32_Dup_Back_Defaults} */
         const DEF = spec['Fl32_Dup_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Api_ILogger} */

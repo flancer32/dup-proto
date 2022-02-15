@@ -25,7 +25,7 @@ class Dto {
  */
 export default class Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */

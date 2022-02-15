@@ -11,7 +11,7 @@ const NS = 'Fl32_Dup_Back_Act_User_Invite_Create';
 
 // MODULE'S FUNCTIONS
 export default function (spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {Fl32_Dup_Back_Defaults} */
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
@@ -25,7 +25,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
     const ATTR = metaInvite.getAttributes();
 
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} userId
@@ -36,7 +36,7 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Back_Act_User_Invite_Create
      */
     async function act({trx, userId, userNick, onetime, dateExpired}) {
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCS
         /**
          * @param trx
          * @returns {Promise<string>}
@@ -56,7 +56,7 @@ export default function (spec) {
             return result;
         }
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         const code = await generateCode(trx);
         const dateExp = dateExpired ?? getDateExpDefault();
         // add invitation to DB
@@ -72,7 +72,7 @@ export default function (spec) {
 
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     Object.defineProperty(act, 'name', {value: `${NS}.act`});
     return act;
 }

@@ -9,7 +9,7 @@ const NS = 'Fl32_Dup_Back_Act_Msg_Queue_User_Remove';
 
 // MODULE'S FUNCTIONS
 export default function (spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
     const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
     /** @type {Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User} */
@@ -19,7 +19,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User.ATTR} */
     const ATTR = metaQueue.getAttributes();
 
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} messageId
@@ -35,7 +35,7 @@ export default function (spec) {
         return {success: (res === 1)};
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     Object.defineProperty(act, 'name', {value: `${NS}.act`});
     return act;
 }

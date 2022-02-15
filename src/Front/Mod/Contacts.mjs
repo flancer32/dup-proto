@@ -3,7 +3,7 @@
  */
 export default class Fl32_Dup_Front_Mod_Contacts {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Web_Front_App_Logger} */
         const logger = spec['TeqFw_Web_Front_App_Logger$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */

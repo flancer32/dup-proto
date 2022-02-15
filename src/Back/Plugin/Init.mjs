@@ -5,7 +5,7 @@
 const NS = 'Fl32_Dup_Back_Plugin_Init';
 
 export default function Factory(spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {Fl32_Dup_Back_Defaults} */
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Di_Shared_Container} */

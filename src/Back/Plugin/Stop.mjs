@@ -5,7 +5,7 @@
 const NS = 'Fl32_Dup_Back_Plugin_Stop';
 
 export default function Factory(spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const connect = spec['TeqFw_Db_Back_RDb_IConnect$'];
 

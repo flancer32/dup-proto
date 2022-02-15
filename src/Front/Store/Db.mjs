@@ -30,7 +30,7 @@ export default function (spec) {
     const I_CONTACT_CARD = idbContactCard.getIndexes();
     const I_MSG = idbMsg.getIndexes();
 
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * Factory to pin 'db' in the scope and create function to upgrade DB structure on opening.
      * @param {IDBDatabase} db
@@ -59,7 +59,7 @@ export default function (spec) {
         }
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     idb.init(NS, IDB_VERSION, fnUpgradeDb);
 
     return idb;

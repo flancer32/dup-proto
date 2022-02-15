@@ -19,7 +19,7 @@ const OPT_TEST = 'test';
  * @memberOf Fl32_Dup_Back_Cli_Db_Init
  */
 export default function Factory(spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {Fl32_Dup_Back_Defaults} */
     const DEF = spec['Fl32_Dup_Back_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
@@ -33,16 +33,16 @@ export default function Factory(spec) {
     /** @type {Fl32_Dup_Back_Cli_Db_Z_Restruct.action|function} */
     const actRestruct = spec['Fl32_Dup_Back_Cli_Db_Z_Restruct$'];
 
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * Command action.
      * @returns {Promise<void>}
      * @memberOf Fl32_Dup_Back_Cli_Db_Init
      */
     async function action(opts) {
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCS
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         // logger.pause(false);
         const testData = opts[OPT_TEST];
         // const trx = await conn.startTransaction();

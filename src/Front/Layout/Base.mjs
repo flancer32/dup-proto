@@ -14,7 +14,7 @@ const NS = 'Fl32_Dup_Front_Layout_Base';
  * @returns {Fl32_Dup_Front_Layout_Base.vueCompTmpl}
  */
 export default function Factory(spec) {
-    // EXTRACT DEPS
+    // DEPS
     const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];

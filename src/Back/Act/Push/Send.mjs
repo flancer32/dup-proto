@@ -3,15 +3,14 @@
  *
  * @namespace Fl32_Dup_Back_Act_Push_Send
  */
-
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Back_Act_Push_Send';
 
 // MODULE'S FUNCTIONS
 export default function (spec) {
-    // EXTRACT DEPS
+    // DEPS
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
-    const logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
     const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
     /** @type {TeqFw_Web_Push_Back_Act_Subscript_SendMsg.act|function} */
@@ -19,11 +18,14 @@ export default function (spec) {
     /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript} */
     const rdbSubscription = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
 
-    // WORKING VARS / PROPS
+    // ENCLOSED VARS
     /** @type {typeof TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.ATTR} */
     const A_SUB = rdbSubscription.getAttributes();
 
-    // DEFINE INNER FUNCTIONS
+    // MAIN
+    logger.setNamespace(NS);
+
+    // ENCLOSED FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} userId
@@ -32,9 +34,9 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Back_Act_Push_Send
      */
     async function act({trx, userId, body}) {
-        // DEFINE INNER FUNCTIONS
+        // ENCLOSED FUNCS
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.Dto[]} */
         const all = await crud.readSet(trx, rdbSubscription, {[A_SUB.FRONT_REF]: userId});
         for (const one of all) {
@@ -51,7 +53,7 @@ export default function (spec) {
         return {success: true};
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     Object.defineProperty(act, 'name', {value: `${NS}.act`});
     return act;
 }

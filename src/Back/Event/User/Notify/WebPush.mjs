@@ -22,7 +22,7 @@ class Dto {
  */
 export default class Fl32_Dup_Back_Event_User_Notify_WebPush {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Core_Shared_App_Event_Message} */
         const dtoBase = spec['TeqFw_Core_Shared_App_Event_Message$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
