@@ -1,5 +1,6 @@
 /**
  * Logging transport implementation for this app.
+ * Send logs to logs monitoring server.
  */
 // MODULE'S IMPORT
 import http from "http";
@@ -13,20 +14,21 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         // DEPS
         /** @type {TeqFw_Core_Shared_Mod_Logger_Transport_Console} */
         const transConsole = spec['TeqFw_Core_Shared_Mod_Logger_Transport_Console$'];
+        /** @type {Fl32_Dup_Back_Mod_Logger_Transport_A_Request} */
+        const dtoReq = spec['Fl32_Dup_Back_Mod_Logger_Transport_A_Request$'];
 
         // INSTANCE METHODS
+        /**
+         * @param {TeqFw_Core_Shared_Dto_Log.Dto} dto
+         */
         this.log = function (dto) {
-            const postData = JSON.stringify({
-                data: {
-                    message: dto.message,
-                    meta: {
-                        date: dto.date,
-                        error: dto.isError,
-                        source: dto.source,
-                        opts: dto.meta,
-                    }
-                }
-            });
+            const entry = dtoReq.createDto();
+            entry.date = dto.date;
+            entry.message = dto.message;
+            entry.source = dto.source;
+            entry.level = (dto.isError) ? 1 : 0;
+            entry.meta = dto.meta;
+            const postData = JSON.stringify({data: entry});
             const options = {
                 hostname: 'localhost',
                 port: 4040,
@@ -37,22 +39,8 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     'Content-Length': Buffer.byteLength(postData)
                 }
             };
-            const req = http.request(options, (res) => {
-                // console.log(`STATUS: ${res.statusCode}`);
-                // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-                // res.setEncoding('utf8');
-                // res.on('data', (chunk) => {
-                //     console.log(`BODY: ${chunk}`);
-                // });
-                // res.on('end', () => {
-                //     console.log('No more data in response.');
-                // });
-            });
-            req.on('error', (e) => {
-                console.error(`problem with request: ${e.message}`);
-            });
-
-            // Write data to request body
+            // just write out data w/o response processing
+            const req = http.request(options);
             req.write(postData);
             req.end();
             // duplicate to console
