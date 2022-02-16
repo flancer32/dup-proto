@@ -20,7 +20,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Rx_Led} */
-    const rxLed = spec['TeqFw_Web_Front_Api_Mod_Server_IConnect$']; // get as interface to get singleton
+    const rxLed = spec['TeqFw_Web_Front_Api_Mod_Server_Connect_IState$']; // get as interface to get singleton
 
     // ENCLOSED VARS
     /** @type {typeof Fl32_Dup_Front_Rx_Led.STATE} */

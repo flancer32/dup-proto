@@ -20,7 +20,7 @@ Object.freeze(STATE);
 
 // MODULE'S CLASSES
 /**
- * @implements TeqFw_Web_Front_Api_Mod_Server_IConnect
+ * @implements TeqFw_Web_Front_Api_Mod_Server_Connect_IState
  * TODO: we need proxy here - model is not RX, we have misunderstanding in DI
  */
 export default class Fl32_Dup_Front_Rx_Led {
