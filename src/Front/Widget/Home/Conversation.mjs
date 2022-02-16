@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {typeof Fl32_Dup_Front_Dto_Home_Conversation.Dto} */
     const TDtoConv = spec['Fl32_Dup_Front_Dto_Home_Conversation.Dto'];
-    /** @type {TeqFw_Core_Shared_Util.formatDateTime|function} */
-    const formatDateTime = spec['TeqFw_Core_Shared_Util.formatDateTime'];
+    /** @type {TeqFw_Core_Shared_Util_Format.dateTime|function} */
+    const formatDateTime = spec['TeqFw_Core_Shared_Util_Format.dateTime'];
 
     // WORKING VARS
     const template = `

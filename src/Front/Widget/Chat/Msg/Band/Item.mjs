@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Band_Item';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Util.formatDateTime|function} */
-    const formatDateTime = spec['TeqFw_Core_Shared_Util.formatDateTime'];
+    /** @type {TeqFw_Core_Shared_Util_Format.dateTime|function} */
+    const formatDateTime = spec['TeqFw_Core_Shared_Util_Format.dateTime'];
 
     // DEFINE WORKING VARS
     const template = `

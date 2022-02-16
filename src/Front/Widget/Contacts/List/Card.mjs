@@ -19,8 +19,8 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
-    /** @type {TeqFw_Core_Shared_Util.formatDate|function} */
-    const formatDate = spec['TeqFw_Core_Shared_Util.formatDate'];
+    /** @type {TeqFw_Core_Shared_Util_Format.date|function} */
+    const formatDate = spec['TeqFw_Core_Shared_Util_Format.date'];
 
     // ENCLOSED VARS
     const I_BAND = idbBand.getIndexes();
