@@ -9,13 +9,7 @@
         "user": "..."
       }
     },
-    "db.sqlite3": {
-      "client": "sqlite3",
-      "connection": {
-        "filename": "/.../duplo-proto/var/db.sqlite"
-      },
-      "useNullAsDefault": true
-    }
+    "logsMonitor": "logs.local.teqfw.com"
   },
   "@teqfw/core": {
     "devMode": false

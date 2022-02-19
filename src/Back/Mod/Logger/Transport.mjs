@@ -1,9 +1,9 @@
 /**
- * Logging transport implementation for this app.
+ * Logging transport implementation for back app.
  * Send logs to logs monitoring server.
  */
 // MODULE'S IMPORT
-import http from "http";
+import http from "https";
 
 // MODULE'S CLASSES
 /**
@@ -12,13 +12,22 @@ import http from "http";
 export default class Fl32_Dup_Back_Mod_Logger_Transport {
     constructor(spec) {
         // DEPS
+        /** @type {Fl32_Dup_Back_Defaults} */
+        const DEF = spec['Fl32_Dup_Back_Defaults$'];
+        /** @type {TeqFw_Core_Back_Config} */
+        const config = spec['TeqFw_Core_Back_Config$'];
         /** @type {TeqFw_Core_Shared_Mod_Logger_Transport_Console} */
         const transConsole = spec['TeqFw_Core_Shared_Mod_Logger_Transport_Console$'];
-        /** @type {Fl32_Dup_Back_Mod_Logger_Transport_A_Request} */
-        const dtoReq = spec['Fl32_Dup_Back_Mod_Logger_Transport_A_Request$'];
+        /** @type {Fl32_Dup_Shared_Dto_Log_Request} */
+        const dtoReq = spec['Fl32_Dup_Shared_Dto_Log_Request$'];
 
         // ENCLOSED VARS
-        let canSendLogs = true;
+        let hostname, canSendLogs = true;
+
+        // MAIN
+        /** @type {Fl32_Dup_Back_Dto_Config_Local} */
+        const cfg = config.getLocal(DEF.SHARED.NAME);
+        hostname = cfg.logsMonitor;
 
         // INSTANCE METHODS
         /**
@@ -35,8 +44,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     entry.meta = dto.meta;
                     const postData = JSON.stringify({data: entry});
                     const options = {
-                        hostname: 'localhost',
-                        port: 4040,
+                        hostname,
                         path: '/api/@flancer64/pwa_log_agg/add',
                         method: 'POST',
                         headers: {
@@ -46,7 +54,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     };
                     // just write out data w/o response processing
                     const req = http.request(options, () => {
-                        debugger
+                        // do nothing
                     });
                     req.on('error', (e) => {
                         if (e.code === 'ECONNREFUSED') {
@@ -58,7 +66,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     req.write(postData);
                     req.end();
                 } catch (e) {
-                    // do nothing
+                    canSendLogs = false;
                 }
             // duplicate to console
             transConsole.log(dto);
