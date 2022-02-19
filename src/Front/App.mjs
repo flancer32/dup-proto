@@ -23,8 +23,8 @@ export default class Fl32_Dup_Front_App {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Di_Shared_Container} */
         const container = spec['TeqFw_Di_Shared_Container$'];
-        /** @type {TeqFw_Web_Front_App_Logger} */
-        const logger = spec['TeqFw_Web_Front_App_Logger$'];
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_I18n_Front_Lib} */
         const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
@@ -57,6 +57,9 @@ export default class Fl32_Dup_Front_App {
         // ENCLOSED VARS
         let _isInitialized = false; // application is initialized and can be mounted
         let _root; // root vue component for the application
+
+        // MAIN
+        logger.setNamespace(this.constructor.namespace);
 
         // INSTANCE METHODS
 

@@ -15,19 +15,22 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Band_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_App_Logger} */
-    const logger = spec['TeqFw_Web_Front_App_Logger$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
     const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
     /** @type {Fl32_Dup_Front_Mod_Chat_User} */
     const modChatUser = spec['Fl32_Dup_Front_Mod_Chat_User$'];
 
-    // DEFINE WORKING VARS
+    // ENCLOSED VARS
     const template = `
 <layout-chat>
     <msg-band/>
 </layout-chat>
 `;
+
+    // MAIN
+    logger.setNamespace(NS);
     /**
      * Template to create new component instances using Vue.
      *

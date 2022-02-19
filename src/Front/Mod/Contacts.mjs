@@ -4,8 +4,8 @@
 export default class Fl32_Dup_Front_Mod_Contacts {
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Web_Front_App_Logger} */
-        const logger = spec['TeqFw_Web_Front_App_Logger$'];
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
@@ -15,6 +15,7 @@ export default class Fl32_Dup_Front_Mod_Contacts {
         const I_CONTACT = idbCard.getIndexes();
 
         // MAIN
+        logger.setNamespace(this.constructor.name);
 
         // ENCLOSED FUNCTIONS
 

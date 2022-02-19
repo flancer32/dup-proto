@@ -3,10 +3,10 @@
  * see Fl64_Log_Agg_Shared_WAPI_Add.Request
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Back_Mod_Logger_Transport_A_Request';
+const NS = 'Fl32_Dup_Shared_Dto_Log_Request';
 
 /**
- * @memberOf Fl32_Dup_Back_Mod_Logger_Transport_A_Request
+ * @memberOf Fl32_Dup_Shared_Dto_Log_Request
  * @type {Object}
  */
 const ATTR = {
@@ -15,11 +15,12 @@ const ATTR = {
     MESSAGE: 'message',
     META: 'meta',
     SOURCE: 'source',
+    TYPE: 'type',
 };
 
 // MODULE'S CLASSES
 /**
- * @memberOf Fl32_Dup_Back_Mod_Logger_Transport_A_Request
+ * @memberOf Fl32_Dup_Shared_Dto_Log_Request
  */
 class Dto {
     static namespace = NS;
@@ -48,12 +49,17 @@ class Dto {
      * @type {string}
      */
     source;
+    /**
+     * Type of the log entry (b2f - back to front, f2b - front to back).
+     * @type {string}
+     */
+    type;
 }
 
 /**
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_IMeta
  */
-export default class Fl32_Dup_Back_Mod_Logger_Transport_A_Request {
+export default class Fl32_Dup_Shared_Dto_Log_Request {
 
     constructor(spec) {
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
@@ -67,17 +73,17 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport_A_Request {
 
         // INSTANCE METHODS
         /**
-         * @param {Fl32_Dup_Back_Mod_Logger_Transport_A_Request.Dto} data
-         * @return {Fl32_Dup_Back_Mod_Logger_Transport_A_Request.Dto}
+         * @param {Fl32_Dup_Shared_Dto_Log_Request.Dto} data
+         * @return {Fl32_Dup_Shared_Dto_Log_Request.Dto}
          */
         this.createDto = function (data = null) {
             const res = new Dto();
             res.date = castDate(data?.date);
             res.level = castInt(data?.level);
             res.message = castString(data?.message);
-            res.source = castString(data?.source);
-            // noinspection JSValidateTypes
             res.meta = dtoFormless.createDto(data?.meta);
+            res.source = castString(data?.source);
+            res.type = castString(data?.type);
             return res;
         }
 

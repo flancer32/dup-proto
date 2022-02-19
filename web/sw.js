@@ -16,6 +16,10 @@ const dtoLog = {
 };
 
 // MODULE'S FUNCTIONS
+/**
+ * @param msg
+ * @deprecated use WAPI service to upload logs
+ */
 function log(msg) {
     dtoLog.data.body = msg;
     fetch(`./efb/TeqFw_Web_Shared_Event_Front_Log`, {

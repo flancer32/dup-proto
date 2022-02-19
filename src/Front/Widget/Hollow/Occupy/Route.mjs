@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Hollow_Occupy_Route';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_App_Logger} */
-    const logger = spec['TeqFw_Web_Front_App_Logger$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
     const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
@@ -28,7 +28,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
-    // DEFINE WORKING VARS
+    // ENCLOSED VARS
     const template = `
 <layout-empty>
     <q-card class="bg-white" style="min-width:245px">
@@ -62,6 +62,10 @@ export default function (spec) {
     </q-card>
 </layout-empty>
 `;
+
+    // MAIN
+    logger.setNamespace(NS);
+
     /**
      * Template to create new component instances using Vue.
      *

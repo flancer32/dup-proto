@@ -9,6 +9,8 @@ const NS = 'Fl32_Dup_Back_Dto_Config_Local';
 export default class Fl32_Dup_Back_Dto_Config_Local {
     /** @type {TeqFw_Db_Back_Dto_Config_Local} */
     db;
+    /** @type {string} */
+    logsMonitor;
 }
 
 /**
@@ -20,15 +22,18 @@ export class Factory {
 
     constructor(spec) {
         /** @type {TeqFw_Db_Back_Dto_Config_Local.Factory} */
-        const fDb = spec['TeqFw_Db_Back_Dto_Config_Local#Factory$'];
+        const fDb = spec['TeqFw_Db_Back_Dto_Config_Local.Factory$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
         /**
-         * @param {Fl32_Dup_Back_Dto_Config_Local|null} data
+         * @param {Fl32_Dup_Back_Dto_Config_Local|null} [data]
          * @return {Fl32_Dup_Back_Dto_Config_Local}
          */
-        this.create = function (data = null) {
+        this.create = function (data) {
             const res = new Fl32_Dup_Back_Dto_Config_Local();
             res.db = fDb.create(data?.db);
+            res.logsMonitor = castString(data?.logsMonitor);
             return res;
         }
     }

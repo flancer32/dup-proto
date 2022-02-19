@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Input';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_App_Logger} */
-    const logger = spec['TeqFw_Web_Front_App_Logger$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
     const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
@@ -60,6 +60,9 @@ export default function (spec) {
     </div>
 </div>
 `;
+
+    // MAIN
+    logger.setNamespace(NS);
     /**
      * Template to create new component instances using Vue.
      *
