@@ -49,11 +49,6 @@ class Dto {
      * @type {string}
      */
     source;
-    /**
-     * Type of the log entry (b2f - back to front, f2b - front to back).
-     * @type {string}
-     */
-    type;
 }
 
 /**
@@ -83,7 +78,6 @@ export default class Fl32_Dup_Shared_Dto_Log_Request {
             res.message = castString(data?.message);
             res.meta = dtoFormless.createDto(data?.meta);
             res.source = castString(data?.source);
-            res.type = castString(data?.type);
             return res;
         }
 

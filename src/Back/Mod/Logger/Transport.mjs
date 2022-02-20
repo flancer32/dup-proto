@@ -20,6 +20,8 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         const transConsole = spec['TeqFw_Core_Shared_Mod_Logger_Transport_Console$'];
         /** @type {Fl32_Dup_Shared_Dto_Log_Request} */
         const dtoReq = spec['Fl32_Dup_Shared_Dto_Log_Request$'];
+        /** @type {typeof TeqFw_Web_Shared_Enum_Log_Type} */
+        const TYPE = spec['TeqFw_Web_Shared_Enum_Log_Type$'];
 
         // ENCLOSED VARS
         let hostname, canSendLogs = true;
@@ -36,12 +38,16 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         this.log = function (dto) {
             if (canSendLogs)
                 try {
+                    // compose WAPI DTO to send data to logs monitor
                     const entry = dtoReq.createDto();
                     entry.date = dto.date;
                     entry.message = dto.message;
                     entry.source = dto.source;
                     entry.level = (dto.isError) ? 1 : 0;
-                    entry.meta = dto.meta;
+                    entry.meta = dto.meta ?? {};
+                    // default type is 'back'
+                    entry.meta[DEF.SHARED.LOG_META_TYPE] = entry.meta[DEF.SHARED.LOG_META_TYPE] ?? TYPE.BACK;
+                    // send log entry to logs monitor
                     const postData = JSON.stringify({data: entry});
                     const options = {
                         hostname,
