@@ -252,10 +252,10 @@ export default class Fl32_Dup_Front_App {
                 await frontIdentity.init();
                 print(`Front UUID: ${frontIdentity.getUuid()}.`);
                 try {
-                    await initEventStream(container);
-                    print(`Backend events stream is opened.`);
                     await initEventProcessors(container);
                     print(`Frontend processes are created.`);
+                    await initEventStream(container);
+                    print(`Backend events stream is opened.`);
                     initQuasarUi(_root, quasar);
                     print(`Data sources are initialized.`);
                     initRouter(_root, DEF, container);
