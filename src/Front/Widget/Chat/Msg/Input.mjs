@@ -39,6 +39,8 @@ export default function (spec) {
     const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
     /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
     const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
+    /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
+    const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
 
     // ENCLOSED VARS
     const I_MSG = idbMsg.getIndexes();
@@ -94,12 +96,13 @@ export default function (spec) {
 
                 /**
                  * Encrypt and send message to the server. Get message ID from server.
+                 * @param {string} msgUuid
                  * @param {string} msg
                  * @param {number} authorId
                  * @param {number} bandId current band ID (=> contactId => userId)
                  * @return {Promise<{msgUUID: string, recipientId: number}>}
                  */
-                async function encryptAndSend(msg, authorId, bandId) {
+                async function encryptAndSend(msgUuid, msg, authorId, bandId) {
                     // get keys to encrypt
                     const sec = frontIdentity.getSecretKey();
                     // get recipient's public key from IDB
@@ -112,8 +115,10 @@ export default function (spec) {
                     // set key and encrypt
                     scrambler.setKeys(pub, sec);
                     const encrypted = scrambler.encryptAndSign(msg);
+                    logger.info(`Chat message #${msgUuid} is encrypted.`, {msgUuid});
                     // post message to server
                     const confirm = await procPost({
+                        msgUuid,
                         payload: encrypted,
                         userId: authorId,
                         recipientId: card.userId
@@ -123,21 +128,23 @@ export default function (spec) {
                 }
 
                 // MAIN
-                const authorId = frontIdentity.getFrontId();
+                const senderFrontId = frontIdentity.getFrontId();
                 const body = this.message;
                 this.message = null;
-                const {msgUUID, recipientId} = await encryptAndSend(body, authorId, this.otherSideBandId);
-                if (msgUUID) {
-                    logger.info(`Message sent to the server. ID: ${msgUUID}.`);
+                const msgUuid = uuidV4();
+                logger.info(`Chat message #${msgUuid} is posted to band #${this.otherSideBandId}.`);
+                const {recipientId} = await encryptAndSend(msgUuid, body, senderFrontId, this.otherSideBandId);
+                if (msgUuid) {
+                    logger.info(`Chat message #${msgUuid} is registered by the server.`, {msgUuid});
                     const msgId = await modMsgSaver.savePersonalOut({
-                        uuid: msgUUID,
+                        uuid: msgUuid,
                         body,
                         recipientId,
                     });
                     // push message to current band
                     const trx = await idb.startTransaction([idbMsg]);
                     /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base.Dto} */
-                    const one = await idb.readOne(trx, idbMsg, msgUUID, I_MSG.BY_UUID);
+                    const one = await idb.readOne(trx, idbMsg, msgUuid, I_MSG.BY_UUID);
                     await trx.commit();
                     const dto = dtoMsg.createDto();
                     dto.body = one.body;
@@ -145,7 +152,7 @@ export default function (spec) {
                     dto.sent = (one.type === TYPE.PERS_OUT);
                     rxChat.addMessage(dto);
                 } else {
-                    logger.info(`Cannot send message to the server`);
+                    logger.info(`Cannot send chat message #${msgUuid} to the server.`, {msgUuid});
                 }
             }
         },

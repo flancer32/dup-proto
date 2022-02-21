@@ -24,9 +24,12 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
+        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
+        const actGetIdByUuid = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
 
         // MAIN
         eventsBack.subscribe(esfMsgPost.getEventName(), onMessagePost)
+        logger.setNamespace(this.constructor.name);
 
         // ENCLOSED FUNCTIONS
 
@@ -50,24 +53,30 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
             }
 
             /**
-             * Try to send message to recipient.
+             * Try to send chat message to recipient.
              * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} data
              * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
              */
             async function transferMessage(data, meta) {
-                const post = data.message;
-                const frontId = post.recipientId;
+                const chatMsg = data.message;
+                const msgUuid = chatMsg.uuid;
                 const trx = await rdb.startTransaction();
                 try {
+                    const {id: fromId} = await actGetIdByUuid({trx, uuid: meta.frontUUID});
+                    chatMsg.senderId = fromId; // force sender frontId
+                    const toId = chatMsg.recipientId;
+                    logger.info(`Chat message #${chatMsg.uuid} from #${fromId} to #${toId} is received by back.`, {msgUuid});
                     // get UUID for recipient's front
-                    const {uuid: frontUuid} = await actGetUuidById({trx, id: frontId});
+                    const {uuid: frontUuid} = await actGetUuidById({trx, id: toId});
                     await trx.commit();
                     const event = esbReceive.createDto();
                     event.meta.frontUUID = frontUuid;
-                    event.data.message = post;
+                    event.data.message = chatMsg;
                     // noinspection ES6MissingAwait
                     portalFront.publish(event);
+                    logger.info(`Received event for chat message #${chatMsg.uuid} is published for front #${frontUuid}.`, {msgUuid});
                 } catch (e) {
+                    logger.error(`Error in chat message #${msgUuid} processing: ${e.message}`, {msgUuid});
                     await trx.rollback();
                 }
             }

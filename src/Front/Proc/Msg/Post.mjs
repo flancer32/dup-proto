@@ -10,6 +10,8 @@ export default function (spec) {
     // DEPS
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
     const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
     /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
@@ -27,6 +29,7 @@ export default function (spec) {
 
     /**
      * Post encrypted message to back and wait for post confirmation.
+     * @param {string} msgUuid UUID for the message
      * @param {string} payload encrypted data
      * @param {number} userId TODO: remove this input argument, back should use stream UUID to identify sender
      * @param {number} recipientId
@@ -34,10 +37,10 @@ export default function (spec) {
      *
      * @memberOf Fl32_Dup_Front_Proc_Msg_Post
      */
-    async function process({payload, userId, recipientId} = {}) {
+    async function process({msgUuid, payload, userId, recipientId} = {}) {
         return new Promise((resolve) => {
             // ENCLOSED VARS
-            let idFail, subs, msgUUID = uuidV4();
+            let idFail, subs;
 
             // ENCLOSED FUNCTIONS
             /**
@@ -47,7 +50,7 @@ export default function (spec) {
                 clearTimeout(idFail);
                 eventsFront.unsubscribe(subs);
                 // tmp code to catch wrong answers
-                const theSameMsg = (data?.messageId === msgUUID);
+                const theSameMsg = (data?.messageId === msgUuid);
                 if (!theSameMsg) debugger;
                 resolve(data);
             }
@@ -56,8 +59,12 @@ export default function (spec) {
 
             // subscribe to response event from back and create timeout response
             subs = eventsFront.subscribe(esbConfirm.getEventName(), onResponse);
-            idFail = setTimeout(() => {
+            idFail = setTimeout((event) => {
                 eventsFront.unsubscribe(subs);
+                const eventUuid = event.meta.uuid;
+                logger.info(`Message post is processed by back for message #${msgUuid}, event #${eventUuid}.`,
+                    {msgUuid, eventUuid}
+                );
                 resolve();
             }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
 
@@ -68,12 +75,14 @@ export default function (spec) {
             event.data.message.senderId = userId;
             event.data.message.recipientId = recipientId;
             event.data.message.dateSent = new Date();
-            event.data.message.uuid = msgUUID;
+            event.data.message.uuid = msgUuid;
             portalBack.publish(event);
+            logger.info(`Message #${msgUuid} is posted to the back, event #${event.meta.uuid}.`, {msgUuid});
         });
     }
 
     // MAIN
     Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    logger.setNamespace(NS);
     return process;
 }

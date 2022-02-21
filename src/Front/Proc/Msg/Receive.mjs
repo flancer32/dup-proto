@@ -5,6 +5,8 @@
 export default class Fl32_Dup_Front_Proc_Msg_Receive {
     constructor(spec) {
         // DEPS
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
@@ -40,6 +42,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
 
         // MAIN
         eventsFront.subscribe(esbReceived.getEventName(), onReceive);
+        logger.setNamespace(this.constructor.name);
+        logger.info(`Process ${this.constructor.name} is subscribed to events.`);
 
         // ENCLOSED FUNCTIONS
         /**
@@ -67,6 +71,9 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
             // MAIN
             // decrypt message body
             const message = data.message;
+            const senderId = message.senderId;
+            const msgUuid = message.uuid;
+            logger.info(`Chat message #${msgUuid} is received from front #${senderId}.`, {msgUuid})
             const encrypted = message.payload;
             const publicKey = await getPublicKey(message.senderId);
             const secretKey = frontIdentity.getSecretKey();

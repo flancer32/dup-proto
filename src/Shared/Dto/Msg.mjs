@@ -46,7 +46,7 @@ class Dto {
      */
     recipientId;
     /**
-     * RDB User ID for sender.
+     * RDB User ID for sender (used on recipient side).
      * @type {number}
      */
     senderId;
