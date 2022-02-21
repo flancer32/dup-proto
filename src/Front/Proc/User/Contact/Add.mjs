@@ -11,8 +11,8 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
-        /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-        const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
+        const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */
@@ -34,14 +34,14 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
             const card = idbContact.createDto();
             card.keyPub = data.userPubKey;
             card.nick = data.userNick;
-            card.userId = data.userId;
+            card.idOnBack = data.userId;
             const trx = await idb.startTransaction(idbContact);
-            const found = await idb.readOne(trx, idbContact, data.userId, I_CONTACT.BY_USER);
+            const found = await idb.readOne(trx, idbContact, data.userId, I_CONTACT.BY_BACK_ID);
             if (!found) {
                 await idb.create(trx, idbContact, card);
-                logger.info(`New contact is added: ${card.nick} (#${card.userId}).`);
+                logger.info(`New contact is added: ${card.nick} (#${card.idOnBack}).`);
             } else {
-                logger.info(`Contact for user ${card.nick} (#${card.userId}) exists in IDB.`)
+                logger.info(`Contact for user ${card.nick} (#${card.idOnBack}) exists in IDB.`)
             }
             await trx.commit();
         }

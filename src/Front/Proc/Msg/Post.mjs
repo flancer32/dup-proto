@@ -72,7 +72,7 @@ export default function (spec) {
             const event = esfPosted.createDto();
             event.meta.frontUUID = frontIdentity.getUuid();
             event.data.message.payload = payload;
-            event.data.message.senderId = userId;
+            // event.data.message.senderId = userId;
             event.data.message.recipientId = recipientId;
             event.data.message.dateSent = new Date();
             event.data.message.uuid = msgUuid;

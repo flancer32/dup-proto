@@ -21,8 +21,8 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
 
     // DEFINE WORKING VARS
     const I_BAND = idbBand.getIndexes();
@@ -62,14 +62,14 @@ export default function (spec) {
         components: {card},
         data() {
             return {
-                /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+                /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
                 cards: [],
             };
         },
         methods: {
             /**
              * Dto is modified in 'mounted'
-             * @param {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} card
+             * @param {Fl32_Dup_Front_Store_Entity_Contact.Dto} card
              */
             chat(card) {
                 return DEF.ROUTE_CHAT_BAND.replace(':id', String(card.bandId)); // see mounted
@@ -79,7 +79,7 @@ export default function (spec) {
             // this code is called twice on widget mount cause widget is mounted twice (Vue Router ???)
             if (this.cards.length === 0) {
                 const trx = await idb.startTransaction([idbBand, idbContact], false);
-                /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+                /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
                 const cards = await idb.readSet(trx, idbContact);
                 for (const one of cards) {
                     /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */

@@ -15,7 +15,7 @@ const ATTR = {
 };
 
 /**
- * @extends Fl32_Dup_Front_Store_Entity_Msg_Base.Dto
+ * @extends Fl32_Dup_Front_Store_Entity_Msg.Dto
  * @memberOf Fl32_Dup_Front_Store_Dto_Msg_Pers_Out
  */
 class Dto {
@@ -37,8 +37,8 @@ class Dto {
  */
 export default class Fl32_Dup_Front_Store_Dto_Msg_Pers_Out {
     constructor(spec) {
-        /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
-        const baseDto = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
+        const baseDto = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */

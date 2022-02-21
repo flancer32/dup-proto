@@ -27,10 +27,10 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Band} */
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
-    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
+    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
     /** @type {Fl32_Dup_Front_Proc_Msg_Post.process|function} */
     const procPost = spec['Fl32_Dup_Front_Proc_Msg_Post$'];
     /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */
@@ -39,6 +39,8 @@ export default function (spec) {
     const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
     /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
     const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
+    /** @type {typeof Fl32_Dup_Front_Enum_Msg_Direction} */
+    const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
     /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
     const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
 
@@ -109,7 +111,7 @@ export default function (spec) {
                     const trx = await idb.startTransaction([idbContact, idbBand], false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
                     const band = await idb.readOne(trx, idbBand, bandId);
-                    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
+                    /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
                     const card = await idb.readOne(trx, idbContact, band?.contactRef);
                     const pub = card.keyPub;
                     // set key and encrypt
@@ -121,10 +123,10 @@ export default function (spec) {
                         msgUuid,
                         payload: encrypted,
                         userId: authorId,
-                        recipientId: card.userId
+                        recipientId: card.idOnBack
                     });
                     // trx.commit(); // transaction has finished here (cause read only??)
-                    return {msgUUID: confirm?.messageId, recipientId: card.userId};
+                    return {msgUUID: confirm?.messageId, recipientId: card.idOnBack};
                 }
 
                 // MAIN
@@ -143,13 +145,13 @@ export default function (spec) {
                     });
                     // push message to current band
                     const trx = await idb.startTransaction([idbMsg]);
-                    /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base.Dto} */
+                    /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto} */
                     const one = await idb.readOne(trx, idbMsg, msgUuid, I_MSG.BY_UUID);
                     await trx.commit();
                     const dto = dtoMsg.createDto();
                     dto.body = one.body;
                     dto.date = one.date;
-                    dto.sent = (one.type === TYPE.PERS_OUT);
+                    dto.sent = (one.direction === DIR.OUT);
                     rxChat.addMessage(dto);
                 } else {
                     logger.info(`Cannot send chat message #${msgUuid} to the server.`, {msgUuid});

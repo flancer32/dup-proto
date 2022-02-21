@@ -8,12 +8,14 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Band} */
         const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
-        /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-        const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
-        /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base} */
-        const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg_Base$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
+        const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
+        const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {Fl32_Dup_Front_Dto_Home_Conversation} */
         const dtoConv = spec['Fl32_Dup_Front_Dto_Home_Conversation$'];
+        /** @type {typeof Fl32_Dup_Front_Enum_Msg_Direction} */
+        const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
 
         // ENCLOSED VARS
         const I_BAND = idbBand.getIndexes();
@@ -29,7 +31,7 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
             const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
 
             // read all contacts from IDB
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
             const contacts = await idb.readSet(trx, idbContact);
             for (const contact of contacts) {
                 const dto = dtoConv.createDto();
@@ -46,10 +48,10 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
                     const index = I_MSG.BY_BAND;
                     const backward = true;
                     const limit = 1;
-                    const query = IDBKeyRange.bound([band.id, new Date(0)], [band.id, new Date()]);
+                    const query = IDBKeyRange.bound([band.id, DIR.IN, new Date(0)], [band.id, DIR.IN, new Date()]);
                     const keys = await idb.readKeys(trx, idbMsg, {index, query, backward, limit});
                     if (keys[0]) {
-                        /** @type {Fl32_Dup_Front_Store_Entity_Msg_Base.Dto} */
+                        /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto} */
                         const msg = await idb.readOne(trx, idbMsg, keys[0], I_MSG.BY_BAND);
                         dto.message = msg.body;
                         dto.time = msg.date;
@@ -62,6 +64,8 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
                 }
                 res.push(dto);
             }
+
+            trx.commit();
             // order result by date desc
             res.sort((a, b) => b.time - a.time);
             return res;

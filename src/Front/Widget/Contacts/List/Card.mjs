@@ -45,7 +45,7 @@ export default function (spec) {
         name: NS,
         template,
         props: {
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto} */
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
             card: null
         },
         computed: {
@@ -59,7 +59,7 @@ export default function (spec) {
                 return this.card?.nick || 'Anon';
             },
             userId() {
-                return this.card?.userId;
+                return this.card?.idOnBack;
             },
         },
         methods: {

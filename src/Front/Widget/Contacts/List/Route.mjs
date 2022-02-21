@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Web_Front_App_Store_IDB} */
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card} */
-    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact_Card$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
+    const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
     /** @type {Fl32_Dup_Front_Widget_Contacts_List_Card.vueCompTmpl} */
     const card = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
 
@@ -45,13 +45,13 @@ export default function (spec) {
         components: {card},
         data() {
             return {
-                /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+                /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
                 cards: [],
             };
         },
         async mounted() {
             const trx = await idb.startTransaction(idbContact);
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact_Card.Dto[]} */
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
             this.cards = await idb.readSet(trx, idbContact);
             await trx.commit();
         },

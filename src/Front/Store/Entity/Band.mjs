@@ -35,7 +35,7 @@ const INDEX = {
 class Dto {
     static namespace = NS;
     /**
-     * Reference to related contact by local id (this IDB only).
+     * Reference to related contact by local ID (this IDB relation).
      * @type {number}
      */
     contactRef;
@@ -45,7 +45,7 @@ class Dto {
      */
     date;
     /**
-     * Internal local ID for object in IDB.
+     * Local ID for this object in IDB.
      * @type {number}
      */
     id;
