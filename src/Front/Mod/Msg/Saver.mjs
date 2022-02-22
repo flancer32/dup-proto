@@ -74,15 +74,16 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
          * @param {string} body
          * @param {number} senderId local ID for contact card of the sender
          * @param {Date} dateSent
-         * @return {Promise<{id: number}>}
+         * @return {Promise<{id:number, bandId:number, date:Date}>}
          */
         this.savePersonalIn = async function ({uuid, body, senderId, dateSent}) {
             const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
             const bandId = await _getBandId(trx, senderId);
+            const date = new Date();
             const entity = dtoPersIn.createDto();
             entity.bandRef = bandId;
             entity.body = body;
-            entity.date = new Date();
+            entity.date = date;
             entity.dateSent = castDate(dateSent);
             entity.direction = DIR.IN;
             entity.senderId = senderId;
@@ -91,7 +92,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             entity.uuid = uuid;
             const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
-            return {id};
+            return {id, bandId, date};
         }
 
         /**
