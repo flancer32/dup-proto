@@ -15,14 +15,14 @@ export default class Fl32_Dup_Front_Mod_User_Profile {
         /** @type {TeqFw_Web_Front_Mod_Store_Singleton} */
         const storeSingle = spec['TeqFw_Web_Front_Mod_Store_Singleton$'];
 
-        // ENCLOSED VARS
+        // VARS
         const STORE_KEY = `${DEF.SHARED.NAME}/front/user/profile`;
         /** @type {Fl32_Dup_Front_Dto_User.Dto} */
         let _cache;
 
         // MAIN
 
-        // ENCLOSED FUNCS
+        // FUNCS
 
         // INSTANCE METHODS
         /**

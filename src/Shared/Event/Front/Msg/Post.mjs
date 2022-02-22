@@ -30,10 +30,10 @@ export default class Fl32_Dup_Shared_Event_Front_Msg_Post {
         /** @type {Fl32_Dup_Shared_Dto_Msg} */
         const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} [data]
          * @return {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto}

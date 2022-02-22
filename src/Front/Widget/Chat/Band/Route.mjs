@@ -22,7 +22,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Mod_Chat_User} */
     const modChatUser = spec['Fl32_Dup_Front_Mod_Chat_User$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <layout-chat>
     <msg-band/>

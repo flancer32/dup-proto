@@ -6,7 +6,7 @@ export default class Fl32_Dup_Front_Rx_Title {
         // DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
-        // ENCLOSED VARS
+        // VARS
         const _data = ref(null);
 
         // INSTANCE METHODS

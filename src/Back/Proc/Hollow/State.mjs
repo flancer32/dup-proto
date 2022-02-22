@@ -25,7 +25,7 @@ export default class Fl32_Dup_Back_Proc_Hollow_State {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfStateRequested.getEventName(), handler)
 
-        // ENCLOSED FUNCS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

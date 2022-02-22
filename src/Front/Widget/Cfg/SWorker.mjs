@@ -18,7 +18,7 @@ export default function (spec) {
     /** @type {TeqFw_Web_Front_Mod_Sw_Control} */
     const swControl = spec['TeqFw_Web_Front_Mod_Sw_Control$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <q-card class="bg-white q-mt-xs">
     <q-card-section>

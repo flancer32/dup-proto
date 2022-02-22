@@ -28,10 +28,10 @@ export default class Fl32_Dup_Back_Event_User_Notify_WebPush {
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Back_Event_User_Notify_WebPush.Dto} [data]
          * @return {Fl32_Dup_Back_Event_User_Notify_WebPush.Dto}

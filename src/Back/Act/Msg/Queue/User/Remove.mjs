@@ -19,7 +19,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_Queue_Msg_User.ATTR} */
     const ATTR = metaQueue.getAttributes();
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} messageId

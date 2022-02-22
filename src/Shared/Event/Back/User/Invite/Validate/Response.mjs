@@ -31,10 +31,10 @@ export default class Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response {
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response.Dto} [data]
          * @return {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response.Dto}

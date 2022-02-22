@@ -50,10 +50,10 @@ export default class Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request {
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request.Dto} [data]
          * @return {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request.Dto}

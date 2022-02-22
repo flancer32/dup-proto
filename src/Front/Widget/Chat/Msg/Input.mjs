@@ -42,7 +42,7 @@ export default function (spec) {
     /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
     const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <div class="t-grid-cols" style="width:100%; grid-template-columns: 1fr auto; grid-gap: var(--grid-gap);">
     <div>

@@ -34,7 +34,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response} */
     const esbCreateRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <layout-base>
     <div class="q-pt-xs q-gutter-xs">
@@ -116,7 +116,7 @@ export default function (spec) {
         },
         methods: {
             async onSubmit() {
-                // ENCLOSED FUNCTIONS
+                // FUNCS
                 /**
                  * Request back to create invite code.
                  * @param userId
@@ -127,10 +127,10 @@ export default function (spec) {
                 async function createInvite(userId, date, onetime) {
                     const profile = await modProfile.get();
                     return new Promise((resolve) => {
-                        // ENCLOSED VARS
+                        // VARS
                         let idFail, subs;
 
-                        // ENCLOSED FUNCTIONS
+                        // FUNCS
                         /**
                          * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response.Dto} data
                          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

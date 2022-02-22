@@ -18,14 +18,14 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */
         const esbContactAdd = spec['Fl32_Dup_Shared_Event_Back_User_Contact_Add$'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_CONTACT = idbContact.getIndexes();
 
         // MAIN
         eventsFront.subscribe(esbContactAdd.getEventName(), onContactAdd);
         logger.setNamespace(this.constructor.name);
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_User_Contact_Add.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

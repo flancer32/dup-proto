@@ -54,7 +54,7 @@ export default class Fl32_Dup_Front_App {
         /** @type {TeqFw_Web_Front_Mod_App_Alive} */
         const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
 
-        // ENCLOSED VARS
+        // VARS
         let _isInitialized = false; // application is initialized and can be mounted
         let _root; // root vue component for the application
 
@@ -70,7 +70,7 @@ export default class Fl32_Dup_Front_App {
          * @return {Promise<void>}
          */
         this.init = async function (cssSelector) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
 
             /**
              * Create printout function to log application startup events (to page or to console).

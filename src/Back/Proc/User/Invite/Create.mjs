@@ -25,7 +25,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Create {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfCreateReq.getEventName(), onRequest)
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

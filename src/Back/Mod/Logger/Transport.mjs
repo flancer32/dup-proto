@@ -23,7 +23,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         /** @type {typeof TeqFw_Web_Shared_Enum_Log_Type} */
         const TYPE = spec['TeqFw_Web_Shared_Enum_Log_Type$'];
 
-        // ENCLOSED VARS
+        // VARS
         let hostname, canSendLogs = true;
 
         // MAIN

@@ -36,14 +36,14 @@ export default function Factory(spec) {
     // MAIN
     logger.setNamespace(NS);
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * Command action.
      * @returns {Promise<void>}
      * @memberOf Fl32_Dup_Back_Cli_Db_Init
      */
     async function action(opts) {
-        // ENCLOSED FUNCS
+        // FUNCS
 
         // MAIN
         // logger.pause(false);

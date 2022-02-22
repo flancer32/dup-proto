@@ -30,10 +30,10 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Receive {
         /** @type {Fl32_Dup_Shared_Dto_Msg} */
         const dtoMsg = spec['Fl32_Dup_Shared_Dto_Msg$'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_Msg_Receive.Dto} [data]
          * @return {Fl32_Dup_Shared_Event_Back_Msg_Receive.Dto}

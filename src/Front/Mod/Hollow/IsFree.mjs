@@ -20,21 +20,21 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
         /** @type {Fl32_Dup_Front_Mod_User_Profile} */
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
-        // ENCLOSED VARS
+        // VARS
         /** @type {boolean} */
         let _cache;
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * Get hollow state from the server.
          * @return {Promise<Fl32_Dup_Shared_Event_Back_Hollow_State_Response.Dto|null>}
          */
         function requestHollowState() {
             return new Promise((resolve) => {
-                // ENCLOSED VARS
+                // VARS
                 let idFail, subs;
 
-                // ENCLOSED FUNCTIONS
+                // FUNCS
                 /**
                  * @param {Fl32_Dup_Shared_Event_Back_Hollow_State_Response.Dto} data
                  */

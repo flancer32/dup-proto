@@ -18,14 +18,14 @@ export default function (spec) {
     /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript} */
     const rdbSubscription = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
 
-    // ENCLOSED VARS
+    // VARS
     /** @type {typeof TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.ATTR} */
     const A_SUB = rdbSubscription.getAttributes();
 
     // MAIN
     logger.setNamespace(NS);
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} userId
@@ -34,7 +34,7 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Back_Act_Push_Send
      */
     async function act({trx, userId, body}) {
-        // ENCLOSED FUNCS
+        // FUNCS
 
         // MAIN
         /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.Dto[]} */

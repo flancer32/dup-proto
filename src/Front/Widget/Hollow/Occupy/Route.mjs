@@ -28,7 +28,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <layout-empty>
     <q-card class="bg-white" style="min-width:245px">

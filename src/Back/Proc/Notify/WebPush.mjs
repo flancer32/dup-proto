@@ -17,7 +17,7 @@ export default class Fl32_Dup_Back_Proc_Notify_WebPush {
         /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
 
-        // ENCLOSED VARS
+        // VARS
 
         // MAIN
         logger.setNamespace(this.constructor.name);
@@ -27,7 +27,7 @@ export default class Fl32_Dup_Back_Proc_Notify_WebPush {
          * @param {Fl32_Dup_Back_Event_User_Notify_WebPush.Dto} data
          */
         async function onRequest(data) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
 
             // MAIN
             const trx = await conn.startTransaction();

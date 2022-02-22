@@ -37,7 +37,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Widget_Invite_Validate_SignUp} */
     const wgSignUp = spec['Fl32_Dup_Front_Widget_Invite_Validate_SignUp$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <layout-empty>
 
@@ -131,7 +131,7 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async mounted() {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
             /**
              * Send invitation code to server and get Web Push subscription data back.
              * @param {string} code
@@ -139,10 +139,10 @@ export default function (spec) {
              */
             async function validateInvite(code) {
                 return new Promise((resolve) => {
-                    // ENCLOSED VARS
+                    // VARS
                     let idFail, subs;
 
-                    // ENCLOSED FUNCTIONS
+                    // FUNCS
                     /**
                      * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response.Dto} data
                      * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

@@ -27,7 +27,7 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfAddReq.getEventName(), onRequest)
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta

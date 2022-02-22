@@ -25,7 +25,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
     const ATTR = metaInvite.getAttributes();
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} userId
@@ -36,7 +36,7 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Back_Act_User_Invite_Create
      */
     async function act({trx, userId, userNick, onetime, dateExpired}) {
-        // ENCLOSED FUNCS
+        // FUNCS
         /**
          * @param trx
          * @returns {Promise<string>}

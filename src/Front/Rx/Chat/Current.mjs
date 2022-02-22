@@ -16,7 +16,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         const _typeRoom = ref(false);
         const _typeUser = ref(false);
 
-        // ENCLOSED FUNCS
+        // FUNCS
 
         // DEFINE INSTANCE METHODS
         /**

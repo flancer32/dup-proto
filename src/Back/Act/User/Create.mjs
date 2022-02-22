@@ -15,7 +15,7 @@ export default function (spec) {
     const idbTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
 
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {number} frontId
@@ -24,7 +24,7 @@ export default function (spec) {
      * @memberOf Fl32_Dup_Back_Act_User_Create
      */
     async function act({trx, frontId, parentId}) {
-        // ENCLOSED FUNCS
+        // FUNCS
 
         /**
          * @param {TeqFw_Db_Back_RDb_ITrans} trx

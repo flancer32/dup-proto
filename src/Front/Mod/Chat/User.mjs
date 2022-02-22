@@ -25,7 +25,7 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
         /** @type {Fl32_Dup_Front_Rx_Title} */
         const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_MSG = idbMsg.getIndexes();
 
         /**
@@ -34,7 +34,7 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
          * @return {Promise<boolean>}
          */
         this.loadBand = async function (bandId) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
 
             // MAIN
             let res = false;

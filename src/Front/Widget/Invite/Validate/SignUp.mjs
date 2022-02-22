@@ -29,7 +29,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Proc_User_Register.process|function} */
     const procReg = spec['Fl32_Dup_Front_Proc_User_Register$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <q-card class="bg-white" style="min-width:245px">
         <q-card-section v-if="displaySubscribe">

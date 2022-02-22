@@ -22,7 +22,7 @@ export default function (spec) {
     /** @type {TeqFw_Core_Shared_Util_Format.date|function} */
     const formatDate = spec['TeqFw_Core_Shared_Util_Format.date'];
 
-    // ENCLOSED VARS
+    // VARS
     const I_BAND = idbBand.getIndexes();
     const template = `
 <q-card v-on:click="chat">

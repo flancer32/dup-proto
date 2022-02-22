@@ -31,7 +31,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         eventsBack.subscribe(esfMsgPost.getEventName(), onMessagePost)
         logger.setNamespace(this.constructor.name);
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
 
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} data
@@ -39,7 +39,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
          * @return {Promise<void>}
          */
         async function onMessagePost({data, meta}) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
             /**
              * Send received report to sender.
              * @param {string} frontUuid

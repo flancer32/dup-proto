@@ -11,13 +11,13 @@ export default class Fl32_Dup_Front_Mod_Contacts {
         /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
         const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_CONTACT = idbCard.getIndexes();
 
         // MAIN
         logger.setNamespace(this.constructor.name);
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
 
         // INSTANCE METHODS
         /**

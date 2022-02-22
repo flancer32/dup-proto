@@ -19,7 +19,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Mod_Contacts} */
     const modContacts = spec['Fl32_Dup_Front_Mod_Contacts$'];
 
-    // ENCLOSED VARS
+    // VARS
     const template = `
 <q-card class="bg-white" style="min-width:245px">
     <q-card-section v-if="displayInviteData">

@@ -32,7 +32,7 @@ export default function Factory(spec) {
     // MAIN
     logger.setNamespace(NS);
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * Action to re-create database structure (drop-create tables).
      * @returns {Promise<void>}

@@ -25,7 +25,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         /** @type {Fl32_Dup_Back_Act_User_Invite_Clean.act|function} */
         const actClean = spec['Fl32_Dup_Back_Act_User_Invite_Clean$'];
 
-        // ENCLOSED VARS
+        // VARS
         /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
         const A_INVITE = rdbInvite.getAttributes();
 
@@ -33,13 +33,13 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfValidateReq.getEventName(), onRequest)
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onRequest({data, meta}) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @param {string} code

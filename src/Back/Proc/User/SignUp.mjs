@@ -35,14 +35,14 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfSignUpReq.getEventName(), onRequest)
 
-        // ENCLOSED FUNCS
+        // FUNCS
 
         /**
          * @param {Fl32_Dup_Shared_Event_Front_User_SignUp_Request.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onRequest({data, meta}) {
-            // ENCLOSED FUNCS
+            // FUNCS
 
             /**
              * 'true' if there are no users in the hollow yet.

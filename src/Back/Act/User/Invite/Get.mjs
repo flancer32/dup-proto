@@ -20,7 +20,7 @@ export default function (spec) {
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
     const ATTR = metaInvite.getAttributes();
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {string} code invite code

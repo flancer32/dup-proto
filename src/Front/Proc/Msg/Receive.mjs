@@ -30,7 +30,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
         const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
 
-        // ENCLOSED VARS
+        // VARS
         /** @type {typeof Fl32_Dup_Front_Store_Entity_Contact.INDEX} */
         const I_CONTACT = idbCard.getIndexes();
 

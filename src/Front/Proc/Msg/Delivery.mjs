@@ -18,19 +18,19 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
         const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_MSG = idbMsg.getIndexes();
 
         // MAIN
         eventsFront.subscribe(esbDelivered.getEventName(), onDelivery);
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_Msg_Delivery.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onDelivery({data, meta}) {
-            // ENCLOSED FUNCTIONS
+            // FUNCS
 
             // MAIN
             // update delivery date for message in IDB

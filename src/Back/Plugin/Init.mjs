@@ -15,9 +15,9 @@ export default function Factory(spec) {
     /** @type {TeqFw_Db_Back_RDb_Connect} */ // use interface as implementation
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
 
-    // ENCLOSED FUNCTIONS
+    // FUNCS
     async function init() {
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * Get local configuration and initialize DB connection.
          * Place connection object as 'TeqFw_Db_Back_RDb_IConnect' singleton to DI-container.

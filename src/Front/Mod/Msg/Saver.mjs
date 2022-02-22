@@ -25,11 +25,11 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_BAND = idbBand.getIndexes();
         const I_CONTACT = idbContact.getIndexes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
 
         async function _getBandId(trx, userId) {
             let res;

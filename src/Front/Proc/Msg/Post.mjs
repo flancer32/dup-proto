@@ -23,7 +23,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
     const esbConfirm = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
 
-    // ENCLOSED FUNCS
+    // FUNCS
 
     /**
      * Post encrypted message to back and wait for post confirmation.
@@ -36,10 +36,10 @@ export default function (spec) {
      */
     async function process({msgUuid, payload, recipientId} = {}) {
         return new Promise((resolve) => {
-            // ENCLOSED VARS
+            // VARS
             let idFail, subs;
 
-            // ENCLOSED FUNCTIONS
+            // FUNCS
             /**
              * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto} data
              */

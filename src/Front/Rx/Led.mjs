@@ -28,12 +28,12 @@ export default class Fl32_Dup_Front_Rx_Led {
         // DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
-        // ENCLOSED VARS
+        // VARS
         const _data = ref(STATE.OFF);
         let isOffline = true;
         let isAjax = false;
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * Calculate LED state and set reactive element.
          */

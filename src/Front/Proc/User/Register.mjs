@@ -20,7 +20,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Shared_Event_Front_User_SignUp_Request} */
     const esfUserSignedUp = spec['Fl32_Dup_Shared_Event_Front_User_SignUp_Request$'];
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * @param {string} nick
      * @param {string} invite invitation code if this is not the first user.
@@ -30,10 +30,10 @@ export default function (spec) {
      */
     async function process({nick, invite, pubKey} = {}) {
         return new Promise((resolve) => {
-            // ENCLOSED VARS
+            // VARS
             let idFail, subs, success = false;
 
-            // ENCLOSED FUNCS
+            // FUNCS
             /**
              * @param {Fl32_Dup_Shared_Event_Back_User_SignUp_Response.Dto} data
              */

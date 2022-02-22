@@ -24,7 +24,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(esfConfReceive.getEventName(), onMessageReceived)
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
 
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive.Dto} data

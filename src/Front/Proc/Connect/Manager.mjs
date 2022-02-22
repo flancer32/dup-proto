@@ -22,7 +22,7 @@ export default class Fl32_Dup_Front_Proc_Connect_Manager {
         /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
         const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
 
-        // ENCLOSED VARS
+        // VARS
         let _frequent = true; // retry every 5 sec or every 1 min
         let _idIntervalTry; // save ID for running watchdog function
         let _isOpened = false; // 'true' if reverse stream is opened
@@ -34,7 +34,7 @@ export default class Fl32_Dup_Front_Proc_Connect_Manager {
         eventsFront.subscribe(efClosed.getEventName(), onReverseClosed);
 
 
-        // ENCLOSED FUNCS
+        // FUNCS
         /**
          * Clean up watchdog function on stream opening.
          */

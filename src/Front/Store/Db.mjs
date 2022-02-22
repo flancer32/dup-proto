@@ -30,7 +30,7 @@ export default function (spec) {
     const I_CONTACT = idbContact.getIndexes();
     const I_MSG = idbMsg.getIndexes();
 
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * Factory to pin 'db' in the scope and create function to upgrade DB structure on opening.
      * @param {IDBDatabase} db

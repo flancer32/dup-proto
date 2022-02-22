@@ -28,10 +28,10 @@ export default class Fl32_Dup_Shared_Event_Front_Hollow_State_Request {
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
 
-        // ENCLOSED VARS
+        // VARS
         const ATTR = dtoBase.getAttributes();
 
-        // ENCLOSED FUNCTIONS
+        // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto} [data]
          * @return {Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto}

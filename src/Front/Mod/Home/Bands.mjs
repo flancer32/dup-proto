@@ -17,7 +17,7 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_Direction} */
         const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
 
-        // ENCLOSED VARS
+        // VARS
         const I_BAND = idbBand.getIndexes();
         const I_MSG = idbMsg.getIndexes();
 
