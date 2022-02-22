@@ -19,7 +19,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
         const idbMsgBase = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
-
+        /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
+        const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
         // ENCLOSED VARS
         const I_MSG = idbMsgBase.getIndexes();
@@ -47,6 +48,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
             const items = await idb.readSet(trx, idbMsgBase, I_MSG.BY_UUID, query);
             const [first] = items;
             first.dateDelivered = castDate(data.dateDelivered);
+            first.state = STATE.DELIVERED;
             await idb.updateOne(trx, idbMsgBase, first);
             trx.commit();
         }

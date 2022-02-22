@@ -65,6 +65,7 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
                     dto.body = one.body;
                     dto.date = one.date;
                     dto.sent = (one.direction === DIR.OUT);
+                    dto.state = one.state;
                     messages.push(dto);
                 }
                 // sort by date desc

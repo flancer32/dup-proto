@@ -32,6 +32,8 @@ class Dto {
     key;
     /** @type {boolean} */
     sent;
+    /** @type {Fl32_Dup_Front_Enum_Msg_State} */
+    state;
 }
 
 /**
@@ -46,7 +48,10 @@ export default class Fl32_Dup_Front_Dto_Message {
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */
         const castBool = spec['TeqFw_Core_Shared_Util_Cast.castBoolean'];
-
+        /** @type {TeqFw_Core_Shared_Util_Cast.castEnum|function} */
+        const castEnum = spec['TeqFw_Core_Shared_Util_Cast.castEnum'];
+        /** @type {Fl32_Dup_Front_Enum_Msg_State} */
+        const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
         // DEFINE INSTANCE METHODS
         /**
@@ -60,6 +65,7 @@ export default class Fl32_Dup_Front_Dto_Message {
             res.date = castDate(data?.date);
             res.key = castString(data?.key);
             res.sent = castBool(data?.sent);
+            res.state = castEnum(data?.state, STATE);
             return res;
         }
 

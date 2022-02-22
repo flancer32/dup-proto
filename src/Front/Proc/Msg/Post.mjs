@@ -14,8 +14,6 @@ export default function (spec) {
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
     const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
-    /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
-    const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
     /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
     const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -31,13 +29,12 @@ export default function (spec) {
      * Post encrypted message to back and wait for post confirmation.
      * @param {string} msgUuid UUID for the message
      * @param {string} payload encrypted data
-     * @param {number} userId TODO: remove this input argument, back should use stream UUID to identify sender
      * @param {number} recipientId
      * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
      *
      * @memberOf Fl32_Dup_Front_Proc_Msg_Post
      */
-    async function process({msgUuid, payload, userId, recipientId} = {}) {
+    async function process({msgUuid, payload, recipientId} = {}) {
         return new Promise((resolve) => {
             // ENCLOSED VARS
             let idFail, subs;

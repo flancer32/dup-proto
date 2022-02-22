@@ -11,7 +11,6 @@ const NS = 'Fl32_Dup_Front_Store_Dto_Msg_Pers_Out';
  */
 const ATTR = {
     DATE_DELIVERED: 'dateDelivered',
-    RECIPIENT_ID: 'recipientId',
 };
 
 /**
@@ -25,11 +24,6 @@ class Dto {
      * @type {Date}
      */
     dateDelivered;
-    /**
-     * Internal ID for recipient of the message.
-     * @type {number}
-     */
-    recipientId;
 }
 
 /**
@@ -39,8 +33,6 @@ export default class Fl32_Dup_Front_Store_Dto_Msg_Pers_Out {
     constructor(spec) {
         /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
         const baseDto = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
-        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
 
@@ -54,7 +46,6 @@ export default class Fl32_Dup_Front_Store_Dto_Msg_Pers_Out {
             const res = Object.assign(new Dto(), base);
             // then init this DTO props
             res.dateDelivered = castDate(data?.dateDelivered);
-            res.recipientId = castInt(data?.recipientId);
             return res;
         }
     }

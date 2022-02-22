@@ -1,10 +1,15 @@
 /**
- * Widget to display one message on the messages band.
+ * Widget to display one chat message on the messages band.
  *
  * @namespace Fl32_Dup_Front_Widget_Chat_Msg_Band_Item
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Band_Item';
+// Quasar codes for colors
+const Q_COLOR_NOT_SENT = 'grey';
+const Q_COLOR_ON_SERVER = 'yellow-3';
+const Q_COLOR_DELIVERED = 'blue-6';
+const Q_COLOR_READ = 'green-6';
 
 // MODULE'S FUNCTIONS
 /**
@@ -15,8 +20,10 @@ const NS = 'Fl32_Dup_Front_Widget_Chat_Msg_Band_Item';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Util_Format.dateTime|function} */
-    const formatDateTime = spec['TeqFw_Core_Shared_Util_Format.dateTime'];
+    /** @type {TeqFw_Core_Shared_Util_Format.time|function} */
+    const formatTime = spec['TeqFw_Core_Shared_Util_Format.time'];
+    /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
+    const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -24,8 +31,14 @@ export default function (spec) {
     :text="body"
     :name="item?.author"
     :sent="item?.sent"
-    :stamp="stamp"
-/>
+>
+    <template v-slot:stamp>
+        <div style="text-align: right;">
+            {{stamp}} 
+            <q-btn dense flat round icon="lens" size="6px" v-if="displayLed" :color="colorLed" />
+        </div>
+    </template>
+</q-chat-message>
 `;
     /**
      * Template to create new component instances using Vue.
@@ -47,15 +60,27 @@ export default function (spec) {
                 const item = this.item;
                 return (typeof item?.body === 'string') ? [item.body] : [];
             },
-            stamp() {
-                return (this.item?.date instanceof Date) ? formatDateTime(this.item.date) : null;
-            },
             colorBg() {
                 return (this.item?.sent) ? 'base' : 'darker';
+            },
+            colorLed() {
+                /** @type {Fl32_Dup_Front_Enum_Msg_State} */
+                const state = this.item.state;
+                if (state === STATE.ON_SERVER) return Q_COLOR_ON_SERVER;
+                else if (state === STATE.DELIVERED) return Q_COLOR_DELIVERED;
+                else if (state === STATE.READ) return Q_COLOR_READ;
+                else return Q_COLOR_NOT_SENT;
+
             },
             colorTxt() {
                 return (this.item?.sent) ? 'lightest' : 'lighter';
             },
+            displayLed() {
+                return this.item.sent;
+            },
+            stamp() {
+                return (this.item?.date instanceof Date) ? formatTime(this.item.date) : null;
+            }
         }
     };
 }

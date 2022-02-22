@@ -37,16 +37,12 @@ export default function (spec) {
     const modMsgSaver = spec['Fl32_Dup_Front_Mod_Msg_Saver$'];
     /** @type {Fl32_Dup_Front_Dto_Message} */
     const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
-    /** @type {typeof Fl32_Dup_Front_Enum_Msg_Type} */
-    const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
-    /** @type {typeof Fl32_Dup_Front_Enum_Msg_Direction} */
-    const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
+    /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
+    const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
     /** @type {TeqFw_Web_Front_Lib_Uuid.v4|function} */
     const uuidV4 = spec['TeqFw_Web_Front_Lib_Uuid.v4'];
 
     // ENCLOSED VARS
-    const I_MSG = idbMsg.getIndexes();
-
     const template = `
 <div class="t-grid-cols" style="width:100%; grid-template-columns: 1fr auto; grid-gap: var(--grid-gap);">
     <div>
@@ -94,68 +90,73 @@ export default function (spec) {
         },
         methods: {
             async send() {
-                // INNER FUNCTIONS
+                // FUNCS
 
                 /**
-                 * Encrypt and send message to the server. Get message ID from server.
-                 * @param {string} msgUuid
-                 * @param {string} msg
-                 * @param {number} authorId
-                 * @param {number} bandId current band ID (=> contactId => userId)
-                 * @return {Promise<{msgUUID: string, recipientId: number}>}
+                 * Get contact card by band ID from IDB.
+                 * @param {number} bandId
+                 * @return {Promise<Fl32_Dup_Front_Store_Entity_Contact.Dto>}
                  */
-                async function encryptAndSend(msgUuid, msg, authorId, bandId) {
-                    // get keys to encrypt
-                    const sec = frontIdentity.getSecretKey();
-                    // get recipient's public key from IDB
+                async function getContactByBand(bandId) {
+                    let res;
                     const trx = await idb.startTransaction([idbContact, idbBand], false);
                     /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
                     const band = await idb.readOne(trx, idbBand, bandId);
                     /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
-                    const card = await idb.readOne(trx, idbContact, band?.contactRef);
-                    const pub = card.keyPub;
-                    // set key and encrypt
+                    res = await idb.readOne(trx, idbContact, band?.contactRef);
+                    trx.commit(); // transaction has finished here (cause read only??)
+                    return res;
+                }
+
+                /**
+                 * Add posted message to band on UI.
+                 * @param {string} body plain text
+                 * @param {Date} date
+                 */
+                function postToBand(body, date) {
+                    const dto = dtoMsg.createDto();
+                    dto.body = body;
+                    dto.date = date;
+                    dto.sent = true;
+                    dto.state = STATE.NOT_SENT;
+                    rxChat.addMessage(dto);
+                }
+
+                /**
+                 * Encrypt and send message to the server. Get message ID from server.
+                 * @param {string} uuid chat message UUID
+                 * @param {string} body plain text body
+                 * @param {Fl32_Dup_Front_Store_Entity_Contact.Dto} contact contact card of the recipient
+                 * @return {Promise<void>}
+                 */
+                async function encryptAndSend(uuid, body, contact) {
+                    const authorId = frontIdentity.getFrontId();
+                    // retrieve keys and encrypt text body
+                    const pub = contact.keyPub;
+                    const sec = frontIdentity.getSecretKey();
                     scrambler.setKeys(pub, sec);
-                    const encrypted = scrambler.encryptAndSign(msg);
-                    logger.info(`Chat message #${msgUuid} is encrypted.`, {msgUuid});
+                    const encrypted = scrambler.encryptAndSign(body);
+                    logger.info(`Chat message #${uuid} is encrypted.`, {msgUuid: uuid});
                     // post message to server
-                    const confirm = await procPost({
-                        msgUuid,
+                    await procPost({
+                        msgUuid: uuid,
                         payload: encrypted,
                         userId: authorId,
-                        recipientId: card.idOnBack
+                        recipientId: contact.idOnBack
                     });
-                    // trx.commit(); // transaction has finished here (cause read only??)
-                    return {msgUUID: confirm?.messageId, recipientId: card.idOnBack};
                 }
 
                 // MAIN
-                const senderFrontId = frontIdentity.getFrontId();
+                const uuid = uuidV4();
                 const body = this.message;
-                this.message = null;
-                const msgUuid = uuidV4();
-                logger.info(`Chat message #${msgUuid} is posted to band #${this.otherSideBandId}.`);
-                const {recipientId} = await encryptAndSend(msgUuid, body, senderFrontId, this.otherSideBandId);
-                if (msgUuid) {
-                    logger.info(`Chat message #${msgUuid} is registered by the server.`, {msgUuid});
-                    const msgId = await modMsgSaver.savePersonalOut({
-                        uuid: msgUuid,
-                        body,
-                        recipientId,
-                    });
-                    // push message to current band
-                    const trx = await idb.startTransaction([idbMsg]);
-                    /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto} */
-                    const one = await idb.readOne(trx, idbMsg, msgUuid, I_MSG.BY_UUID);
-                    await trx.commit();
-                    const dto = dtoMsg.createDto();
-                    dto.body = one.body;
-                    dto.date = one.date;
-                    dto.sent = (one.direction === DIR.OUT);
-                    rxChat.addMessage(dto);
-                } else {
-                    logger.info(`Cannot send chat message #${msgUuid} to the server.`, {msgUuid});
-                }
+                const bandId = this.otherSideBandId;
+                const contact = await getContactByBand(bandId);
+                const {id: msgId, date: msgDate} = await modMsgSaver.savePersonalOut({uuid, body, bandId});
+                logger.info(`Chat message #${uuid} is saved to IDB as #${msgId}.`);
+                this.message = null; // clear UI field
+                postToBand(body, msgDate);
+                logger.info(`Chat message #${uuid} is posted to band #${bandId}.`);
+                await encryptAndSend(uuid, body, contact);
             }
         },
         async mounted() {

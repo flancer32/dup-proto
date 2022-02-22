@@ -79,17 +79,17 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
         this.savePersonalIn = async function ({uuid, body, senderId, dateSent}) {
             const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
             const bandId = await _getBandId(trx, senderId);
-            const dto = dtoPersIn.createDto();
-            dto.bandRef = bandId;
-            dto.body = body;
-            dto.date = new Date();
-            dto.dateSent = castDate(dateSent);
-            dto.direction = DIR.IN;
-            dto.senderId = senderId;
-            dto.state = STATE.NOT_SENT;
-            dto.type = TYPE.PERS;
-            dto.uuid = uuid;
-            const id = await idb.create(trx, idbMsg, dto);
+            const entity = dtoPersIn.createDto();
+            entity.bandRef = bandId;
+            entity.body = body;
+            entity.date = new Date();
+            entity.dateSent = castDate(dateSent);
+            entity.direction = DIR.IN;
+            entity.senderId = senderId;
+            entity.state = STATE.NOT_SENT;
+            entity.type = TYPE.PERS;
+            entity.uuid = uuid;
+            const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
             return {id};
         }
@@ -98,24 +98,22 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
          * Save personal outgoing message to IDB.
          * @param {string} uuid
          * @param {string} body
-         * @param {number} recipientId local ID for contact card of the recipient
-         * @return {Promise<{id: number}>}
+         * @param {number|string} bandId local ID for contact card of the recipient
+         * @return {Promise<{id: number, date: Date}>}
          */
-        this.savePersonalOut = async function ({uuid, body, recipientId}) {
-            const trx = await idb.startTransaction([idbBand, idbContact, idbMsg]);
-            const bandId = await _getBandId(trx, recipientId);
-            const dto = dtoPersOut.createDto();
-            dto.bandRef = bandId;
-            dto.body = body;
-            dto.date = new Date();
-            dto.direction = DIR.OUT;
-            dto.recipientId = recipientId;
-            dto.state = STATE.NOT_SENT;
-            dto.type = TYPE.PERS;
-            dto.uuid = uuid;
-            const id = await idb.create(trx, idbMsg, dto);
+        this.savePersonalOut = async function ({uuid, body, bandId}) {
+            const trx = await idb.startTransaction([idbMsg]);
+            const entity = dtoPersOut.createDto();
+            entity.bandRef = Number.parseInt(bandId);
+            entity.body = body;
+            entity.date = new Date();
+            entity.direction = DIR.OUT;
+            entity.state = STATE.NOT_SENT;
+            entity.type = TYPE.PERS;
+            entity.uuid = uuid;
+            const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
-            return {id};
+            return {id, date: entity.date};
         }
     }
 }

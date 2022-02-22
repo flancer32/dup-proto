@@ -117,7 +117,7 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
         this.getIndexes = () => INDEX;
 
         this.getKeysForIndex = function (index) {
-            if (index === INDEX.BY_BAND) return [ATTR.BAND_REF, ATTR.DATE, ATTR.DIRECTION];
+            if (index === INDEX.BY_BAND) return [ATTR.BAND_REF, ATTR.DIRECTION, ATTR.DATE];
             else if (index === INDEX.BY_UUID) return [ATTR.UUID];
             return this.getPrimaryKey();
         }
