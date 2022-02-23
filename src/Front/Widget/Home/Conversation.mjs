@@ -83,7 +83,7 @@ export default function (spec) {
                 let res = '';
                 if (this?.item?.time instanceof Date) {
                     const formatted = formatDateTime(this.item.time, false);
-                    res = formatted.substr(5);
+                    res = formatted.substring(5);
                 }
                 return res;
             },
@@ -96,9 +96,6 @@ export default function (spec) {
                 const route = DEF.ROUTE_CHAT_BAND.replace(':id', this.item.bandId);
                 this.$router.push(route);
             }
-        },
-        async mounted() {
-
         }
     };
 }

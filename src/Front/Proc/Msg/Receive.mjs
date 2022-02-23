@@ -29,6 +29,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
         const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
+        /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
+        const uiHomeConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
 
         // VARS
         /** @type {typeof Fl32_Dup_Front_Store_Entity_Contact.INDEX} */
@@ -84,13 +86,15 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                 logger.info(`Chat message #${msgUuid} is saved to IDB as #${id}.`, {msgUuid})
                 const currentBandId = rxChat.getBandId().value;
                 if (currentBandId === bandId) {
-                    // push message to current band if it is compatible
+                    // push message to current band if it is acceptable
                     const dto = dtoMsg.createDto();
                     dto.body = body;
                     dto.date = date;
                     dto.sent = false;
                     rxChat.addMessage(dto);
                 }
+                const homeUi = uiHomeConv.get();
+                homeUi.reload();
             }
             // send receive confirmation back to server
             publishConfirmation(message.uuid, message.senderId);

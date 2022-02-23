@@ -23,6 +23,8 @@ export default function (spec) {
     const modBands = spec['Fl32_Dup_Front_Mod_Home_Bands$'];
     /** @type {Fl32_Dup_Front_Rx_Title} */
     const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
+    /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
+    const uiConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
 
     // WORKING VARS
     const template = `
@@ -52,11 +54,16 @@ export default function (spec) {
                 bands: [],
             };
         },
+        methods: {
+            async reload() {
+                this.bands = await modBands.load();
+            }
+        },
         async mounted() {
+            uiConv.set(this);
             const profile = await modProfile.get();
             rxTitle.set(profile?.nick);
             this.bands = await modBands.load();
-
         }
     };
 }
