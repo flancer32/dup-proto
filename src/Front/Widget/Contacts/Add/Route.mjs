@@ -33,6 +33,10 @@ export default function (spec) {
     const esfCreateReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request$'];
     /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response} */
     const esbCreateRes = spec['Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response$'];
+    /** @type {Fl32_Dup_Front_Widget_Contacts_Add_DialogLink.vueCompTmpl} */
+    const dialogLink = spec['Fl32_Dup_Front_Widget_Contacts_Add_DialogLink$'];
+    /** @type {Fl32_Dup_Front_Ui_Contacts_Add_DialogLink} */
+    const uiDialogLink = spec['Fl32_Dup_Front_Ui_Contacts_Add_DialogLink$'];
 
     // VARS
     const template = `
@@ -73,6 +77,10 @@ export default function (spec) {
             </q-card-actions>
             {{message}}
         </q-card>
+         <dialog-link 
+             :display="displayLink"
+             @onHide="displayLink=false"
+         />
     </div>
 </layout-base>
 `;
@@ -90,9 +98,10 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
+        components: {dialogLink},
         data() {
             return {
+                displayLink: false,
                 lifeCount: LIFE_COUNT.ONE,
                 lifeTime: LIFE_TIME.MIN5,
                 loading: false,
@@ -186,6 +195,9 @@ export default function (spec) {
                     } else {
                         // desktop mode
                         logger.info(`invitation url: ${url}`);
+                        this.displayLink = true;
+                        const ui = uiDialogLink.get();
+                        ui.displayLink(url);
                     }
                 } else {
                     logger.error(`Cannot create invite code on backend.`);

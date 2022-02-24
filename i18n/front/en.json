@@ -42,6 +42,10 @@
     },
     "contact": {
       "add": {
+        "dgLink": {
+          "title": "Send this link to your contact",
+          "link": "Invitation"
+        },
         "count": {
           "many": "Reusable",
           "one": "One-time",
