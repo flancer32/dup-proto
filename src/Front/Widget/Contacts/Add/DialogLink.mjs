@@ -28,7 +28,7 @@ export default function (spec) {
         </q-card-section>
         
         <q-card-section class="q-pt-none text-center">
-            <a href="{{link}}">{{$t('wg.contact.add.dgLink.link')}}</a>
+            <a :href="link">{{$t('wg.contact.add.dgLink.link')}}</a>
         </q-card-section>
 
         <q-card-actions align="center">
