@@ -1,5 +1,5 @@
 /**
- * Message is delivered to recipient.
+ * Send delivery report to chat message author as continuation of 'Fl32_Dup_Shared_Event_Front_Msg_Delivery' event..
  *
  * @namespace Fl32_Dup_Shared_Event_Back_Msg_Delivery
  */

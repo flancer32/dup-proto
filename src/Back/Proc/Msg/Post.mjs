@@ -3,7 +3,7 @@
  * Receive report from recipient, move message from 'Posted Queue' to 'Delivered Queue' then report about delivery
  * to sender. Get delivery report confirmation from sender and remove message from queue.
  */
-export default class Fl32_Dup_Back_Proc_Msg_Queue {
+export default class Fl32_Dup_Back_Proc_Msg_Post {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
@@ -18,8 +18,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const esfMsgPost = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
         const esbConfirmPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Send_Post} */
-        const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Send_Post$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Post} */
+        const esbSendPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
         /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
@@ -69,7 +69,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
                     // get UUID for recipient's front
                     const {uuid: frontUuid} = await actGetUuidById({trx, id: toId});
                     await trx.commit();
-                    const event = esbReceive.createDto();
+                    const event = esbSendPost.createDto();
                     event.meta.frontUUID = frontUuid;
                     event.data.message = chatMsg;
                     // noinspection ES6MissingAwait

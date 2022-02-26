@@ -1,13 +1,16 @@
 /**
- * Sender side process to receive reports about chat message reading sent by recipients.
+ * Sender side process to receive delivery reports from backend.
+ * Change chat message state.
+ *
+ * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
-export default class Fl32_Dup_Front_Proc_Msg_Sent_Read {
+export default class Fl32_Dup_Front_Proc_Msg_Report_Delivery {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Send_Read} */
-        const esbRead = spec['Fl32_Dup_Shared_Event_Back_Msg_Send_Read$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
+        const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
@@ -21,28 +24,32 @@ export default class Fl32_Dup_Front_Proc_Msg_Sent_Read {
         const I_MSG = idbMsg.getIndexes();
 
         // MAIN
-        eventsFront.subscribe(esbRead.getEventName(), onEvent);
+        eventsFront.subscribe(esbDelivery.getEventName(), onDelivery);
 
         // FUNCS
         /**
-         * @param {Fl32_Dup_Shared_Event_Back_Msg_Send_Read.Dto} data
+         * @param {Fl32_Dup_Shared_Event_Back_Msg_Delivery.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
-        async function onEvent({data, meta}) {
+        async function onDelivery({data, meta}) {
             // FUNCS
 
             // MAIN
-            // update unread status for chat message in IDB
+            // update delivery date for message in IDB
             const trx = await idb.startTransaction(idbMsg);
-            const query = IDBKeyRange.only(data.messageUuid);
+            const query = IDBKeyRange.only(data.uuid);
             /** @type {Fl32_Dup_Front_Store_Dto_Msg_Pers_Out.Dto[]} */
             const items = await idb.readSet(trx, idbMsg, I_MSG.BY_UUID, query);
             const [first] = items;
-            first.dateRead = castDate(data.dateRead);
-            first.state = STATE.READ;
-            delete first.unread;
+            first.dateDelivered = castDate(data.dateDelivered);
+            first.state = STATE.DELIVERED;
             await idb.updateOne(trx, idbMsg, first);
             trx.commit();
+            // TODO: publish front local event about state change
         }
+
+        // INSTANCE METHODS
+        this.init = async function () {}
+        this.run = async function ({}) {}
     }
 }

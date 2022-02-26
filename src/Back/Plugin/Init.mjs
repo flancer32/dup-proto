@@ -36,9 +36,9 @@ export default function Factory(spec) {
         // run initialization synchronously to prevent doubling of singletons
         await container.get('Fl32_Dup_Back_Proc_Contact_Add_Bridge$');
         await container.get('Fl32_Dup_Back_Proc_Hollow_State$');
-        await container.get('Fl32_Dup_Back_Proc_Msg_Confirm_Read$');
-        await container.get('Fl32_Dup_Back_Proc_Msg_Confirm_Receive$');
-        await container.get('Fl32_Dup_Back_Proc_Msg_Queue$');
+        await container.get('Fl32_Dup_Back_Proc_Msg_Read$');
+        await container.get('Fl32_Dup_Back_Proc_Msg_Delivery$');
+        await container.get('Fl32_Dup_Back_Proc_Msg_Post$');
         await container.get('Fl32_Dup_Back_Proc_Notify_WebPush$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Create$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Validate$');

@@ -1,8 +1,7 @@
 /**
- * Receive report from recipient, move message from 'Posted Queue' to 'Delivered Queue' then report about delivery
- * to sender.
+ * Receive read report from recipient and transfer this report to chat message author.
  */
-export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
+export default class Fl32_Dup_Back_Proc_Msg_Read {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
@@ -13,37 +12,37 @@ export default class Fl32_Dup_Back_Proc_Msg_Confirm_Receive {
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
-        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
-        const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
-        const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
+        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Read} */
+        const esfRead = spec['Fl32_Dup_Shared_Event_Front_Msg_Read$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Read} */
+        const esbRead = spec['Fl32_Dup_Shared_Event_Back_Msg_Read$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
 
         // MAIN
         logger.setNamespace(this.constructor.name);
-        eventsBack.subscribe(esfConfReceive.getEventName(), onMessageReceived)
+        eventsBack.subscribe(esfRead.getEventName(), onEvent)
 
         // FUNCS
-
         /**
-         * @param {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive.Dto} data
+         * @param {Fl32_Dup_Shared_Event_Front_Msg_Read.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          * @return {Promise<void>}
          */
-        async function onMessageReceived({data, meta}) {
-            const uuid = data.messageUuid;
+        async function onEvent({data, meta}) {
             const trx = await rdb.startTransaction();
             try {
                 // get UUID for recipient's front (sender of original message)
-                const {uuid: frontUuid} = await actGetUuidById({trx, id: data?.senderFrontId});
+                const {uuid: frontUuid} = await actGetUuidById({trx, id: data.authorId});
                 await trx.commit();
-                const event = esbDelivery.createDto();
-                event.meta.frontUUID = frontUuid;
-                event.data.dateDelivered = data.dateDelivery;
-                event.data.uuid = uuid;
-                // noinspection ES6MissingAwait
-                portalFront.publish(event);
+                if (frontUuid) {
+                    const event = esbRead.createDto();
+                    event.meta.frontUUID = frontUuid;
+                    event.data.dateRead = data.dateRead;
+                    event.data.messageUuid = data.messageUuid;
+                    // noinspection ES6MissingAwait
+                    portalFront.publish(event);
+                }
             } catch (e) {
                 await trx.rollback();
             }

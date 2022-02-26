@@ -1,14 +1,14 @@
 /**
  * Send new chat message to recipient as continuation of 'Fl32_Dup_Shared_Event_Front_Msg_Post' event.
  *
- * @namespace Fl32_Dup_Shared_Event_Back_Msg_Send_Post
+ * @namespace Fl32_Dup_Shared_Event_Back_Msg_Post
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Shared_Event_Back_Msg_Send_Post';
+const NS = 'Fl32_Dup_Shared_Event_Back_Msg_Post';
 
 // MODULE'S CLASSES
 /**
- * @memberOf Fl32_Dup_Shared_Event_Back_Msg_Send_Post
+ * @memberOf Fl32_Dup_Shared_Event_Back_Msg_Post
  */
 class Dto {
     static namespace = NS;
@@ -22,7 +22,7 @@ class Dto {
 /**
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_IEvent
  */
-export default class Fl32_Dup_Shared_Event_Back_Msg_Send_Post {
+export default class Fl32_Dup_Shared_Event_Back_Msg_Post {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
@@ -35,8 +35,8 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Send_Post {
 
         // FUNCS
         /**
-         * @param {Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto} [data]
-         * @return {Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto}
+         * @param {Fl32_Dup_Shared_Event_Back_Msg_Post.Dto} [data]
+         * @return {Fl32_Dup_Shared_Event_Back_Msg_Post.Dto}
          */
         function createData(data) {
             const res = new Dto();
@@ -46,8 +46,8 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Send_Post {
 
         // INSTANCE METHODS
         /**
-         * @param {{data: Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}} [data]
-         * @return {{data: Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}}
+         * @param {{data: Fl32_Dup_Shared_Event_Back_Msg_Post.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}} [data]
+         * @return {{data: Fl32_Dup_Shared_Event_Back_Msg_Post.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}}
          */
         this.createDto = function (data) {
             const res = dtoBase.createDto({[ATTR.META]: data?.[ATTR.META]});

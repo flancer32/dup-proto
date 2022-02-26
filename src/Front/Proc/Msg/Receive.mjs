@@ -11,10 +11,10 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
         const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Send_Post} */
-        const esbReceived = spec['Fl32_Dup_Shared_Event_Back_Msg_Send_Post$'];
-        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
-        const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Post} */
+        const esbPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
+        /** @type {Fl32_Dup_Shared_Event_Front_Msg_Delivery} */
+        const esfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Delivery$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
         const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
         /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
@@ -37,16 +37,16 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const I_CONTACT = idbCard.getIndexes();
 
         // MAIN
-        eventsFront.subscribe(esbReceived.getEventName(), onReceive);
+        eventsFront.subscribe(esbPost.getEventName(), onEvent);
         logger.setNamespace(this.constructor.name);
         logger.info(`Process ${this.constructor.name} is subscribed to events.`);
 
         // FUNCS
         /**
-         * @param {Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto} data
+         * @param {Fl32_Dup_Shared_Event_Back_Msg_Post.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
-        async function onReceive({data, meta}) {
+        async function onEvent({data, meta}) {
             // FUNCS
             async function getPublicKey(userId) {
                 const trx = await idb.startTransaction(idbCard, false);
@@ -56,8 +56,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                 return one?.keyPub;
             }
 
-            function publishConfirmation(messageUuid, senderId) {
-                const event = new esfConfReceive.createDto();
+            function publishDeliveryReport(messageUuid, senderId) {
+                const event = new esfDelivery.createDto();
                 event.data.dateDelivery = new Date();
                 event.data.messageUuid = message.uuid;
                 event.data.senderFrontId = senderId;
@@ -97,7 +97,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                 homeUi?.reload();
             }
             // send receive confirmation back to server
-            publishConfirmation(message.uuid, message.senderId);
+            publishDeliveryReport(message.uuid, message.senderId);
         }
 
         // INSTANCE METHODS

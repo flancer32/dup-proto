@@ -12,6 +12,11 @@ const NS = 'Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read';
  */
 class Dto {
     static namespace = NS;
+    /**
+     * Chat message UUID.
+     * @type {string}
+     */
+    msgUuid;
 }
 
 /**
@@ -22,6 +27,8 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read {
         // DEPS
         /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
         const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
+        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
+        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
         // VARS
         const ATTR = dtoBase.getAttributes();
@@ -33,6 +40,7 @@ export default class Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read {
          */
         function createData(data) {
             const res = new Dto();
+            res.msgUuid = castString(data?.msgUuid);
             return res;
         }
 
