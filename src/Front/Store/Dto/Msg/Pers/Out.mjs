@@ -24,6 +24,11 @@ class Dto {
      * @type {Date}
      */
     dateDelivered;
+    /**
+     * UTC date when message was read by recipient.
+     * @type {Date}
+     */
+    dateRead;
 }
 
 /**
@@ -46,6 +51,7 @@ export default class Fl32_Dup_Front_Store_Dto_Msg_Pers_Out {
             const res = Object.assign(new Dto(), base);
             // then init this DTO props
             res.dateDelivered = castDate(data?.dateDelivered);
+            res.dateRead = castDate(data?.dateRead);
             return res;
         }
     }

@@ -18,8 +18,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Queue {
         const esfMsgPost = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
         const esbConfirmPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Receive} */
-        const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Send_Post} */
+        const esbReceive = spec['Fl32_Dup_Shared_Event_Back_Msg_Send_Post$'];
         /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
         const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */

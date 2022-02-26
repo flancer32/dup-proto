@@ -55,6 +55,7 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
                         const msg = await idb.readOne(trx, idbMsg, keys[0], I_MSG.BY_BAND);
                         dto.message = msg.body;
                         dto.time = msg.date;
+                        dto.unread = msg.unread;
                     }
                 } else {
                     // create new band

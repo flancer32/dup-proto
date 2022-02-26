@@ -37,9 +37,9 @@ export default function (spec) {
             </div>
             <div class="col-auto">
                  <q-avatar 
-                 size="24px" 
-                 v-if="unread>0"
-                 color="green">{{ unread }}</q-avatar>
+                 size="8px" 
+                 v-if="unread"
+                 color="green"/>
             </div>
         </div>
     </q-card-section>

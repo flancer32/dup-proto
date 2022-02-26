@@ -1,8 +1,10 @@
 /**
- * Process delivery report from backend and change chat message state.
+ * Sender side process to receive delivery reports from backend.
+ * Change chat message state.
+ *
  * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
-export default class Fl32_Dup_Front_Proc_Msg_Delivery {
+export default class Fl32_Dup_Front_Proc_Msg_Sent_Receive {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -43,6 +45,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Delivery {
             first.state = STATE.DELIVERED;
             await idb.updateOne(trx, idbMsg, first);
             trx.commit();
+            // TODO: publish front local event about state change
         }
 
         // INSTANCE METHODS

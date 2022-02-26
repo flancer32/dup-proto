@@ -1,9 +1,9 @@
 /**
- * On-demand process to transfer new user message to backend and wait for confirmation.
- * @namespace Fl32_Dup_Front_Proc_Msg_Post
+ * On-demand process to transfer report about message reading from recipient to author.
+ * @namespace Fl32_Dup_Front_Proc_Msg_Read
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Proc_Msg_Post';
+const NS = 'Fl32_Dup_Front_Proc_Msg_Read';
 
 // MODULE'S FUNCTIONS
 export default function (spec) {
@@ -18,30 +18,30 @@ export default function (spec) {
     const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
     const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-    /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
-    const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
-    /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post} */
-    const esbConfirm = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_Msg_Read} */
+    const esfRead = spec['Fl32_Dup_Shared_Event_Front_Msg_Read$'];
+    /** @type {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read} */
+    const esbConfirm = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read$'];
 
     // FUNCS
 
     /**
-     * Post encrypted message to back and wait for post confirmation.
-     * @param {string} msgUuid UUID for the message
-     * @param {string} payload encrypted data
-     * @param {number} recipientId
-     * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto>}
+     * Send info about message reading form recipient to author.
+     * @param {string} msgUuid UUID for the read message
+     * @param {Date} date read date
+     * @param {number} authorId backend ID for author's front
+     * @return {Promise<Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read.Dto>}
      *
-     * @memberOf Fl32_Dup_Front_Proc_Msg_Post
+     * @memberOf Fl32_Dup_Front_Proc_Msg_Read
      */
-    async function process({msgUuid, payload, recipientId} = {}) {
+    async function process({msgUuid, date, authorId} = {}) {
         return new Promise((resolve) => {
             // VARS
             let idFail, subs;
 
             // FUNCS
             /**
-             * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post.Dto} data
+             * @param {Fl32_Dup_Shared_Event_Back_Msg_Confirm_Read.Dto} data
              */
             function onResponse({data}) {
                 clearTimeout(idFail);
@@ -58,22 +58,20 @@ export default function (spec) {
             subs = eventsFront.subscribe(esbConfirm.getEventName(), onResponse);
             idFail = setTimeout(() => {
                 eventsFront.unsubscribe(subs);
-                logger.info(`Post event for chat message #${msgUuid} is failed by timeout.`,
+                logger.info(`Read report sending for chat message #${msgUuid} is failed by timeout.`,
                     {msgUuid}
                 );
                 resolve();
             }, DEF.TIMEOUT_EVENT_RESPONSE); // return nothing after timeout
 
             // create event message and publish it to back
-            const event = esfPosted.createDto();
+            const event = esfRead.createDto();
             event.meta.frontUUID = frontIdentity.getUuid();
-            event.data.message.payload = payload;
-            // event.data.message.senderId = userId;
-            event.data.message.recipientId = recipientId;
-            event.data.message.dateSent = new Date();
-            event.data.message.uuid = msgUuid;
+            event.data.messageUuid = msgUuid;
+            event.data.dateRead = date;
+            event.data.authorId = authorId;
             portalBack.publish(event);
-            logger.info(`Chat message #${msgUuid} is posted to the back, event #${event.meta.uuid}.`, {msgUuid});
+            logger.info(`Read report for chat message #${msgUuid} is sent to the back, event #${event.meta.uuid}.`, {msgUuid});
         });
     }
 

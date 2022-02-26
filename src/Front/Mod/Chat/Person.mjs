@@ -1,11 +1,7 @@
 /**
- * User chat model.
- *
- * Access to locally stored data (IDB) and to syncing local data with remote.
- *
- * @namespace Fl32_Dup_Front_Mod_Chat_User
+ * Messages loader for person chat.
  */
-export default class Fl32_Dup_Front_Mod_Chat_User {
+export default class Fl32_Dup_Front_Mod_Chat_Person {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
@@ -24,6 +20,10 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
         const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
         /** @type {Fl32_Dup_Front_Rx_Title} */
         const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
+        /** @type {Fl32_Dup_Front_Proc_Msg_Read.process|function} */
+        const procRead = spec['Fl32_Dup_Front_Proc_Msg_Read$'];
+        /** @type {Fl32_Dup_Front_Act_GetFrontIdByBandId.act|function} */
+        const actGetFrontIdByBandId = spec['Fl32_Dup_Front_Act_GetFrontIdByBandId$'];
 
         // VARS
         const I_MSG = idbMsg.getIndexes();
@@ -35,6 +35,17 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
          */
         this.loadBand = async function (bandId) {
             // FUNCS
+            /**
+             * Remove 'unread' attribute for entity in IDB and send event message to author about chat message reading.
+             * @param {IDBTransaction} trx
+             * @param {Fl32_Dup_Front_Store_Entity_Msg.Dto} entity
+             */
+            async function processUnread(trx, entity) {
+                delete entity.unread;
+                idb.updateOne(trx, idbMsg, entity);
+                const {frontBid: authorId} = await actGetFrontIdByBandId({trx, bandId: entity.bandRef});
+                if (authorId) procRead({msgUuid: entity.uuid, date: entity.date, authorId});
+            }
 
             // MAIN
             let res = false;
@@ -67,6 +78,7 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
                     dto.sent = (one.direction === DIR.OUT);
                     dto.state = one.state;
                     messages.push(dto);
+                    if (one.unread) await processUnread(trx, one);
                 }
                 // sort by date desc
                 messages.sort((a, b) => (a.date - b.date));
@@ -77,24 +89,5 @@ export default class Fl32_Dup_Front_Mod_Chat_User {
             return res;
         }
 
-        /**
-         * Get contact card from IDB.
-         * @param {number|string} contactId
-         * @return {Promise<Fl32_Dup_Front_Store_Entity_Contact.Dto|null>}
-         */
-        this.getCard = async function (contactId) {
-            let res;
-            // load data from IDB
-            const trxRead = await idb.startTransaction([idbContact, idbMsg], false);
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
-            res = await idb.readOne(trxRead, idbContact, parseInt(contactId));
-            if (!res) {
-                rxChat.setTypeUser();
-                rxChat.setBandId(null);
-                rxChat.setTitle(null);
-            }
-            trxRead.commit();
-            return res;
-        }
     }
 }

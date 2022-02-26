@@ -23,6 +23,7 @@ const ATTR = {
     ID: 'id',
     STATE: 'state',
     TYPE: 'type',
+    UNREAD: 'isRead',
     UUID: 'uuid',
 };
 
@@ -65,6 +66,11 @@ class Dto {
     state;
     /** @type {Fl32_Dup_Front_Enum_Msg_Type} */
     type;
+    /**
+     * 'true' if message is unread by recipient.
+     * @type {boolean}
+     */
+    unread;
     /** @type {number} */
     uuid;
 }
@@ -74,6 +80,8 @@ class Dto {
  */
 export default class Fl32_Dup_Front_Store_Entity_Msg {
     constructor(spec) {
+        /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */
+        const castBoolean = spec['TeqFw_Core_Shared_Util_Cast.castBoolean'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
@@ -100,6 +108,7 @@ export default class Fl32_Dup_Front_Store_Entity_Msg {
             res.date = castDate(data?.date) || new Date();
             res.direction = castEnum(data?.direction, DIR);
             res.id = castInt(data?.id);
+            res.unread = castBoolean(data?.unread);
             res.state = castEnum(data?.state, STATE);
             res.type = castEnum(data?.type, TYPE);
             res.uuid = castStr(data?.uuid);

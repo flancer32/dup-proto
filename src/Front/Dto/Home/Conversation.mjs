@@ -33,7 +33,7 @@ export class Dto {
     name;
     /** @type {Date} */
     time;
-    /** @type {number} */
+    /** @type {boolean} */
     unread;
 }
 
@@ -43,6 +43,8 @@ export class Dto {
 export default class Fl32_Dup_Front_Dto_Home_Conversation {
 
     constructor(spec) {
+        /** @type {TeqFw_Core_Shared_Util_Cast.castBoolean|function} */
+        const castBoolean = spec['TeqFw_Core_Shared_Util_Cast.castBoolean'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
@@ -62,7 +64,7 @@ export default class Fl32_Dup_Front_Dto_Home_Conversation {
             res.message = castString(data?.message);
             res.name = castString(data?.name);
             res.time = castDate(data?.time);
-            res.unread = castInt(data?.unread);
+            res.unread = castBoolean(data?.unread);
             return res;
         }
 

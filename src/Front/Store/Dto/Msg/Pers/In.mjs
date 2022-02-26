@@ -26,7 +26,7 @@ class Dto {
      */
     dateSent;
     /**
-     * Internal ID for sender of the message.
+     * Internal ID for contact card of message sender.
      * @type {number}
      */
     senderId;

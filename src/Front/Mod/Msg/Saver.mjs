@@ -89,6 +89,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             entity.senderId = senderId;
             entity.state = STATE.NOT_SENT;
             entity.type = TYPE.PERS;
+            entity.unread = true; // message is not read by user itself yet
             entity.uuid = uuid;
             const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
@@ -111,6 +112,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             entity.direction = DIR.OUT;
             entity.state = STATE.NOT_SENT;
             entity.type = TYPE.PERS;
+            entity.unread = true; // message is not read by recipient yet
             entity.uuid = uuid;
             const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();

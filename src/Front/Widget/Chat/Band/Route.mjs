@@ -19,8 +19,8 @@ export default function (spec) {
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band} */
     const msgBand = spec['Fl32_Dup_Front_Widget_Chat_Msg_Band$'];
-    /** @type {Fl32_Dup_Front_Mod_Chat_User} */
-    const modChatUser = spec['Fl32_Dup_Front_Mod_Chat_User$'];
+    /** @type {Fl32_Dup_Front_Mod_Chat_Person} */
+    const modChat = spec['Fl32_Dup_Front_Mod_Chat_Person$'];
 
     // VARS
     const template = `
@@ -53,14 +53,14 @@ export default function (spec) {
         watch: {
             async id(current, old) {
                 if (current !== old)
-                    await modChatUser.loadBand(current);
+                    await modChat.loadBand(current);
                 else
                     logger.info(`The same ID on message band loading.`);
             }
         },
         async mounted() {
             logger.info(`Loading message band #${this.id}...`);
-            await modChatUser.loadBand(this.id);
+            await modChat.loadBand(this.id);
         },
     };
 }

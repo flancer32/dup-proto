@@ -11,8 +11,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
         const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
-        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Receive} */
-        const esbReceived = spec['Fl32_Dup_Shared_Event_Back_Msg_Receive$'];
+        /** @type {Fl32_Dup_Shared_Event_Back_Msg_Send_Post} */
+        const esbReceived = spec['Fl32_Dup_Shared_Event_Back_Msg_Send_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive} */
         const esfConfReceive = spec['Fl32_Dup_Shared_Event_Front_Msg_Confirm_Receive$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
@@ -43,7 +43,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
 
         // FUNCS
         /**
-         * @param {Fl32_Dup_Shared_Event_Back_Msg_Receive.Dto} data
+         * @param {Fl32_Dup_Shared_Event_Back_Msg_Send_Post.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
         async function onReceive({data, meta}) {
@@ -94,7 +94,7 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                     rxChat.addMessage(dto);
                 }
                 const homeUi = uiHomeConv.get();
-                homeUi.reload();
+                homeUi?.reload();
             }
             // send receive confirmation back to server
             publishConfirmation(message.uuid, message.senderId);
