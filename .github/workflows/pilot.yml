@@ -40,7 +40,7 @@ jobs:
             cp ~/cfg/${{env.PRJ}}.local.crypto.keys.json ./cfg/local.crypto.keys.json
             cp ~/cfg/${{env.PRJ}}.local.json ./cfg/local.json
             cp ~/cfg/${{env.PRJ}}.local.vapid.key.json ./cfg/local.vapid.key.json
-            npm install
+            /bin/bash ./bin/deploy/dev.sh
             cd /home/github/${{env.PRJ}}/
             npm stop
             cd /home/github/
