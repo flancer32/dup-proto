@@ -17,6 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Ui_Contacts_Add_DialogLink} */
     const uiLink = spec['Fl32_Dup_Front_Ui_Contacts_Add_DialogLink$'];
+    /** @type {Fl32_Dup_Front_Lib_Qrious|function} */
+    const QRious = spec['Fl32_Dup_Front_Lib_Qrious#'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -27,6 +29,10 @@ export default function (spec) {
             <div class="text-h6">{{$t('wg.contact.add.dgLink.title')}}</div>
         </q-card-section>
         
+        <q-card-section class="q-pt-none text-center">
+            <canvas id="qrcode"></canvas>
+        </q-card-section>
+                
         <q-card-section class="q-pt-none text-center">
             <a :href="link">{{$t('wg.contact.add.dgLink.link')}}</a>
         </q-card-section>
@@ -65,6 +71,13 @@ export default function (spec) {
         },
         async mounted() {
             uiLink.set(this);
+        },
+        updated() {
+            const elCanvas = document.getElementById('qrcode');
+            new QRious({
+                element: elCanvas,
+                value: this.link
+            });
         },
     };
 }

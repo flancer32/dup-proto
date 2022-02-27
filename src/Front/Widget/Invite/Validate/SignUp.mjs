@@ -33,7 +33,7 @@ export default function (spec) {
     const template = `
 <q-card class="bg-white" style="min-width:245px">
         <q-card-section v-if="displaySubscribe">
-            <div class="text-subtitle2">{{$t('wg.invite.verify.msg.subscribe')}}</div>
+            <div class="text-subtitle2">{{$t('wg.invite.validate.msg.subscribe')}}</div>
             <q-card-actions align="center">
                 <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
             </q-card-actions>
@@ -50,7 +50,7 @@ export default function (spec) {
             </q-card-actions>
         </q-card-section>
         <q-card-section v-if="displaySuccess">
-            <div class="text-subtitle2 text-center">{{$t('wg.invite.verify.msg.success')}}</div>
+            <div class="text-subtitle2 text-center">{{$t('wg.invite.validate.msg.success')}}</div>
         </q-card-section> 
         <q-card-section v-if="displayError">
             <div class="text-subtitle2 text-center">{{fldError}}</div>

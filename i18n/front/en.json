@@ -84,17 +84,15 @@
       "validate": {
         "contact": {
           "added": "New contact is added as #{{id}}",
-          "title": "Invitation from user"
-        }
-      },
-      "verify": {
+          "title": "Invitation from user",
+          "updated": "This contact already exists as #{{id}}"
+        },
         "msg": {
           "checkCode": "Invite verification...",
           "wrongCode": "Sorry, this invitation is expired. Try to get another one.",
           "subscribe": "You need to subscribe to notifications first.",
           "success": "You have been successfully registered in the hollow."
-        },
-        "title": "Registration"
+        }
       }
     }
   }

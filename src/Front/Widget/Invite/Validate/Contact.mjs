@@ -32,6 +32,9 @@ export default function (spec) {
     <q-card-section v-if="displayAdded">
         <div class="text-subtitle2 text-center">{{$t('wg.invite.validate.contact.added', {id: contactId})}}</div>
     </q-card-section>
+    <q-card-section v-if="displayUpdated">
+        <div class="text-subtitle2 text-center">{{$t('wg.invite.validate.contact.updated', {id: contactId})}}</div>
+    </q-card-section>
 </q-card>
 `;
     // MAIN
@@ -50,6 +53,7 @@ export default function (spec) {
                 contactId: null,
                 displayAdded: false,
                 displayInviteData: true,
+                displayUpdated: false,
                 freezeAccept: false,
             };
         },
@@ -69,12 +73,14 @@ export default function (spec) {
                 if (res.contactId) {
                     this.contactId = res.contactId;
                     this.displayInviteData = false;
-                    this.displayAdded = true;
+                    this.displayAdded = !res.alreadyExists;
+                    this.displayUpdated = res.alreadyExists;
                 }
                 this.freezeAccept = false;
                 setTimeout(() => {
                     this.displayInviteData = true;
                     this.displayAdded = false;
+                    this.displayUpdated = false;
                     this.$emit(EVT_DONE);
                 }, DEF.TIMEOUT_UI_DELAY);
             },

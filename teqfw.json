@@ -28,6 +28,7 @@
     "statics": {
       "/tweetnacl-util/": "/tweetnacl-util/",
       "/tweetnacl/": "/tweetnacl/",
+      "/qrious/": "/qrious/dist/",
       "/vue-router/": "/vue-router/dist/"
     }
   }

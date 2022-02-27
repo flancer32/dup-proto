@@ -55,10 +55,10 @@ export default function (spec) {
 
     <q-card class="bg-white" style="min-width:245px">
         <q-card-section v-if="displayValidation">
-            <div class="text-subtitle2 text-center">{{ $t('wg.invite.verify.msg.checkCode') }}</div>
+            <div class="text-subtitle2 text-center">{{ $t('wg.invite.validate.msg.checkCode') }}</div>
         </q-card-section>
         <q-card-section v-if="displayInvalid">
-            <div class="text-subtitle2 text-center">{{ $t('wg.invite.verify.msg.wrongCode') }}</div>
+            <div class="text-subtitle2 text-center">{{ $t('wg.invite.validate.msg.wrongCode') }}</div>
         </q-card-section>
     </q-card>
 
