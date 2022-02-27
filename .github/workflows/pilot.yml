@@ -36,15 +36,16 @@ jobs:
           username: ${{ secrets.REMOTE_USER_CONTABO }}
           key: ${{ secrets.SERVER_SSH_KEY_CONTABO }}
           script: |
-            cd /home/github/${{env.PRJ}}.new/
+            mv ./${{env.PRJ}} ./${{env.PRJ}}.old
+            mv ./${{env.PRJ}}.new ./${{env.PRJ}}
+            cd /home/github/${{env.PRJ}}
             cp ~/cfg/${{env.PRJ}}.local.crypto.keys.json ./cfg/local.crypto.keys.json
             cp ~/cfg/${{env.PRJ}}.local.json ./cfg/local.json
             cp ~/cfg/${{env.PRJ}}.local.vapid.key.json ./cfg/local.vapid.key.json
             /bin/bash ./bin/deploy/dev.sh
-            cd /home/github/${{env.PRJ}}/
+            cd /home/github/${{env.PRJ}}.old/
             npm stop
             cd /home/github/
-            rm -fr ./${{env.PRJ}}
-            mv ./${{env.PRJ}}.new ./${{env.PRJ}}
+            rm -fr ./${{env.PRJ}}.old
             cd ./${{env.PRJ}}/
             nohup npm start > ./output.log 2>&1 &
