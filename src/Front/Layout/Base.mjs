@@ -15,11 +15,8 @@ const NS = 'Fl32_Dup_Front_Layout_Base';
  */
 export default function Factory(spec) {
     // DEPS
-    const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Layout_Nav_Base.vueCompTmpl} */
-    const navigator = spec['Fl32_Dup_Front_Layout_Nav_Base$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
     /** @type {Fl32_Dup_Front_Layout_Base_BottomBar.vueCompTmpl} */
@@ -38,7 +35,6 @@ export default function Factory(spec) {
             <q-toolbar-title>{{title}}</q-toolbar-title>
             <q-space></q-space>
             <leds/>
-            <!--            <q-btn dense flat round icon="menu" @click="toggleRightDrawer"/>-->
         </q-toolbar>
     </q-header>
 
@@ -64,35 +60,12 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {navigator, bottomBar, leds},
+        components: {bottomBar, leds},
         data() {
             return {
-                menuOpen: false,
                 title: rxTitle.getRef(),
             };
         },
-        methods: {
-            toggleMenu() {
-                this.menuOpen = !this.menuOpen;
-            }
-        },
-        setup() {
-            // TODO: clean up or move menuOpenHere
-            const leftDrawerOpen = ref(false)
-            const rightDrawerOpen = ref(false)
-
-            return {
-                leftDrawerOpen,
-                toggleLeftDrawer() {
-                    leftDrawerOpen.value = !leftDrawerOpen.value
-                },
-
-                rightDrawerOpen,
-                toggleRightDrawer() {
-                    rightDrawerOpen.value = !rightDrawerOpen.value
-                }
-            }
-        }
     };
 }
 

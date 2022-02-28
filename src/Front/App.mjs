@@ -180,8 +180,8 @@ export default class Fl32_Dup_Front_App {
                     component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Add_Route$')
                 });
                 router.addRoute({
-                    path: DEF.ROUTE_CONTACTS_LIST,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_List_Route$')
+                    path: DEF.ROUTE_CONTACTS_CARD,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Card_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOME,

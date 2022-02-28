@@ -18,8 +18,6 @@ export default function Factory(spec) {
     const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Layout_Nav_Chat.vueCompTmpl} */
-    const navigator = spec['Fl32_Dup_Front_Layout_Nav_Chat$'];
     /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
     const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
     /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Input.vueCompTmpl} */
@@ -64,7 +62,7 @@ export default function Factory(spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {navigator, leds, messageInput},
+        components: {leds, messageInput},
         data() {
             return {
                 menuOpen: false,
