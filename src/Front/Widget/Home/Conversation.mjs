@@ -23,28 +23,27 @@ export default function (spec) {
     // WORKING VARS
     const template = `
 <q-card class="col">
-    <q-card-section class="q-gutter-xs" v-on:click="goToChat">
+    <q-card-section class="q-gutter-xs">
         <div class="row items-center q-gutter-xs">
-            <div class="col-auto">
+            <div class="col-auto" v-on:click="goToContact">
                 <q-avatar color="primary" text-color="white">{{ avatarLetter }}</q-avatar>
             </div>
-            <div class="text-h6 col">{{ item.name }}</div>
-            <div class="text-subtitle2 col-auto">{{ timestamp }}</div>
+            <div class="text-h6 col ellipsis" v-on:click="goToChat">{{ item.name }}</div>
+            <div class="text-subtitle2 col-auto" v-on:click="goToChat">{{ timestamp }}</div>
         </div>
-        <div class="row items-center q-gutter-xs">
+        <div class="row items-center q-gutter-xs" v-on:click="goToChat">
             <div class="col">
                 {{ message }}
             </div>
             <div class="col-auto">
-                 <q-avatar 
-                 size="8px" 
-                 v-if="unread"
-                 color="green"/>
+                <q-avatar
+                        size="8px"
+                        v-if="unread"
+                        color="green"/>
             </div>
         </div>
     </q-card-section>
 </q-card>
-
 `;
     /**
      * Template to create new component instances using Vue.
@@ -95,7 +94,11 @@ export default function (spec) {
             goToChat() {
                 const route = DEF.ROUTE_CHAT_BAND.replace(':id', this.item.bandId);
                 this.$router.push(route);
-            }
-        }
+            },
+            goToContact() {
+                const route = DEF.ROUTE_CONTACTS_CARD.replace(':id', this.item.contactId);
+                this.$router.push(route);
+            },
+        },
     };
 }

@@ -19,13 +19,54 @@ export default function (spec) {
     const idb = spec['Fl32_Dup_Front_Store_Db$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
+    /** @type {Fl32_Dup_Front_Store_Entity_Band} */
+    const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Widget_Contacts_List_Card.vueCompTmpl} */
-    const card = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
+    const cardData = spec['Fl32_Dup_Front_Widget_Contacts_List_Card$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
+    /** @type {TeqFw_Core_Shared_Util_Format.dateTime|function} */
+    const formatDate = spec['TeqFw_Core_Shared_Util_Format.dateTime'];
 
-    // DEFINE WORKING VARS
+    // VARS
+    const I_BAND = idbBand.getIndexes();
     const template = `
 <layout-base>
-CONTACT
+    <q-card>
+    
+        <q-card-section class="q-gutter-sm">
+            <q-input :label="$t('wg.contact.card.nick')"
+                     :disable="freezeRegister"
+                     outlined
+                     v-model="fldNick"
+            />
+            <div class="t-grid-cols">
+                <q-input :label="$t('wg.contact.card.dateFrom')"
+                         disable
+                         outlined
+                         v-model="dateFrom"
+                />
+                 <q-btn dense flat round icon="message" v-on:click="goToChat" />
+            </div>
+        </q-card-section>
+
+        <q-card-actions align="center">
+            <q-btn :label="$t('btn.ok')"
+                   color="primary"
+                   padding="xs lg"
+                   v-on:click="onSubmit"
+            />
+        </q-card-actions>
+
+    </q-card>
+    
+    <q-dialog v-model="displayInfo">
+        <q-card>
+            <q-card-section>
+                <div class="text-h6">{{$t('wg.contact.add.dgLink.title')}}</div>
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 </layout-base>
 `;
     /**
@@ -38,18 +79,54 @@ CONTACT
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {card},
+        components: {cardData},
         data() {
             return {
-                /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
-                cards: [],
+                /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
+                card: null,
+                displayInfo: false,
+                fldNick: null,
             };
         },
+        props: {
+            id: Number, // card id in IDB
+        },
+        computed: {
+            dateFrom() {
+                return formatDate(this?.card?.date);
+            },
+        },
+        methods: {
+            async goToChat() {
+                const cardId = Number.parseInt(this.id);
+                const trx = await idb.startTransaction(idbBand);
+                /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
+                const band = await idb.readOne(trx, idbBand, cardId, I_BAND.BY_CONTACT);
+                if (band) {
+                    const route = DEF.ROUTE_CHAT_BAND.replace(':id', band.id);
+                    this.$router.push(route);
+                }
+                trx.commit();
+            },
+            async onSubmit() {
+                this.displayInfo = true;
+                this.card.nick = this.fldNick.trim();
+                const entity = idbContact.createDto(this.card);
+                const trx = await idb.startTransaction(idbContact);
+                await idb.updateOne(trx, idbContact, entity);
+                await trx.commit();
+                this.displayInfo = false;
+                rxTitle.set(this.card.nick);
+            },
+        },
         async mounted() {
-            const trx = await idb.startTransaction(idbContact);
-            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto[]} */
-            this.cards = await idb.readSet(trx, idbContact);
+            const trx = await idb.startTransaction(idbContact, false);
+            /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
+            const card = await idb.readOne(trx, idbContact, Number.parseInt(this.id));
             await trx.commit();
+            this.card = card;
+            this.fldNick = card.nick;
+            rxTitle.set(card.nick);
         },
     };
 }

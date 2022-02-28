@@ -60,6 +60,10 @@
         },
         "title": "Create sign up code to add new user to the Hollow"
       },
+      "card": {
+        "dateFrom": "From",
+        "nick": "Nick"
+      },
       "list": {
         "contact": "contact",
         "from": "from",

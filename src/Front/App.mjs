@@ -166,7 +166,6 @@ export default class Fl32_Dup_Front_App {
                 router.addRoute({
                     path: DEF.ROUTE_CHAT,
                     component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$'),
-                    props: true,
                     children: [
                         {
                             path: DEF.ROUTE_CHAT_BAND,
@@ -181,6 +180,7 @@ export default class Fl32_Dup_Front_App {
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CONTACTS_CARD,
+                    props: true,
                     component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Card_Route$')
                 });
                 router.addRoute({

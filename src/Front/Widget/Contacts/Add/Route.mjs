@@ -42,21 +42,21 @@ export default function (spec) {
     const template = `
 <layout-base>
     <div class="q-pt-xs q-gutter-xs">
-        <div class="text-subtitle1 text-center">{{$t('wg.contact.add.title')}}:</div>
+        <div class="text-subtitle1 text-center">{{ $t('wg.contact.add.title') }}:</div>
         <q-card>
             <q-card-section>
-                <div class="text-subtitle2">{{$t('wg.contact.add.time.title')}}:</div>
+                <div class="text-subtitle2">{{ $t('wg.contact.add.time.title') }}:</div>
                 <q-option-group
                         :options="lifeTimeOpts"
                         inline
                         v-model="lifeTime"
                 ></q-option-group>
             </q-card-section>
-            
+
             <q-separator></q-separator>
-            
+
             <q-card-section>
-                <div class="text-subtitle2">{{$t('wg.contact.add.count.title')}}:</div>
+                <div class="text-subtitle2">{{ $t('wg.contact.add.count.title') }}:</div>
                 <q-option-group
                         :options="lifeCountOpts"
                         inline
@@ -72,15 +72,15 @@ export default function (spec) {
                         color="primary"
                         padding="xs lg"
                         v-on:click="onSubmit"
-                >{{$t('btn.ok')}}
+                >{{ $t('btn.ok') }}
                 </q-btn>
             </q-card-actions>
-            {{message}}
+            {{ message }}
         </q-card>
-         <dialog-link 
-             :display="displayLink"
-             @onHide="displayLink=false"
-         />
+        <dialog-link
+                :display="displayLink"
+                @onHide="displayLink=false"
+        />
     </div>
 </layout-base>
 `;

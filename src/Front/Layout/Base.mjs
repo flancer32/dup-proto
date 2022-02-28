@@ -17,8 +17,8 @@ export default function Factory(spec) {
     // DEPS
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {Fl32_Dup_Front_Layout_Leds.vueCompTmpl} */
-    const leds = spec['Fl32_Dup_Front_Layout_Leds$'];
+    /** @type {Fl32_Dup_Front_Layout_Z_Leds.vueCompTmpl} */
+    const leds = spec['Fl32_Dup_Front_Layout_Z_Leds$'];
     /** @type {Fl32_Dup_Front_Layout_Base_BottomBar.vueCompTmpl} */
     const bottomBar = spec['Fl32_Dup_Front_Layout_Base_BottomBar$'];
     /** @type {Fl32_Dup_Front_Rx_Title} */
@@ -31,14 +31,13 @@ export default function Factory(spec) {
     <q-header reveal class="bg-primary text-white">
         <q-toolbar>
             <q-btn dense flat round icon="menu" to="${DEF.ROUTE_HOME}"/>
-            <q-space></q-space>
-            <q-toolbar-title>{{title}}</q-toolbar-title>
+            <q-toolbar-title>{{ title }}</q-toolbar-title>
             <q-space></q-space>
             <leds/>
         </q-toolbar>
     </q-header>
 
-    <q-page-container style="display: grid; height: 100vh; justify-items: center;">
+    <q-page-container style="display: grid; height: 100vh;align-items: center; justify-items: center;">
         <slot/>
     </q-page-container>
 

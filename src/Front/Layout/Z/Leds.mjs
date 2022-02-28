@@ -1,10 +1,10 @@
 /**
  * LEDs panel to indicate connection state.
  *
- * @namespace Fl32_Dup_Front_Layout_Leds
+ * @namespace Fl32_Dup_Front_Layout_Z_Leds
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Layout_Leds';
+const NS = 'Fl32_Dup_Front_Layout_Z_Leds';
 // Quasar codes for colors
 const Q_COLOR_OFF = 'grey';
 const Q_COLOR_OK = 'green-8';
@@ -14,7 +14,7 @@ const Q_COLOR_AJAX = 'green-6';
 /**
  * TeqFW DI factory function to get dependencies for the object.
  *
- * @returns {Fl32_Dup_Front_Layout_Leds.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Layout_Z_Leds.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -32,7 +32,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Layout_Leds
+     * @memberOf Fl32_Dup_Front_Layout_Z_Leds
      */
     return {
         teq: {package: DEF.SHARED.NAME},

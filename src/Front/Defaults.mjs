@@ -7,7 +7,7 @@ export default class Fl32_Dup_Front_Defaults {
     ROUTE_CHAT = '/chat';
     ROUTE_CHAT_BAND = '/chat/band/:id';
     ROUTE_CONTACTS_ADD = '/contacts/add';
-    ROUTE_CONTACTS_CARD = '/contacts/card';
+    ROUTE_CONTACTS_CARD = '/contacts/card/:id';
     ROUTE_CONTACTS_LIST = '/contacts/list';
     ROUTE_HOLLOW_OCCUPY = '/hollow/occupy';
     ROUTE_HOME = '/';
