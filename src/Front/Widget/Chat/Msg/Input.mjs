@@ -52,6 +52,7 @@ export default function (spec) {
       @keypress.ctrl.enter="send"
       autogrow
       outlined
+      bg-color="white"
       v-model="message"
     />
     </div>

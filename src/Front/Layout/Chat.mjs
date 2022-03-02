@@ -42,7 +42,7 @@ export default function Factory(spec) {
         <slot/>
     </q-page-container>
 
-    <q-footer class="bg-lightest q-pb-sm">
+    <q-footer class="bg-lightest q-pa-sm">
         <q-toolbar>
             <message-input/>
         </q-toolbar>
