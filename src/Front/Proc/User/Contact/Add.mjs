@@ -17,12 +17,14 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */
         const esbContactAdd = spec['Fl32_Dup_Shared_Event_Back_User_Contact_Add$'];
+        /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
+        const uiHomeConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
 
         // VARS
         const I_CONTACT = idbContact.getIndexes();
 
         // MAIN
-        eventsFront.subscribe(esbContactAdd.getEventName(), onContactAdd);
+        eventsFront.subscribe(esbContactAdd.getEventName(), onEvent);
         logger.setNamespace(this.constructor.name);
 
         // FUNCS
@@ -30,7 +32,7 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
          * @param {Fl32_Dup_Shared_Event_Back_User_Contact_Add.Dto} data
          * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
          */
-        async function onContactAdd({data, meta}) {
+        async function onEvent({data, meta}) {
             const card = idbContact.createDto();
             card.keyPub = data.userPubKey;
             card.nick = data.userNick;
@@ -44,6 +46,11 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
                 logger.info(`Contact for user ${card.nick} (#${card.idOnBack}) exists in IDB.`)
             }
             await trx.commit();
+            // reload home route conversations if new contact is added
+            if (!found) {
+                const wgHome = uiHomeConv.get();
+                wgHome.reload();
+            }
         }
 
         // INSTANCE METHODS

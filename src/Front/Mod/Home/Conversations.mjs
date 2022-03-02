@@ -1,7 +1,7 @@
 /**
  * Model to collect data for homepage widget conversations.
  */
-export default class Fl32_Dup_Front_Mod_Home_Bands {
+export default class Fl32_Dup_Front_Mod_Home_Conversations {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
@@ -38,7 +38,7 @@ export default class Fl32_Dup_Front_Mod_Home_Bands {
                 dto.contactId = contact.id;
                 dto.name = contact.nick;
                 dto.time = contact.date;
-                dto.unread = 0; // TODO: implement it after message DTO re-structure
+                dto.unread = 0;
                 // get related band
                 /** @type {Fl32_Dup_Front_Store_Entity_Band.Dto} */
                 const band = await idb.readOne(trx, idbBand, contact.id, I_BAND.BY_CONTACT);

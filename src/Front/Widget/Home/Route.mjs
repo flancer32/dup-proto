@@ -19,8 +19,8 @@ export default function (spec) {
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {Fl32_Dup_Front_Widget_Home_Conversation.vueCompTmpl} */
     const conversation = spec['Fl32_Dup_Front_Widget_Home_Conversation$'];
-    /** @type {Fl32_Dup_Front_Mod_Home_Bands} */
-    const modBands = spec['Fl32_Dup_Front_Mod_Home_Bands$'];
+    /** @type {Fl32_Dup_Front_Mod_Home_Conversations} */
+    const modConv = spec['Fl32_Dup_Front_Mod_Home_Conversations$'];
     /** @type {Fl32_Dup_Front_Rx_Title} */
     const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
     /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
@@ -56,14 +56,14 @@ export default function (spec) {
         },
         methods: {
             async reload() {
-                this.bands = await modBands.load();
+                this.bands = await modConv.load();
             }
         },
         async mounted() {
             uiConv.set(this);
             const profile = await modProfile.get();
             rxTitle.set(profile?.nick);
-            this.bands = await modBands.load();
+            this.bands = await modConv.load();
         }
     };
 }
