@@ -39,7 +39,7 @@ export default function Factory(spec) {
         await container.get('Fl32_Dup_Back_Proc_Msg_Read$');
         await container.get('Fl32_Dup_Back_Proc_Msg_Delivery$');
         await container.get('Fl32_Dup_Back_Proc_Msg_Post$');
-        await container.get('Fl32_Dup_Back_Proc_Notify_WebPush$');
+        await container.get('Fl32_Dup_Back_Proc_WebPush_Enable$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Create$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Validate$');
         await container.get('Fl32_Dup_Back_Proc_User_SignUp$');

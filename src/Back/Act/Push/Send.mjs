@@ -2,6 +2,7 @@
  * Send notification to user with WebPush API.
  *
  * @namespace Fl32_Dup_Back_Act_Push_Send
+ * @deprecated use TeqFw_Web_Push_Back_Act_Subscript_SendMsg
  */
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Back_Act_Push_Send';

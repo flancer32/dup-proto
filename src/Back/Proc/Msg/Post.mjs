@@ -10,6 +10,10 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
+        /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
+        const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
+        /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript} */
+        const rdbSubscript = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
         /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
@@ -20,12 +24,12 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
         const esbConfirmPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Post} */
         const esbSendPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
-        /** @type {Fl32_Dup_Back_Event_User_Notify_WebPush} */
-        const ebWebPush = spec['Fl32_Dup_Back_Event_User_Notify_WebPush$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
         const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
         const actGetIdByUuid = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
+        /** @type {TeqFw_Web_Push_Back_Act_Subscript_SendMsg.act|function} */
+        const actPushSend = spec['TeqFw_Web_Push_Back_Act_Subscript_SendMsg$'];
 
         // MAIN
         eventsBack.subscribe(esfMsgPost.getEventName(), onMessagePost)
@@ -58,6 +62,28 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
              * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
              */
             async function transferMessage(data, meta) {
+                // FUNCS
+                /**
+                 *  Send WebPush notification for first delayed chat message.
+                 *
+                 * @param {TeqFw_Db_Back_RDb_ITrans} trx
+                 * @param {number} frontId
+                 * @return {Promise<void>}
+                 */
+                async function notifyWebPush(trx, frontId) {
+                    /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.Dto} */
+                    const subscript = await crud.readOne(trx, rdbSubscript, frontId);
+                    if (subscript?.enabled) {
+                        const title = 'New message in DUPLO.';
+                        const body = 'New message in DUPLO.';
+                        await actPushSend({trx, title, body, frontId});
+                        subscript.enabled = false;
+                        await crud.updateOne(trx, rdbSubscript, subscript);
+                        logger.info(`Web Push notification for first delayed chat message is sent to front #${frontId}. Web push is disabled for this front.`);
+                    }
+                }
+
+                // MAIN
                 const chatMsg = data.message;
                 const msgUuid = chatMsg.uuid;
                 const trx = await rdb.startTransaction();
@@ -68,13 +94,14 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
                     logger.info(`Chat message #${chatMsg.uuid} from #${fromId} to #${toId} is received by back.`, {msgUuid});
                     // get UUID for recipient's front
                     const {uuid: frontUuid} = await actGetUuidById({trx, id: toId});
-                    await trx.commit();
                     const event = esbSendPost.createDto();
                     event.meta.frontUUID = frontUuid;
                     event.data.message = chatMsg;
                     // noinspection ES6MissingAwait
-                    portalFront.publish(event);
-                    logger.info(`Received event for chat message #${chatMsg.uuid} is published for front #${frontUuid}.`, {msgUuid});
+                    const sent = await portalFront.publish(event);
+                    if (sent) logger.info(`Received event for chat message #${chatMsg.uuid} is published for front #${frontUuid}.`, {msgUuid});
+                    else await notifyWebPush(trx, toId);
+                    await trx.commit();
                 } catch (e) {
                     logger.error(`Error in chat message #${msgUuid} processing: ${e.message}`, {msgUuid});
                     await trx.rollback();
