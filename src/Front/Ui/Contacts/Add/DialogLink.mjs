@@ -4,7 +4,7 @@
  */
 export default class Fl32_Dup_Front_Ui_Contacts_Add_DialogLink {
     constructor() {
-        // ENCLOSED VARS
+        // VARS
         let _store;
 
         // INSTANCE METHODS

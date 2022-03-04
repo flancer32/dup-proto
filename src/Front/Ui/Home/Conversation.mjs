@@ -4,7 +4,7 @@
  */
 export default class Fl32_Dup_Front_Ui_Home_Conversation {
     constructor() {
-        // ENCLOSED VARS
+        // VARS
         let _store;
 
         // INSTANCE METHODS

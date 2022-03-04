@@ -71,7 +71,7 @@ class Dto {
      * @type {boolean}
      */
     unread;
-    /** @type {number} */
+    /** @type {string} */
     uuid;
 }
 

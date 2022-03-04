@@ -14,6 +14,8 @@ const ATTR = {
     DATE: 'date',
     KEY: 'key',
     SENT: 'sent',
+    STATE: 'state',
+    UUID: 'uuid',
 };
 
 // MODULE'S CLASSES
@@ -34,6 +36,8 @@ class Dto {
     sent;
     /** @type {Fl32_Dup_Front_Enum_Msg_State} */
     state;
+    /** @type {string} */
+    uuid;
 }
 
 /**
@@ -66,6 +70,7 @@ export default class Fl32_Dup_Front_Dto_Message {
             res.key = castString(data?.key);
             res.sent = castBool(data?.sent);
             res.state = castEnum(data?.state, STATE);
+            res.uuid = castString(data?.uuid);
             return res;
         }
 

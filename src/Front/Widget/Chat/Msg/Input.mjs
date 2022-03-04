@@ -29,10 +29,10 @@ export default function (spec) {
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
-    /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
-    const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
-    /** @type {Fl32_Dup_Front_Proc_Msg_Post.process|function} */
-    const procPost = spec['Fl32_Dup_Front_Proc_Msg_Post$'];
+    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
+    const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
     /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */
     const modMsgSaver = spec['Fl32_Dup_Front_Mod_Msg_Saver$'];
     /** @type {Fl32_Dup_Front_Dto_Message} */
@@ -113,13 +113,15 @@ export default function (spec) {
                  * Add posted message to band on UI.
                  * @param {string} body plain text
                  * @param {Date} date
+                 * @param {string} uuid
                  */
-                function postToBand(body, date) {
+                function postToBand(body, date, uuid) {
                     const dto = dtoMsg.createDto();
                     dto.body = body;
                     dto.date = date;
                     dto.sent = true;
                     dto.state = STATE.NOT_SENT;
+                    dto.uuid = uuid;
                     rxChat.addMessage(dto);
                 }
 
@@ -131,20 +133,34 @@ export default function (spec) {
                  * @return {Promise<void>}
                  */
                 async function encryptAndSend(uuid, body, contact) {
-                    const authorId = frontIdentity.getFrontId();
+                    // FUNCS
+                    /**
+                     * Post chat message to the server as event.
+                     * @param {string} uuid UUID for the message
+                     * @param {string} payload encrypted data
+                     * @param {number} recipientId
+                     * @return {Promise<void>}
+                     */
+                    async function postMessage(uuid, payload, recipientId) {
+                        const event = esfPosted.createDto();
+                        event.meta.frontUUID = frontIdentity.getUuid();
+                        event.data.message.payload = payload;
+                        event.data.message.recipientId = recipientId;
+                        event.data.message.dateSent = new Date();
+                        event.data.message.uuid = uuid;
+                        await portalBack.publish(event);
+                        logger.info(`Chat message #${uuid} is posted to the back, event #${event.meta.uuid}.`, {msgUuid: uuid});
+                    }
+
+                    // MAIN
                     // retrieve keys and encrypt text body
                     const pub = contact.keyPub;
                     const sec = frontIdentity.getSecretKey();
                     scrambler.setKeys(pub, sec);
                     const encrypted = scrambler.encryptAndSign(body);
                     logger.info(`Chat message #${uuid} is encrypted.`, {msgUuid: uuid});
-                    // post message to server
-                    await procPost({
-                        msgUuid: uuid,
-                        payload: encrypted,
-                        userId: authorId,
-                        recipientId: contact.idOnBack
-                    });
+                    // noinspection ES6MissingAwait
+                    postMessage(uuid, encrypted, contact.idOnBack);
                 }
 
                 // MAIN
@@ -155,7 +171,7 @@ export default function (spec) {
                 const {id: msgId, date: msgDate} = await modMsgSaver.savePersonalOut({uuid, body, bandId});
                 logger.info(`Chat message #${uuid} is saved to IDB as #${msgId}.`);
                 this.message = null; // clear UI field
-                postToBand(body, msgDate);
+                postToBand(body, msgDate, uuid);
                 logger.info(`Chat message #${uuid} is posted to band #${bandId}.`);
                 await encryptAndSend(uuid, body, contact);
             }

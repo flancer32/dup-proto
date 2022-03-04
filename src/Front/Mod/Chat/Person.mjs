@@ -77,6 +77,7 @@ export default class Fl32_Dup_Front_Mod_Chat_Person {
                     dto.date = one.date;
                     dto.sent = (one.direction === DIR.OUT);
                     dto.state = one.state;
+                    dto.uuid = one.uuid;
                     messages.push(dto);
                     if (one.unread) await processUnread(trx, one);
                 }

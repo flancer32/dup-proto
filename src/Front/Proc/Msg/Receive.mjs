@@ -5,6 +5,8 @@
 export default class Fl32_Dup_Front_Proc_Msg_Receive {
     constructor(spec) {
         // DEPS
+        /** @type {Fl32_Dup_Front_Defaults} */
+        const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Web_Front_App_Event_Bus} */
@@ -23,6 +25,8 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
         const idbCard = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
+        /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
+        const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */
         const modMsgSaver = spec['Fl32_Dup_Front_Mod_Msg_Saver$'];
         /** @type {Fl32_Dup_Front_Dto_Message} */
@@ -31,10 +35,16 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
         const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
         /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
         const uiHomeConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
+        /** @type {Fl32_Dup_Front_Proc_Msg_Read.process|function} */
+        const procRead = spec['Fl32_Dup_Front_Proc_Msg_Read$'];
+        /** @type {Fl32_Dup_Front_Ui_App} */
+        const uiApp = spec['Fl32_Dup_Front_Ui_App$'];
 
         // VARS
         /** @type {typeof Fl32_Dup_Front_Store_Entity_Contact.INDEX} */
         const I_CONTACT = idbCard.getIndexes();
+        /** @type {typeof Fl32_Dup_Front_Store_Entity_Msg.INDEX} */
+        const I_MSG = idbMsg.getIndexes();
 
         // MAIN
         eventsFront.subscribe(esbPost.getEventName(), onEvent);
@@ -48,20 +58,57 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
          */
         async function onEvent({data, meta}) {
             // FUNCS
-            async function getPublicKey(userId) {
+            async function getPublicKey(frontBid) {
                 const trx = await idb.startTransaction(idbCard, false);
                 /** @type {Fl32_Dup_Front_Store_Entity_Contact.Dto} */
-                const one = await idb.readOne(trx, idbCard, userId, I_CONTACT.BY_BACK_ID);
+                const one = await idb.readOne(trx, idbCard, frontBid, I_CONTACT.BY_BACK_ID);
                 await trx.commit();
                 return one?.keyPub;
             }
 
+            /**
+             * Send delivery report event back.
+             * @param messageUuid
+             * @param senderId
+             */
             function publishDeliveryReport(messageUuid, senderId) {
                 const event = new esfDelivery.createDto();
                 event.data.dateDelivery = new Date();
                 event.data.messageUuid = message.uuid;
                 event.data.senderFrontId = senderId;
                 portalBack.publish(event);
+            }
+
+            /**
+             * Add incoming message to current band if acceptable.
+             * @param {string} body
+             * @param {Date} date
+             * @param {string} uuid
+             */
+            function putToCurrentBand(body, date, uuid) {
+                // push message to current band if it is acceptable
+                const dto = dtoMsg.createDto();
+                dto.body = body;
+                dto.date = date;
+                dto.sent = false;
+                dto.uuid = uuid;
+                rxChat.addMessage(dto);
+            }
+
+            /**
+             * Remove 'unread' attribute for incoming messages if matched band is active.
+             * @param uuid
+             * @return {Promise<void>}
+             */
+            async function removeUnread(uuid) {
+                const trx = await idb.startTransaction(idbMsg);
+                /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto} */
+                const one = await idb.readOne(trx, idbMsg, uuid, I_MSG.BY_UUID);
+                if (one.unread) {
+                    delete one.unread;
+                    await idb.updateOne(trx, idbMsg, one);
+                }
+                await trx.commit();
             }
 
             // MAIN
@@ -77,21 +124,26 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
             const body = scrambler.decryptAndVerify(encrypted);
             // save message to IDB and push to current band (if required)
             if (body) {
-                const {id, bandId, date} = await modMsgSaver.savePersonalIn({
+                const {id, bandId, date: dateRead} = await modMsgSaver.savePersonalIn({
                     uuid: message.uuid,
                     body,
-                    senderId: message.senderId,
+                    senderId,
                     dateSent: message.dateSent,
                 });
                 logger.info(`Chat message #${msgUuid} is saved to IDB as #${id}.`, {msgUuid})
                 const currentBandId = rxChat.getBandId().value;
                 if (currentBandId === bandId) {
-                    // push message to current band if it is acceptable
-                    const dto = dtoMsg.createDto();
-                    dto.body = body;
-                    dto.date = date;
-                    dto.sent = false;
-                    rxChat.addMessage(dto);
+                    putToCurrentBand(body, dateRead, msgUuid);
+                    if (senderId) {
+                        procRead({msgUuid, date: dateRead, authorId: senderId});
+                        const router = uiApp.getRouter();
+                        const current = router.currentRoute._value;
+                        if (current?.matched[1]?.path === DEF.ROUTE_CHAT_BAND) {
+                            debugger
+                            // noinspection ES6MissingAwait
+                            removeUnread(msgUuid);
+                        }
+                    }
                 }
                 const homeUi = uiHomeConv.get();
                 homeUi?.reload();

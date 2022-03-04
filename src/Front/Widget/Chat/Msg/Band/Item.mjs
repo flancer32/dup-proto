@@ -11,6 +11,19 @@ const Q_COLOR_ON_SERVER = 'yellow-3';
 const Q_COLOR_DELIVERED = 'blue-6';
 const Q_COLOR_READ = 'green-6';
 
+// MODULE'S INTERFACES
+/**
+ * @interface
+ * @memberOf Fl32_Dup_Front_Widget_Chat_Msg_Band_Item
+ */
+class IUiComp {
+    setDelivered() {}
+
+    setOnServer() {}
+
+    setRead() {}
+}
+
 // MODULE'S FUNCTIONS
 /**
  * TeqFW DI factory function to get dependencies for the object.
@@ -24,6 +37,8 @@ export default function (spec) {
     const formatTime = spec['TeqFw_Core_Shared_Util_Format.time'];
     /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
     const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
+    /** @type {Fl32_Dup_Front_Ui_Chat_Band} */
+    const uiChatBand = spec['Fl32_Dup_Front_Ui_Chat_Band$'];
 
     // DEFINE WORKING VARS
     const template = `
@@ -81,6 +96,20 @@ export default function (spec) {
             stamp() {
                 return (this.item?.date instanceof Date) ? formatTime(this.item.date) : null;
             }
-        }
+        },
+        methods: {
+            setDelivered() {
+                this.item.state = STATE.DELIVERED;
+            },
+            setOnServer() {
+                this.item.state = STATE.ON_SERVER;
+            },
+            setRead() {
+                this.item.state = STATE.READ;
+            },
+        },
+        mounted() {
+            uiChatBand.putMessage(this?.item?.uuid, this);
+        },
     };
 }

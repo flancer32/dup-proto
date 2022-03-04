@@ -53,6 +53,9 @@ export default class Fl32_Dup_Front_App {
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
         /** @type {TeqFw_Web_Front_Mod_App_Alive} */
         const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
+        /** @type {Fl32_Dup_Front_Ui_App} */
+        const uiApp = spec['Fl32_Dup_Front_Ui_App$'];
+
 
         // VARS
         let _isInitialized = false; // application is initialized and can be mounted
@@ -94,8 +97,9 @@ export default class Fl32_Dup_Front_App {
                 // TODO: init from 'teqfw.json'
                 // Some processes (authentication) should be subscribed to events before Reverse Stream can be opened.
                 await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
-                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Delivery$');
                 await container.get('Fl32_Dup_Front_Proc_Msg_Receive$');
+                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Delivery$');
+                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Sending$');
                 await container.get('Fl32_Dup_Front_Proc_Msg_Report_Read$');
                 await container.get('Fl32_Dup_Front_Proc_User_Contact_Add$');
             }
@@ -200,6 +204,7 @@ export default class Fl32_Dup_Front_App {
                 });
 
                 app.use(router);
+                uiApp.setRouter(router);
                 return router;
             }
 
@@ -237,6 +242,7 @@ export default class Fl32_Dup_Front_App {
                     this.canDisplay = true;
                 }
             });
+            uiApp.set(_root);
 
             // ... and add global available components
             _root.component('LayoutBase', layoutBase);
