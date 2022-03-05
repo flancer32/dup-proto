@@ -14,8 +14,6 @@ export default class Fl32_Dup_Front_Mod_Home_Conversations {
         const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {Fl32_Dup_Front_Dto_Home_Conversation} */
         const dtoConv = spec['Fl32_Dup_Front_Dto_Home_Conversation$'];
-        /** @type {typeof Fl32_Dup_Front_Enum_Msg_Direction} */
-        const DIR = spec['Fl32_Dup_Front_Enum_Msg_Direction$'];
 
         // VARS
         const I_BAND = idbBand.getIndexes();
@@ -48,7 +46,7 @@ export default class Fl32_Dup_Front_Mod_Home_Conversations {
                     const index = I_MSG.BY_BAND;
                     const backward = true;
                     const limit = 1;
-                    const query = IDBKeyRange.bound([band.id, DIR.IN, new Date(0)], [band.id, DIR.IN, new Date()]);
+                    const query = IDBKeyRange.bound([band.id, new Date(0)], [band.id, new Date()]);
                     const keys = await idb.readKeys(trx, idbMsg, {index, query, backward, limit});
                     if (keys[0]) {
                         /** @type {Fl32_Dup_Front_Store_Entity_Msg.Dto} */

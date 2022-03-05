@@ -55,7 +55,7 @@ export default function (spec) {
         if (!db.objectStoreNames.contains(E_MSG)) {
             const store = db.createObjectStore(E_MSG, {keyPath: A_MSG.ID, autoIncrement});
             store.createIndex(I_MSG.BY_UUID, A_MSG.UUID, {unique});
-            store.createIndex(I_MSG.BY_BAND, [A_MSG.BAND_REF, A_MSG.DIRECTION, A_MSG.DATE]);
+            store.createIndex(I_MSG.BY_BAND, [A_MSG.BAND_REF, A_MSG.DATE]);
         }
     }
 

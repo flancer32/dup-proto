@@ -131,16 +131,15 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
                 });
                 logger.info(`Chat message #${msgUuid} is saved to IDB as #${id}.`, {msgUuid})
                 const currentBandId = rxChat.getBandId().value;
-                if (currentBandId === bandId) {
-                    putToCurrentBand(body, dateRead, msgUuid);
-                    if (senderId) {
+                if ((currentBandId === bandId) && (senderId)) {
+                    const router = uiApp.getRouter();
+                    const current = router.currentRoute._value;
+                    if (current?.matched[1]?.path === DEF.ROUTE_CHAT_BAND) {
+                        putToCurrentBand(body, dateRead, msgUuid);
+                        // mark message as read
                         procRead({msgUuid, date: dateRead, authorId: senderId});
-                        const router = uiApp.getRouter();
-                        const current = router.currentRoute._value;
-                        if (current?.matched[1]?.path === DEF.ROUTE_CHAT_BAND) {
-                            // noinspection ES6MissingAwait
-                            removeUnread(msgUuid);
-                        }
+                        // noinspection ES6MissingAwait
+                        removeUnread(msgUuid);
                     }
                 }
                 const homeUi = uiHomeConv.get();

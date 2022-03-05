@@ -65,7 +65,7 @@ export default class Fl32_Dup_Front_Mod_Chat_Person {
                 const backward = true;
                 const limit = 20;
                 // short-circuited array sorting
-                const query = IDBKeyRange.bound([band.id, DIR.IN, new Date(0)], [band.id, DIR.OUT, new Date()]);
+                const query = IDBKeyRange.bound([band.id, new Date(0)], [band.id, new Date()]);
                 const keys = await idb.readKeys(trx, idbMsg, {index, query, backward, limit});
                 // load messages by keys
                 const messages = [];

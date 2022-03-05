@@ -36,7 +36,7 @@ export default function (spec) {
             const storeName = idbMsg.getEntityName();
             const store = trx.objectStore(storeName);
             const source = store.index(I_MSG.BY_BAND);
-            const query = IDBKeyRange.bound([bandId, 'IN', new Date(0)], [bandId, 'OUT', new Date()]);
+            const query = IDBKeyRange.bound([bandId, new Date(0)], [bandId, new Date()]);
             return await new Promise((resolve) => {
                 const req = source.count(query);
                 req.onsuccess = () => resolve(req.result);
@@ -49,7 +49,7 @@ export default function (spec) {
                 const storeName = idbMsg.getEntityName();
                 const store = trx.objectStore(storeName);
                 const source = store.index(I_MSG.BY_BAND);
-                const query = IDBKeyRange.bound([bandId, 'IN', new Date(0)], [bandId, 'OUT', new Date()]);
+                const query = IDBKeyRange.bound([bandId, new Date(0)], [bandId, new Date()]);
                 await new Promise((resolve) => {
                     const req = source.getAllKeys(query, toDelete);
                     req.onsuccess = async () => {
