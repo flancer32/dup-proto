@@ -6,6 +6,7 @@
     "disable": "Disable",
     "enable": "Enable",
     "ok": "OK",
+    "save": "Save",
     "subscribe": "Subscribe",
     "uninstall": "Uninstall"
   },
@@ -21,14 +22,10 @@
   },
   "wg": {
     "cfg": {
-      "sse": {
-        "close": "Close",
-        "open": "Open",
-        "title": "Server Sent Events"
-      },
-      "store": {
-        "init": "Init IDB Schema",
-        "title": "Store Configuration"
+      "profile": {
+        "nick": "Nickname",
+        "threshold": "Messages Cleanup Threshold",
+        "title": "User Profile"
       },
       "sw": {
         "cache": {

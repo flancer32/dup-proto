@@ -15,15 +15,23 @@ const NS = 'Fl32_Dup_Front_Widget_Cfg_Store';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Front_App_Store_IDB} */
-    const idb = spec['Fl32_Dup_Front_Store_Db$'];
+    /** @type {Fl32_Dup_Front_Mod_User_Profile} */
+    const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
-    // DEFINE WORKING VARS
+    // VARS
     const template = `
-<q-card class="bg-white q-mt-xs">
-    <q-card-section>
-        <div class="text-subtitle2">{{$t('wg.cfg.store.title')}}:</div> 
-        <q-btn :label="$t('wg.cfg.store.init')" color="primary" :disable="disabled" v-on:click="init"></q-btn>
+<q-card class="">
+    <q-card-section class="q-gutter-sm">
+        <div class="text-subtitle2">{{ $t('wg.cfg.profile.title') }}:</div>
+        <q-input :label="$t('wg.cfg.profile.nick')"
+                 outlined
+                 v-model="fldNick"
+        />
+        <q-input :label="$t('wg.cfg.profile.threshold')"
+                 outlined
+                 v-model="fldMsgCleanupThreshold"
+        />
+        <q-btn :label="$t('btn.save')" color="primary" :disable="disabled" v-on:click="save"></q-btn>
     </q-card-section>
 </q-card>
 `;
@@ -40,15 +48,24 @@ export default function (spec) {
         data() {
             return {
                 disabled: false,
+                fldNick: null,
+                fldMsgCleanupThreshold: null,
             };
         },
         methods: {
-            async init() {
+            async save() {
                 this.disabled = true;
-                await idb.dropDb();
-                await idb.open();
+                const profile = await modProfile.get();
+                profile.nick = this.fldNick;
+                profile.msgCleanupThreshold = Number.parseInt(this.fldMsgCleanupThreshold);
+                await modProfile.set(profile);
                 this.disabled = false;
             }
         },
+        async mounted() {
+            const profile = await modProfile.get();
+            this.fldNick = profile.nick;
+            this.fldMsgCleanupThreshold = profile.msgCleanupThreshold || 32;
+        }
     };
 }

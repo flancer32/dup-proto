@@ -24,6 +24,8 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
         const TYPE = spec['Fl32_Dup_Front_Enum_Msg_Type$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
+        /** @type {Fl32_Dup_Front_Proc_Msg_CleanUp.process|function} */
+        const procCleanUp = spec['Fl32_Dup_Front_Proc_Msg_CleanUp$'];
 
         // VARS
         const I_BAND = idbBand.getIndexes();
@@ -93,6 +95,7 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             entity.uuid = uuid;
             const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
+            procCleanUp({bandId});
             return {id, bandId, date};
         }
 
@@ -101,14 +104,15 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
          * @param {string} uuid
          * @param {string} body
          * @param {number|string} bandId local ID for contact card of the recipient
-         * @return {Promise<{id: number, date: Date}>}
+         * @param {Date} date
+         * @return {Promise<{id: number}>}
          */
-        this.savePersonalOut = async function ({uuid, body, bandId}) {
+        this.savePersonalOut = async function ({uuid, body, bandId, date}) {
             const trx = await idb.startTransaction([idbMsg]);
             const entity = dtoPersOut.createDto();
             entity.bandRef = Number.parseInt(bandId);
             entity.body = body;
-            entity.date = new Date();
+            entity.date = date;
             entity.direction = DIR.OUT;
             entity.state = STATE.NOT_SENT;
             entity.type = TYPE.PERS;
@@ -116,7 +120,8 @@ export default class Fl32_Dup_Front_Mod_Msg_Saver {
             entity.uuid = uuid;
             const id = await idb.create(trx, idbMsg, entity);
             await trx.commit();
-            return {id, date: entity.date};
+            procCleanUp({bandId});
+            return {id};
         }
     }
 }

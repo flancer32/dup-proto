@@ -1,10 +1,7 @@
 /**
  * Add new contact card to local store.
- *
- * @namespace Fl32_Dup_Front_Proc_User_Contact_Add
- * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
-export default class Fl32_Dup_Front_Proc_User_Contact_Add {
+export default class Fl32_Dup_Front_Hand_User_Contact_Add {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
@@ -52,10 +49,5 @@ export default class Fl32_Dup_Front_Proc_User_Contact_Add {
                 wgHome.reload();
             }
         }
-
-        // INSTANCE METHODS
-        this.init = async function () { }
-
-        this.run = async function ({}) { }
     }
 }

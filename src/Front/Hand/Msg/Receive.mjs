@@ -1,8 +1,7 @@
 /**
  * Get incoming messages from backend, process it and send delivery confirmation back.
- * @implements TeqFw_Core_Shared_Api_Event_IProcess
  */
-export default class Fl32_Dup_Front_Proc_Msg_Receive {
+export default class Fl32_Dup_Front_Hand_Msg_Receive {
     constructor(spec) {
         // DEPS
         /** @type {Fl32_Dup_Front_Defaults} */
@@ -139,7 +138,6 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
                         const router = uiApp.getRouter();
                         const current = router.currentRoute._value;
                         if (current?.matched[1]?.path === DEF.ROUTE_CHAT_BAND) {
-                            debugger
                             // noinspection ES6MissingAwait
                             removeUnread(msgUuid);
                         }
@@ -152,8 +150,5 @@ export default class Fl32_Dup_Front_Proc_Msg_Receive {
             publishDeliveryReport(message.uuid, message.senderId);
         }
 
-        // INSTANCE METHODS
-        this.init = async function () {}
-        this.run = async function ({}) {}
     }
 }

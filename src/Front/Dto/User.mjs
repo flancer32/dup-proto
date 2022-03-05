@@ -20,6 +20,8 @@ class Dto {
     static namespace = NS;
     /** @type {string} */
     nick;
+    /** @type {number} */
+    msgCleanupThreshold;
 }
 
 /**
@@ -28,6 +30,8 @@ class Dto {
 export default class Fl32_Dup_Front_Dto_User {
 
     constructor(spec) {
+        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
+        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
@@ -38,6 +42,7 @@ export default class Fl32_Dup_Front_Dto_User {
          */
         this.createDto = function (data = null) {
             const res = new Dto();
+            res.msgCleanupThreshold = castInt(data?.msgCleanupThreshold);
             res.nick = castString(data?.nick);
             return res;
         }

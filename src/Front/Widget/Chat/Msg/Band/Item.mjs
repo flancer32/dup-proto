@@ -99,7 +99,8 @@ export default function (spec) {
         },
         methods: {
             setDelivered() {
-                this.item.state = STATE.DELIVERED;
+                if (this.item.state !== STATE.READ)
+                    this.item.state = STATE.DELIVERED;
             },
             setOnServer() {
                 this.item.state = STATE.ON_SERVER;

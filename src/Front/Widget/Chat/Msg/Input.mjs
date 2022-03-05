@@ -168,10 +168,11 @@ export default function (spec) {
                 const body = this.message;
                 const bandId = this.otherSideBandId;
                 const contact = await getContactByBand(bandId);
-                const {id: msgId, date: msgDate} = await modMsgSaver.savePersonalOut({uuid, body, bandId});
+                const date = new Date();
+                postToBand(body, date, uuid);
+                const {id: msgId} = await modMsgSaver.savePersonalOut({uuid, body, bandId, date});
                 logger.info(`Chat message #${uuid} is saved to IDB as #${msgId}.`);
                 this.message = null; // clear UI field
-                postToBand(body, msgDate, uuid);
                 logger.info(`Chat message #${uuid} is posted to band #${bandId}.`);
                 await encryptAndSend(uuid, body, contact);
             }

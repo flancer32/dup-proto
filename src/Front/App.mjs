@@ -96,12 +96,12 @@ export default class Fl32_Dup_Front_App {
             async function initEventProcessors(container) {
                 // TODO: init from 'teqfw.json'
                 // Some processes (authentication) should be subscribed to events before Reverse Stream can be opened.
-                await container.get('Fl32_Dup_Front_Proc_Connect_Manager$');
-                await container.get('Fl32_Dup_Front_Proc_Msg_Receive$');
-                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Delivery$');
-                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Sending$');
-                await container.get('Fl32_Dup_Front_Proc_Msg_Report_Read$');
-                await container.get('Fl32_Dup_Front_Proc_User_Contact_Add$');
+                await container.get('Fl32_Dup_Front_Hand_Connect_Manager$');
+                await container.get('Fl32_Dup_Front_Hand_Msg_Receive$');
+                await container.get('Fl32_Dup_Front_Hand_Msg_Report_Delivery$');
+                await container.get('Fl32_Dup_Front_Hand_Msg_Report_Sending$');
+                await container.get('Fl32_Dup_Front_Hand_Msg_Report_Read$');
+                await container.get('Fl32_Dup_Front_Hand_User_Contact_Add$');
             }
 
             /**

@@ -23,8 +23,8 @@ export default function (spec) {
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-    <sworker/>
     <store/>
+    <sworker/>
 </layout-base>
 `;
     /**

@@ -2,7 +2,7 @@
  * Re-open events reverse stream if it was closed by server.
  * Try to open stream every 5 sec. for first 2 min. then every 1 min until stream will be opened.
  *
- * @namespace Fl32_Dup_Front_Proc_Connect_Manager
+ * @namespace Fl32_Dup_Front_Hand_Connect_Manager
  */
 // MODULE'S VARS
 const TIMEOUT_SMALL = 5000; // 5 sec
@@ -10,7 +10,7 @@ const TIMEOUT_NORM = 60000; // 1 min
 const INTERVAL_TO_SWITCH = 120000 // 2 min
 
 // MODULE'S CLASSES
-export default class Fl32_Dup_Front_Proc_Connect_Manager {
+export default class Fl32_Dup_Front_Hand_Connect_Manager {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
