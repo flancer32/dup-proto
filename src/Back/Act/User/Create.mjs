@@ -14,6 +14,9 @@ export default function (spec) {
     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree} */
     const idbTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
 
+    // VARS
+    /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Tree.ATTR} */
+    const A_TREE = idbTree.getAttributes();
 
     // FUNCS
     /**
@@ -33,11 +36,17 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async function addUserTree(trx, frontId, parentId) {
-            /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree.Dto} */
-            const dto = idbTree.createDto();
-            dto.front_ref = frontId;
-            dto.parent_ref = parentId;
-            await crud.create(trx, idbTree, dto);
+            const found = await crud.readOne(trx, idbTree, {
+                [A_TREE.FRONT_REF]: frontId,
+                [A_TREE.PARENT_REF]: parentId
+            });
+            if (!found) {
+                /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree.Dto} */
+                const dto = idbTree.createDto();
+                dto.front_ref = frontId;
+                dto.parent_ref = parentId;
+                await crud.create(trx, idbTree, dto);
+            }
         }
 
         // MAIN
