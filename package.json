@@ -1,10 +1,10 @@
 {
-  "name": "@flancer32/duplo-proto",
+  "name": "@flancer32/dup-proto",
   "version": "0.1.0",
-  "description": "DUPLO connected (proto)",
-  "homepage": "https://proto.duplo.wiredgeese.com/",
+  "description": "Dup Chat: prototype for secured messenger.",
+  "homepage": "https://github.com/flancer32/dup-proto",
   "bugs": {
-    "url": "https://github.com/flancer32/duplo-proto/issues",
+    "url": "https://github.com/flancer32/dup-proto/issues",
     "email": "alex@flancer32.com"
   },
   "license": "Apache-2.0",
@@ -13,7 +13,7 @@
     "email": "alex@flancer64.com",
     "url": "https://github.com/flancer64"
   },
-  "repository": "github:flancer32/duplo-proto",
+  "repository": "github:flancer32/dup-proto",
   "scripts": {
     "db-init": "node ./bin/tequila.mjs app-db-init",
     "db-reset": "node ./bin/tequila.mjs app-db-init -t",

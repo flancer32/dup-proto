@@ -1,3 +1,3 @@
-# DUPLO (proto)
+# Dup Chat
 
 Prototype for simple secured messenger.

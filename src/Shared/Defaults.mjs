@@ -1,5 +1,5 @@
 export default class Fl32_Dup_Shared_Defaults {
-    NAME = '@flancer32/duplo-proto';
+    NAME = '@flancer32/dup-proto';
 
     DATA_INVITE_CODE_LENGTH = 16; // default length for sign-up & sign-in codes
     DATA_INVITE_LIFETIME_MIN = 5; // default lifetime in minutes for invitation

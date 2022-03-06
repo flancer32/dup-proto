@@ -1,7 +1,7 @@
 {
   "background_color": "#2A180E",
   "categories": ["messenger"],
-  "description": "DUPLO Connected (proto)",
+  "description": "Dup Chat: prototype for secured messenger.",
   "display": "standalone",
   "icons": [
     {
@@ -14,9 +14,9 @@
       "type": "image/png"
     }
   ],
-  "name": "DUPLO",
+  "name": "Dup Chat",
   "scope": "./",
-  "short_name": "DUPLO",
+  "short_name": "Dup Chat",
   "start_url": "./",
   "theme_color": "#2A180E"
 }

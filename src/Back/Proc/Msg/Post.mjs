@@ -74,8 +74,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
                     /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript.Dto} */
                     const subscript = await crud.readOne(trx, rdbSubscript, frontId);
                     if (subscript?.enabled) {
-                        const title = 'New message in DUPLO.';
-                        const body = 'New message in DUPLO.';
+                        const title = 'New message in Dup Chat.';
+                        const body = 'New message in Dup Chat.';
                         await actPushSend({trx, title, body, frontId});
                         subscript.enabled = false;
                         await crud.updateOne(trx, rdbSubscript, subscript);

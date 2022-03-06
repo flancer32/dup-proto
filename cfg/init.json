@@ -1,9 +1,9 @@
 {
-  "@flancer32/duplo-proto": {
+  "@flancer32/dup-proto": {
     "db": {
       "client": "mysql2|pg",
       "connection": {
-        "database": "duplo",
+        "database": "dup",
         "host": "127.0.0.1",
         "password": "...",
         "user": "..."
@@ -18,7 +18,7 @@
     "server": {
       "port": 9999
     },
-    "urlBase": "duplo.wiredgeese.com"
+    "urlBase": "dup.wiredgeese.com"
   },
   "@teqfw/web-push": {
     "email": "user@email.com"
