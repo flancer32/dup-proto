@@ -48,14 +48,14 @@
           "one": "One-time",
           "title": "Code usability"
         },
-        "phoneMsg": "D.U.P.L.O. is waiting for you.",
+        "phoneMsg": "DupChat is waiting for you.",
         "time": {
           "day1": "1 day",
           "hour1": "1 hour",
           "min5": "5 mins",
           "title": "Code life-time"
         },
-        "title": "Create sign up code to add new user to the Hollow"
+        "title": "Create sign up code to add new contact"
       },
       "card": {
         "dateFrom": "From",
