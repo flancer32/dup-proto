@@ -24,12 +24,15 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         const TYPE = spec['TeqFw_Web_Shared_Enum_Log_Type$'];
 
         // VARS
-        let hostname, canSendLogs = true;
+        let canSendLogs;
 
         // MAIN
         /** @type {Fl32_Dup_Back_Dto_Config_Local} */
         const cfg = config.getLocal(DEF.SHARED.NAME);
-        hostname = cfg.logsMonitor;
+        /** @type {TeqFw_Core_Back_Api_Dto_Config_Local} */
+        const cfgCore = config.getLocal(DEF.MOD_CORE.SHARED.NAME);
+        const HOSTNAME = cfg.logsMonitor;
+        canSendLogs = cfgCore.devMode;
 
         // INSTANCE METHODS
         /**
@@ -50,7 +53,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     // send log entry to logs monitor
                     const postData = JSON.stringify({data: entry});
                     const options = {
-                        hostname,
+                        hostname: HOSTNAME,
                         path: '/api/@flancer64/pwa_log_agg/add',
                         method: 'POST',
                         headers: {
