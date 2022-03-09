@@ -20,10 +20,14 @@ text messages only for now (no attachments, images, voice messages, etc.)
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [First user registration](#first-user-registration)
-* 'Homepage' panel
-* 'Configuration' panel
-* 'Add contact' panel
-* Create invitation link
+* ['Homepage' panel](#homepage-panel)
+* ['Configuration' panel](#configuration-panel)
+* ['Add contact' panel](#add-contact-panel)
+* [Create invitation link](#create-invitation-link)
+* [Use invitation link](#use-invitation-link)
+* [Conversations](#conversations)
+* [Message chat](#message-chat)
+* [Resume](#resume)
 
 ## Requirements
 
@@ -241,33 +245,70 @@ generation result for desktop/notebooks:
 ![Add User Smartphone](doc/img/readme/dup_add_user_mobile.png)
 
 You can send invitation link using any available communication channel (email, messenger, etc.) or generate QR-code to
-pass this invitation link to an other party.
+pass this invitation link to another party.
 
+## Use invitation link
 
+This is typical invitation link: https://.../#/invite/validate/f8d30ab409fb50a1e47ac540293f64c3
 
+... and the first step of registration process:
 
+![Registration First Step](doc/img/readme/dup_reg_step_accept.png)
 
+Press 'Accept' button then allow Web Push subscription:
 
+![Registration Web Push](doc/img/readme/dup_reg_step_web_push.png)
 
+... and enter your nickname:
 
+![Registration Web Push](doc/img/readme/dup_reg_step_nick.png)
 
+This nickname is used as your default contact name for other users.
 
+## Conversations
 
+Home panel displays all available contacts and conversations:
 
+![Conversations](doc/img/readme/dup_conversations.png)
 
+### Conversation card
 
+![Conversation Card](doc/img/readme/dup_conversation_card.png)
 
+1. Contact name (local).
+2. Date-time of the last communication.
+3. Part of the last message (incoming or outgoing).
+4. Unread led. Indicates that message is not read by recipient.
+5. Icon with the first letter of contact name allows editing contact name locally.
 
+### Contact card
 
+![Contact Card](doc/img/readme/dup_contact_card.png)
 
+1. **Nick**: local name for contact.
+2. **From**: date-time when contact was added to local address book.
+3. **Message icon**: go to conversation with this contact.
 
+## Message chat
 
+![Contact Card](doc/img/readme/dup_ptp_chat.png)
 
+Only text messages are allowed in the chat for now.
 
+LED indicator states for outgoing messages (on the right side):
 
+* **grey**: message is not sent to the server yet (sender's smartphone is offline).
+* **yellow**: message is sent to the server but is not transferred to recipient (recipient's smartphone is offline).
+* **blue**: message is transferred to recipient but is not read yet.
+* **green**: message is read by recipient.
 
+## Resume
 
+I believe that Progressive Web Applications have a great perspectives, and I want to improve my own skills in this
+technology. I am open to any contacts and suggestions in this area. `DupChat` is just a demo of the possibilities of
+what PWA is capable of.
 
-
-
-
+My contacts:
+* **email**: alex@flancer32.com
+* **skype**: alex.gusev.work
+* **telegram**: @wiredgeese
