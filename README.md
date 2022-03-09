@@ -1,8 +1,8 @@
 # DupChat
 
-DupChat is a prototype for simple secured messenger. I learn how to
+`DupChat` is a prototype for simple secured messenger. I learn how to
 create [Progressive Web Applications](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) and made this
-DupChat app to test some techniques: database connectivity (relational and indexed DB), back-to-front
+`DupChat` app to test some techniques: database connectivity (relational and indexed DB), back-to-front
 messaging ([SSE](https://en.wikipedia.org/wiki/Server-sent_events)),
 encryption ([NaCl](https://en.wikipedia.org/wiki/NaCl_(software))), UI composition (Vue 3 and Quasar UI ), event driven
 architecture, etc. One only programming language has been used to create this app - vanilla JavaScript (ES6+).
@@ -14,7 +14,7 @@ join. You don't need to type any identification information (email or phone numb
 notebook as a chat client. All messages are encrypted on the front ends before sending, server cannot decrypt chat
 messages.
 
-This is just a PWA features test, not a full-featured application, please, don't expect too much. DupChat works with
+This is just a PWA features test, not a full-featured application, please, don't expect too much. `DupChat` works with
 text messages only for now (no attachments, images, voice messages, etc.)
 
 * [Requirements](#requirements)
@@ -30,7 +30,7 @@ text messages only for now (no attachments, images, voice messages, etc.)
 * Node.js engine.
 * Package manager (`npm` or `yarn`).
 * Backend RDBMS (Postgres, MySQL, MariaDB).
-* Chrome browser.
+* Chrome browser or other PWA aware software.
 
 ## Installation
 
@@ -47,9 +47,9 @@ $ npm install
 ```shell
 $ sudo mysql
 ...
-> CREATE DATABASE dup_db;
+> CREATE DATABASE dup;
 > CREATE USER dup@localhost IDENTIFIED BY '...';
-> GRANT ALL PRIVILEGES ON dup_db.* TO dup@localhost;
+> GRANT ALL PRIVILEGES ON dup.* TO dup@localhost;
 > FLUSH PRIVILEGES;
 ```
 
@@ -68,7 +68,7 @@ Change local configuration according your environment:
     "db": {
       "client": "mysql2|pg",
       "connection": {
-        "database": "dup_db",
+        "database": "dup",
         "host": "127.0.0.1",
         "password": "...",
         "user": "dup"
@@ -96,7 +96,7 @@ Change local configuration according your environment:
 ```shell
 $ ./bin/tequila.mjs help
 03/07 16:03:08.665 (info): Backend application UUID: a948d6a6-a843-4c6e-bc2f-d69dad8b751a.
-03/07 16:03:08.891 (info): Setup connection to DB 'dup_db@127.0.0.1' as 'dup'.
+  03/07 16:03:08.891 (info): Setup connection to DB 'dup@127.0.0.1' as 'dup'.
 Usage: tequila [options] [command]
 
 Options:
@@ -118,7 +118,7 @@ Commands:
 ```shell
 $ ./bin/tequila.mjs app-db-init
 03/07 16:12:00.731 (info): Backend application UUID: c7f185e0-893f-4320-8b04-d699804f0041.
-03/07 16:12:00.936 (info): Setup connection to DB 'dup_db@127.0.0.1' as 'dup'.
+03/07 16:12:00.936 (info): Setup connection to DB 'dup@127.0.0.1' as 'dup'.
 03/07 16:12:01.053 (info): Total 6 entities are in DEM.
 03/07 16:12:01.054 (info): Table 'app_cfg' is created.
 03/07 16:12:01.054 (info): Table 'web_front' is created.
@@ -127,7 +127,7 @@ $ ./bin/tequila.mjs app-db-init
 03/07 16:12:01.054 (info): Table 'web_event_queue' is created.
 03/07 16:12:01.054 (info): Table 'web_push_subscript' is created.
 03/07 16:12:01.370 (info): Database structure is recreated.
-03/07 16:12:01.471 (info): Connections to 'dup_db@127.0.0.1' as 'dup' are closed.
+03/07 16:12:01.471 (info): Connections to 'dup@127.0.0.1' as 'dup' are closed.
 ```
 
 This is schema for backend DB:
@@ -141,7 +141,7 @@ HTTP/1 mode is used for development (`localhost:9999`).
 ```shell
 $ ./bin/tequila.mjs web-server-start -1
 03/07 16:15:27.749 (info): Backend application UUID: cbd09021-2fd6-4fe2-9955-bd53bb80eefb.
-03/07 16:15:27.953 (info): Setup connection to DB 'dup_db@127.0.0.1' as 'dup'.
+03/07 16:15:27.953 (info): Setup connection to DB 'dup@127.0.0.1' as 'dup'.
 03/07 16:15:27.695 (info): Teq-application is started in '/.../dup-proto' (ver. 0.1.0).
 ...
 03/07 16:15:28.085 (info): Web server is started on port 9999 in HTTP/1 mode.
@@ -153,8 +153,8 @@ Open link `http://localhost:9999/` in your browser:
 
 ### Setup reverse proxy
 
-I use Apache 2 server as reverse proxy to handle HTTPS traffic. Backend application is started in HTTP/2 mode in this
-case.
+I use Apache 2 server as reverse proxy to handle HTTPS traffic. Backend application for `DupChat` is started in HTTP/2
+mode in this case.
 
 Apache config:
 
@@ -241,7 +241,7 @@ generation result for desktop/notebooks:
 ![Add User Smartphone](doc/img/readme/dup_add_user_mobile.png)
 
 You can send invitation link using any available communication channel (email, messenger, etc.) or generate QR-code to
-pass this invitation link to the other party.
+pass this invitation link to an other party.
 
 
 
