@@ -39,7 +39,7 @@ finish() {
 }
 
 ##
-# Define deployment configuration to use (work|live) and check existance of the config file.
+# Define deployment configuration to use (work|live) and check existence of the config file.
 ##
 FILE_CFG="${DIR_ROOT}/cfg/local.sh"
 if test -f "${FILE_CFG}"; then
