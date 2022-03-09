@@ -166,6 +166,20 @@ export default function (spec) {
                     });
                 }
 
+                /**
+                 * Compose URL for invitation link.
+                 * @param {string} code invitation code from server
+                 * @return {string}
+                 */
+                function composeUrl(code) {
+                    const protocol = location.protocol; // 'https:'
+                    let port = location.port; // empty string for default ports (80 & 443)
+                    if (port !== '') port = `:${port}`
+                    const host = `${protocol}//${config.urlBase}${port}`;
+                    const route = DEF.ROUTE_INVITE_VALIDATE.replace(':code', code);
+                    return `${host}/#${route}`;
+                }
+
                 // MAIN
                 const userId = frontIdentity.getFrontId();
                 const date = new Date();
@@ -180,14 +194,12 @@ export default function (spec) {
                 const code = await createInvite(userId, date, onetime);
                 if (code) {
                     // compose URL to add new friend
-                    const host = `https://${config.urlBase}`;
-                    const route = DEF.ROUTE_INVITE_VALIDATE.replace(':code', code);
-                    const url = `${host}/#${route}`;
+                    const url = composeUrl(code);
                     // open sharing options or print out sign up link to console
                     if (self.navigator.share) {
                         // smartphone mode
                         const data = {
-                            title: 'D.U.P.L.O.',
+                            title: 'Dup Chat',
                             text: this.$t('wg.contact.add.phoneMsg'),
                             url,
                         };
