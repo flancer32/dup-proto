@@ -48,14 +48,12 @@ $ npm install
 
 ### Create DB for backend
 
-```shell
-$ sudo mysql
-...
-> CREATE DATABASE dup;
-> CREATE USER dup@localhost IDENTIFIED BY '...';
-> GRANT ALL PRIVILEGES ON dup.* TO dup@localhost;
-> FLUSH PRIVILEGES;
-```
+`DupChat` uses `knex` package to work with data on backend. Any of these three RDBMS can be used on backend (
+see [more](./doc/rdb_setup.md)):
+
+* SQLite (file & in-memory)
+* MySQL/MariaDB
+* PostgreSQL
 
 ### Create local config
 
@@ -70,13 +68,7 @@ Change local configuration according your environment:
 {
   "@flancer32/dup-proto": {
     "db": {
-      "client": "mysql2|pg",
-      "connection": {
-        "database": "dup",
-        "host": "127.0.0.1",
-        "password": "...",
-        "user": "dup"
-      }
+      "use": "'knex' configuration options here"
     }
   },
   "@teqfw/core": {
@@ -86,7 +78,7 @@ Change local configuration according your environment:
     "server": {
       "port": 9999
     },
-    "urlBase": "localhost" // or domain name: dup.flancer64.com
+    "urlBase": "[localhost|dup.flancer64.com]"
   },
   "@teqfw/web-push": {
     "email": "dup@flancer64.com"
@@ -119,8 +111,9 @@ Commands:
 
 ### Initialize backend DB
 
+Backend DB tables will be created on the first launch:
+
 ```shell
-$ ./bin/tequila.mjs app-db-init
 03/07 16:12:00.731 (info): Backend application UUID: c7f185e0-893f-4320-8b04-d699804f0041.
 03/07 16:12:00.936 (info): Setup connection to DB 'dup@127.0.0.1' as 'dup'.
 03/07 16:12:01.053 (info): Total 6 entities are in DEM.
@@ -137,6 +130,12 @@ $ ./bin/tequila.mjs app-db-init
 This is schema for backend DB:
 
 ![RDB Schema](doc/img/readme/rdb_schema.png)
+
+You can re-initialize DB schema manually:
+
+```shell
+$ ./bin/tequila.mjs app-db-init
+```
 
 ### Start backend server in HTTP/1 mode
 

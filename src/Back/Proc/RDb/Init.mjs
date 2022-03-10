@@ -1,23 +1,14 @@
 /**
- * Action to re-create database structure (drop-create tables).
+ * On-demand process to create tables in RDB.
  *
- * @namespace Fl32_Dup_Back_Cli_Db_Z_Restruct
+ * @namespace Fl32_Dup_Back_Proc_RDb_Init
  */
-// MODULE'S IMPORT
+// MODULE'S VARS
+const NS = 'Fl32_Dup_Back_Proc_RDb_Init';
 
-// DEFINE WORKING VARS
-const NS = 'Fl32_Dup_Back_Cli_Db_Z_Restruct';
-
-// DEFINE MODULE'S FUNCTIONS
-/**
- * Factory to setup context and to create the action.
- *
- * @param {TeqFw_Di_Shared_SpecProxy} spec
- * @constructor
- * @memberOf Fl32_Dup_Back_Cli_Db_Z_Restruct
- */
-export default function Factory(spec) {
-    // PARSE INPUT & DEFINE WORKING VARS
+// MODULE'S FUNCTIONS
+export default function (spec) {
+    // DEPS
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
@@ -29,16 +20,12 @@ export default function Factory(spec) {
     /** @type {TeqFw_Db_Back_Dem_Load} */
     const demLoad = spec['TeqFw_Db_Back_Dem_Load$'];
 
-    // MAIN
-    logger.setNamespace(NS);
-
     // FUNCS
     /**
-     * Action to re-create database structure (drop-create tables).
-     * @returns {Promise<void>}
-     * @memberOf Fl32_Dup_Back_Cli_Db_Z_Restruct
+     * @return {Promise<void>}
+     * @memberOf Fl32_Dup_Back_Proc_RDb_Init
      */
-    async function action() {
+    async function process() {
         // load DEMs then drop/create all tables
         const path = config.getBoot().projectRoot;
         const {dem, cfg} = await demLoad.exec({path});
@@ -49,11 +36,8 @@ export default function Factory(spec) {
         logger.info('Database structure is recreated.');
     }
 
-    // COMPOSE RESULT
-    Object.defineProperty(action, 'name', {value: `${NS}.action`});
-    return action;
+    // MAIN
+    logger.setNamespace(NS);
+    Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    return process;
 }
-
-
-// finalize code components for this es6-module
-Object.defineProperty(Factory, 'name', {value: `${NS}.Factory`});

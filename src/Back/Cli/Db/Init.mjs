@@ -30,8 +30,8 @@ export default function Factory(spec) {
     const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command#Factory$'];
     /** @type {TeqFw_Core_Back_Api_Dto_Command_Option.Factory} */
     const fOpt = spec['TeqFw_Core_Back_Api_Dto_Command_Option#Factory$'];
-    /** @type {Fl32_Dup_Back_Cli_Db_Z_Restruct.action|function} */
-    const actRestruct = spec['Fl32_Dup_Back_Cli_Db_Z_Restruct$'];
+    /** @type {Fl32_Dup_Back_Proc_RDb_Init.process|function} */
+    const procDbInit = spec['Fl32_Dup_Back_Proc_RDb_Init$'];
 
     // MAIN
     logger.setNamespace(NS);
@@ -43,14 +43,9 @@ export default function Factory(spec) {
      * @memberOf Fl32_Dup_Back_Cli_Db_Init
      */
     async function action(opts) {
-        // FUNCS
-
-        // MAIN
-        // logger.pause(false);
         const testData = opts[OPT_TEST];
-        // const trx = await conn.startTransaction();
         // recreate DB structure
-        await actRestruct();
+        await procDbInit();
         if (testData) {
             // TODO: add test data to DB here
         }
