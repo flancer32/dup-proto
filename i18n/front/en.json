@@ -72,7 +72,7 @@
         "msg": {
           "nick": "Enter your nick and complete registration.",
           "occupied": "This hollow is occupied by some squirrel.",
-          "subscribe": "You need to subscribe to notifications first.",
+          "subscribe": "To start using app, please allow pop-up notifications.",
           "success": "You have been successfully registered in the hollow."
         },
         "nick": {
@@ -91,7 +91,7 @@
         "msg": {
           "checkCode": "Invite verification...",
           "wrongCode": "Sorry, this invitation is expired. Try to get another one.",
-          "subscribe": "You need to subscribe to notifications first.",
+          "subscribe": "To start using app, please allow pop-up notifications.",
           "success": "You have been successfully registered in the hollow."
         }
       }
