@@ -17,6 +17,12 @@ messages.
 This is just a PWA features test, not a full-featured application, please, don't expect too much. `DupChat` works with
 text messages only for now (no attachments, images, voice messages, etc.)
 
+Invitation link to demo: https://dup.flancer64.com/#/invite/validate/b710ab0be296292cff604cfdb6c14d9e
+
+QR-code for smartphones:
+
+![QR-code](./doc/img/readme/dup_chat_invite.png)
+
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [First user registration](#first-user-registration)
@@ -41,9 +47,16 @@ text messages only for now (no attachments, images, voice messages, etc.)
 ### Clone and install
 
 ```shell
-$ git clone https://github.com/flancer32/dup-proto.git
+$ git clone --depth 1 --branch 0.1.0  https://github.com/flancer32/dup-proto.git
 $ cd dup-proto/
 $ npm install
+```
+
+### Create local config
+
+```shell
+$ cp ./cfg/init.json ./cfg/local.json
+$ nano ./cfg/local.json
 ```
 
 ### Create DB for backend
@@ -55,12 +68,23 @@ see [more](./doc/rdb_setup.md)):
 * MySQL/MariaDB
 * PostgreSQL
 
-### Create local config
+This is configuration options for `./cfg/local.json` file to use SQLite in-memory DB:
 
-```shell
-$ cp ./cfg/init.json ./cfg/local.json
-$ nano ./cfg/local.json
+```json
+{
+  "@flancer32/dup-proto": {
+    "db": {
+      "client": "sqlite3",
+      "connection": {
+        "filename": ":memory:"
+      },
+      "useNullAsDefault": true
+    }
+  }
+}
 ```
+
+### Setup local config
 
 Change local configuration according your environment:
 
@@ -131,7 +155,7 @@ This is schema for backend DB:
 
 ![RDB Schema](doc/img/readme/rdb_schema.png)
 
-You can re-initialize DB schema manually:
+You can re-initialize DB schema manually (except in-memory DB):
 
 ```shell
 $ ./bin/tequila.mjs app-db-init
