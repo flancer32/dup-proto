@@ -23,8 +23,6 @@ export default function (spec) {
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register.process|function} */
     const procReg = spec['Fl32_Dup_Front_Proc_User_Register$'];
-    /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
-    const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
@@ -35,14 +33,8 @@ export default function (spec) {
         <q-card-section v-if="displayIsOccupied">
             <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.occupied')}}</div>
         </q-card-section>
-        <q-card-section v-if="displaySubscribe">
-            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.subscribe')}}</div>
-            <q-card-actions align="center">
-                <q-btn :label="$t('btn.subscribe')" padding="xs lg" :disable="freezeSubscribe" v-on:click="subscribe"></q-btn>
-            </q-card-actions>
-        </q-card-section>
         <q-card-section v-if="displayRegister">
-            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.nick')}}</div>
+            <div class="text-subtitle2">{{$t('wg.hollow.occupy.title')}}</div>
             <q-input
                     :label="$t('wg.hollow.occupy.nick.label')"
                     :disable="freezeRegister"
@@ -82,12 +74,10 @@ export default function (spec) {
                 displayError: false,
                 displayIsOccupied: false,
                 displayRegister: false,
-                displaySubscribe: false,
                 displaySuccess: false,
                 fldError: null,
                 fldNick: null,
                 freezeRegister: false,
-                freezeSubscribe: false,
             };
         },
         methods: {
@@ -121,19 +111,6 @@ export default function (spec) {
                 }
                 this.freezeRegister = false;
             },
-
-            async subscribe() {
-                this.freezeSubscribe = true;
-                const isSubscribed = await modSubscript.subscribe();
-                // switch UI
-                if (isSubscribed) {
-                    this.displaySubscribe = false;
-                    this.displayRegister = true;
-                } else {
-                    logger.error('Cannot subscribe new user to Web Push API on hollow occupation.');
-                }
-                this.freezeSubscribe = false;
-            }
         },
         /**
          * Redirect to homepage is user is authenticated.
@@ -144,11 +121,7 @@ export default function (spec) {
             /** @type {Fl32_Dup_Front_Dto_User.Dto} */
             const profile = await modProfile.get();
             if (await modHollowIsFree.get() === true) {
-                const canSubscribe = await modSubscript.canSubscribe();
-                const hasSubscription = await modSubscript.hasSubscription();
-                const needSubscribe = canSubscribe && !hasSubscription;
-                this.displaySubscribe = needSubscribe;
-                this.displayRegister = (!needSubscribe) && (profile?.nick === undefined);
+                this.displayRegister = (profile?.nick === undefined);
             } else {
                 // user is authenticated, goto home page
                 this.displayIsOccupied = true;

@@ -22,8 +22,6 @@ export default function (spec) {
     const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
-    /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
-    const modSubscript = spec['TeqFw_Web_Push_Front_Mod_Subscription$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
     const dtoProfile = spec['Fl32_Dup_Front_Dto_User$'];
     /** @type {Fl32_Dup_Front_Proc_User_Register.process|function} */
@@ -32,30 +30,24 @@ export default function (spec) {
     // VARS
     const template = `
 <q-card class="bg-white" style="min-width:245px">
-        <q-card-section v-if="displaySubscribe">
-            <div class="text-subtitle2">{{$t('wg.invite.validate.msg.subscribe')}}</div>
-            <q-card-actions align="center">
-                <q-btn :label="$t('btn.subscribe')" padding="xs lg" v-on:click="subscribe"></q-btn>
-            </q-card-actions>
-        </q-card-section>     
-        <q-card-section v-if="displayRegister">
-            <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.nick')}}</div>
-            <q-input
-                    :label="$t('wg.hollow.occupy.nick.label')"
-                    outlined
-                    v-model="fldNick"
-            ></q-input>
-            <q-card-actions align="center">
-                <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
-            </q-card-actions>
-        </q-card-section>
-        <q-card-section v-if="displaySuccess">
-            <div class="text-subtitle2 text-center">{{$t('wg.invite.validate.msg.success')}}</div>
-        </q-card-section> 
-        <q-card-section v-if="displayError">
-            <div class="text-subtitle2 text-center">{{fldError}}</div>
-        </q-card-section>           
-    </q-card>
+    <q-card-section v-if="displayRegister">
+        <div class="text-subtitle2">{{$t('wg.invite.validate.title')}}</div>
+        <q-input
+                :label="$t('wg.hollow.occupy.nick.label')"
+                outlined
+                v-model="fldNick"
+        ></q-input>
+        <q-card-actions align="center">
+            <q-btn :label="$t('btn.ok')" padding="xs lg" v-on:click="create"></q-btn>
+        </q-card-actions>
+    </q-card-section>
+    <q-card-section v-if="displaySuccess">
+        <div class="text-subtitle2 text-center">{{$t('wg.invite.validate.msg.success')}}</div>
+    </q-card-section>
+    <q-card-section v-if="displayError">
+        <div class="text-subtitle2 text-center">{{fldError}}</div>
+    </q-card-section>
+</q-card>
 `;
 
     // MAIN
@@ -75,8 +67,7 @@ export default function (spec) {
         data() {
             return {
                 displayError: false,
-                displayRegister: false,
-                displaySubscribe: false,
+                displayRegister: true,
                 displaySuccess: false,
                 fldError: null,
                 fldNick: null,
@@ -113,37 +104,7 @@ export default function (spec) {
                     logger.error(this.fldError);
                 }
             },
-
-            /**
-             * Subscribe new user to Web Push API.
-             * @return {Promise<void>}
-             */
-            async subscribe() {
-                const isSubscribed = await modSubscript.subscribe();
-                // switch UI
-                if (isSubscribed) {
-                    this.displaySubscribe = false;
-                    this.displayRegister = true;
-                } else {
-                    this.displayError = true;
-                    const msg = `Cannot subscribe new user to Web Push API.`;
-                    this.fldError = msg;
-                    logger.error(msg);
-                }
-            }
         },
         emits: [EVT_DONE],
-        async mounted() {
-            // check can we subscribe new user to Web Push API?
-            const canSubscribe = await modSubscript.canSubscribe();
-            const hasSubscription = await modSubscript.hasSubscription();
-            this.displaySubscribe = canSubscribe && !hasSubscription;
-            if (this.displaySubscribe) {
-                logger.info(`Invited user should subscribe to Web Push API.`);
-            } else {
-                logger.info(`Invited user cannot subscribe to Web Push API (Apple?).`);
-                this.displayRegister = true;
-            }
-        },
     };
 }

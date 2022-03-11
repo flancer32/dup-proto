@@ -24,7 +24,7 @@ export default function (spec) {
     const template = `
 <div 
     class="q-pa-md fixed-bottom row justify-center" 
-    style="margin-bottom:56px; width: 100%; height:calc(100vh - 50px - 56px)">
+    style="margin-bottom:56px; width: 100%; height:calc(100% - 50px - 56px); margin-top: 50px;">
     <q-scroll-area ref="scrollAreaRef" style="height: 100%; width: 100%;"  @scroll="onScrollFirst">
         <message v-for="(item) in band"
             :item="item"

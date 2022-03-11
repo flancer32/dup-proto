@@ -37,12 +37,14 @@ export default function (spec) {
     const dialogLink = spec['Fl32_Dup_Front_Widget_Contacts_Add_DialogLink$'];
     /** @type {Fl32_Dup_Front_Ui_Contacts_Add_DialogLink} */
     const uiDialogLink = spec['Fl32_Dup_Front_Ui_Contacts_Add_DialogLink$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
     // VARS
     const template = `
 <layout-base>
     <div class="q-pt-xs q-gutter-xs">
-        <div class="text-subtitle1 text-center">{{ $t('wg.contact.add.title') }}:</div>
+        <div class="text-subtitle1 text-center">{{ $t('wg.contact.add.info') }}:</div>
         <q-card>
             <q-card-section>
                 <div class="text-subtitle2">{{ $t('wg.contact.add.time.title') }}:</div>
@@ -216,5 +218,8 @@ export default function (spec) {
                 }
             }
         },
+        mounted() {
+            rxTitle.set(this.$t('wg.contact.add.title'));
+        }
     };
 }

@@ -35,12 +35,19 @@ export default class Fl32_Dup_Front_Hand_User_Contact_Add {
             card.nick = data.userNick;
             card.idOnBack = data.userId;
             const trx = await idb.startTransaction(idbContact);
+            /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add.Dto} */
             const found = await idb.readOne(trx, idbContact, data.userId, I_CONTACT.BY_BACK_ID);
             if (!found) {
                 await idb.create(trx, idbContact, card);
                 logger.info(`New contact is added: ${card.nick} (#${card.idOnBack}).`);
             } else {
                 logger.info(`Contact for user ${card.nick} (#${card.idOnBack}) exists in IDB.`)
+                if (found.userPubKey !== data.userPubKey) {
+                    found.userNick = data.userNick;
+                    found.userPubKey = data.userPubKey;
+                    await idb.updateOne(trx, idbContact, found);
+                    logger.info(`Public key for user ${card.nick} (#${card.idOnBack}) is updated.`)
+                }
             }
             await trx.commit();
             // reload home route conversations if new contact is added

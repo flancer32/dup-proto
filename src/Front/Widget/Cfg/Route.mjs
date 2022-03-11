@@ -17,14 +17,19 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Widget_Cfg_SWorker.vueCompTmpl} */
     const sworker = spec['Fl32_Dup_Front_Widget_Cfg_SWorker$'];
-    /** @type {Fl32_Dup_Front_Widget_Cfg_Store.vueCompTmpl} */
-    const store = spec['Fl32_Dup_Front_Widget_Cfg_Store$'];
+    /** @type {Fl32_Dup_Front_Widget_Cfg_Profile.vueCompTmpl} */
+    const profile = spec['Fl32_Dup_Front_Widget_Cfg_Profile$'];
+    /** @type {Fl32_Dup_Front_Widget_Cfg_WebPush.vueCompTmpl} */
+    const webPush = spec['Fl32_Dup_Front_Widget_Cfg_WebPush$'];
+    /** @type {Fl32_Dup_Front_Rx_Title} */
+    const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
     // DEFINE WORKING VARS
     const template = `
 <layout-base>
-    <store/>
-    <sworker/>
+    <profile />
+    <web-push />
+    <sworker />
 </layout-base>
 `;
     /**
@@ -37,6 +42,9 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {store, sworker},
+        components: {profile, webPush, sworker},
+        mounted() {
+            rxTitle.set(this.$t('wg.cfg.title'));
+        },
     };
 }

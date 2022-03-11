@@ -117,7 +117,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
             const msgUuid = message.uuid;
             logger.info(`Chat message #${msgUuid} is received from front #${senderId}.`, {msgUuid});
             const encrypted = message.payload;
-            const publicKey = await getPublicKey(message.senderId);
+            const publicKey = await getPublicKey(senderId);
             const secretKey = frontIdentity.getSecretKey();
             scrambler.setKeys(publicKey, secretKey);
             const body = scrambler.decryptAndVerify(encrypted);
@@ -144,6 +144,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
                 }
                 const homeUi = uiHomeConv.get();
                 homeUi?.reload();
+            } else {
+                logger.error(`Cannot decrypt message body.`, meta);
             }
             // send receive confirmation back to server
             publishDeliveryReport(message.uuid, message.senderId);

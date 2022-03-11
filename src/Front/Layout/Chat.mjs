@@ -38,7 +38,7 @@ export default function Factory(spec) {
         </q-toolbar>
     </q-header>
 
-    <q-page-container class="absolute-bottom">
+    <q-page-container class="">
         <slot/>
     </q-page-container>
 

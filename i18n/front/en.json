@@ -10,16 +10,6 @@
     "subscribe": "Subscribe",
     "uninstall": "Uninstall"
   },
-  "navig": {
-    "cfg": "Config",
-    "chat": "Chat",
-    "contacts": {
-      "add": "Add User",
-      "list": "List Contacts"
-    },
-    "2home": "Go Home",
-    "home": "Home"
-  },
   "wg": {
     "cfg": {
       "profile": {
@@ -35,19 +25,24 @@
         "worker": {
           "title": "Worker"
         }
+      },
+      "title": "Front Config",
+      "wp": {
+        "title": "Web Push Notification"
       }
     },
     "contact": {
       "add": {
-        "dgLink": {
-          "title": "Send this link to your contact",
-          "link": "Invitation"
-        },
         "count": {
           "many": "Reusable",
           "one": "One-time",
           "title": "Code usability"
         },
+        "dgLink": {
+          "link": "Invitation",
+          "title": "Send this link to your contact"
+        },
+        "info": "Create sign up code to add new contact",
         "phoneMsg": "DupChat is waiting for you.",
         "time": {
           "day1": "1 day",
@@ -55,7 +50,7 @@
           "min5": "5 mins",
           "title": "Code life-time"
         },
-        "title": "Create sign up code to add new contact"
+        "title": "Add Contact"
       },
       "card": {
         "dateFrom": "From",
@@ -70,15 +65,13 @@
     "hollow": {
       "occupy": {
         "msg": {
-          "nick": "Enter your nick and complete registration.",
-          "occupied": "This hollow is occupied by some squirrel.",
-          "subscribe": "To start using app, please allow pop-up notifications.",
-          "success": "You have been successfully registered in the hollow."
+          "occupied": "This server is already occupied.",
+          "success": "You have been successfully registered on the server."
         },
         "nick": {
           "label": "Your nickname"
         },
-        "title": "Occupation"
+        "title": "You are the first user on the server, please enter your nick."
       }
     },
     "invite": {
@@ -90,10 +83,10 @@
         },
         "msg": {
           "checkCode": "Invite verification...",
-          "wrongCode": "Sorry, this invitation is expired. Try to get another one.",
-          "subscribe": "To start using app, please allow pop-up notifications.",
-          "success": "You have been successfully registered in the hollow."
-        }
+          "success": "You have been successfully registered on the server.",
+          "wrongCode": "Sorry, this invitation is expired. Try to get another one."
+        },
+        "title": "Please, enter your nickname."
       }
     }
   }

@@ -24,9 +24,7 @@ export default function (spec) {
 
     // VARS
     const template = `
-<layout-chat>
-    <msg-band/>
-</layout-chat>
+<msg-band/>
 `;
 
     // MAIN

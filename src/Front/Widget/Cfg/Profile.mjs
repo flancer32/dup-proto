@@ -1,16 +1,16 @@
 /**
  * Store configuration widget.
  *
- * @namespace Fl32_Dup_Front_Widget_Cfg_Store
+ * @namespace Fl32_Dup_Front_Widget_Cfg_Profile
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Cfg_Store';
+const NS = 'Fl32_Dup_Front_Widget_Cfg_Profile';
 
 // MODULE'S FUNCTIONS
 /**
  * TeqFW DI factory function to get dependencies for the object.
  *
- * @returns {Fl32_Dup_Front_Widget_Cfg_Store.vueCompTmpl}
+ * @returns {Fl32_Dup_Front_Widget_Cfg_Profile.vueCompTmpl}
  */
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
@@ -20,7 +20,7 @@ export default function (spec) {
 
     // VARS
     const template = `
-<q-card class="">
+<q-card class="q-mt-xs">
     <q-card-section class="q-gutter-sm">
         <div class="text-subtitle2">{{ $t('wg.cfg.profile.title') }}:</div>
         <q-input :label="$t('wg.cfg.profile.nick')"
@@ -39,7 +39,7 @@ export default function (spec) {
      * Template to create new component instances using Vue.
      *
      * @const {Object} vueCompTmpl
-     * @memberOf Fl32_Dup_Front_Widget_Cfg_Store
+     * @memberOf Fl32_Dup_Front_Widget_Cfg_Profile
      */
     return {
         teq: {package: DEF.SHARED.NAME},

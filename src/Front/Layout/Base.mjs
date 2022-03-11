@@ -28,7 +28,7 @@ export default function Factory(spec) {
     const template = `
 <q-layout view="lHr lpR lFr">
 
-    <q-header reveal class="bg-primary text-white">
+    <q-header reveal>
         <q-toolbar>
             <q-btn dense flat round icon="menu" to="${DEF.ROUTE_HOME}"/>
             <q-toolbar-title>{{ title }}</q-toolbar-title>
@@ -37,8 +37,10 @@ export default function Factory(spec) {
         </q-toolbar>
     </q-header>
 
-    <q-page-container style="display: grid; height: 100vh;align-items: center; justify-items: center;">
-        <slot/>
+    <q-page-container style="height: 100vh">
+        <div style="display: grid; height: 100%; align-items: center; justify-items: center;">
+            <slot/>
+        </div>
     </q-page-container>
 
     <q-footer class="bg-primary text-white">
