@@ -45,6 +45,7 @@ export default function Factory(spec) {
                 } catch (error) {
                     await trx.rollback();
                 }
+                await conn.disconnect(); // to prevent nodejs freezing on 'stop' commands
                 return res;
             }
 
