@@ -15,8 +15,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Report_Delivery {
         const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
         const castDate = spec['TeqFw_Core_Shared_Util_Cast.castDate'];
-        /** @type {Fl32_Dup_Front_Ui_Chat_Band} */
-        const uiBand = spec['Fl32_Dup_Front_Ui_Chat_Band$'];
+        /** @type {Fl32_Dup_Front_Widget_Chat_Band} */
+        const uiBand = spec['Fl32_Dup_Front_Widget_Chat_Band$'];
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
         const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
@@ -63,7 +63,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Report_Delivery {
              * @param uuid
              */
             function updateUi(uuid) {
-                /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band_Item.IUiComp} */
+                /** @type {Fl32_Dup_Front_Ui_Chat_Msg_Band_Item.IUiComp} */
                 const uiComp = uiBand.get(uuid);
                 if (uiComp) uiComp.setDelivered();
             }

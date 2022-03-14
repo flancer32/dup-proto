@@ -8,8 +8,8 @@ export default class Fl32_Dup_Front_Hand_Admin_Command {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Admin_Command_Log_State} */
         const esbLogState = spec['Fl32_Dup_Shared_Event_Back_Admin_Command_Log_State$'];
-        /** @type {Fl32_Dup_Front_Ui_Admin_Route} */
-        const wgAdmin = spec['Fl32_Dup_Front_Ui_Admin_Route$'];
+        /** @type {Fl32_Dup_Front_Widget_Admin_Route} */
+        const wgAdmin = spec['Fl32_Dup_Front_Widget_Admin_Route$'];
 
         // MAIN
         eventsFront.subscribe(esbLogState.getEventName(), onLogState);

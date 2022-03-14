@@ -57,8 +57,8 @@ export default class Fl32_Dup_Front_App {
         const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
         /** @type {Fl32_Dup_Front_Mod_Log_Monitor} */
         const modLogMonitor = spec['Fl32_Dup_Front_Mod_Log_Monitor$'];
-        /** @type {Fl32_Dup_Front_Ui_App} */
-        const uiApp = spec['Fl32_Dup_Front_Ui_App$'];
+        /** @type {Fl32_Dup_Front_Widget_App} */
+        const uiApp = spec['Fl32_Dup_Front_Widget_App$'];
 
 
         // VARS
@@ -170,45 +170,45 @@ export default class Fl32_Dup_Front_App {
                 // setup application routes (load es6-module on demand with DI-container)
                 router.addRoute({
                     path: DEF.ROUTE_ADMIN,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Admin_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Ui_Admin_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CFG,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Cfg_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Ui_Cfg_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CHAT,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Chat_Route$'),
+                    component: () => container.get('Fl32_Dup_Front_Ui_Chat_Route$'),
                     children: [
                         {
                             path: DEF.ROUTE_CHAT_BAND,
-                            component: () => container.get('Fl32_Dup_Front_Widget_Chat_Band_Route$'),
+                            component: () => container.get('Fl32_Dup_Front_Ui_Chat_Band_Route$'),
                             props: true
                         }
                     ]
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CONTACTS_ADD,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Add_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Ui_Contacts_Add_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_CONTACTS_CARD,
                     props: true,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Contacts_Card_Route$')
+                    component: () => container.get('Fl32_Dup_Front_Ui_Contacts_Card_Route$')
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOME,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Home_Route$'),
+                    component: () => container.get('Fl32_Dup_Front_Ui_Home_Route$'),
                 });
                 router.addRoute({
                     path: DEF.ROUTE_INVITE_VALIDATE,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Invite_Validate_Route$'),
+                    component: () => container.get('Fl32_Dup_Front_Ui_Invite_Validate_Route$'),
                     props: true,
                     meta: {requiresAuth: false}
                 });
                 router.addRoute({
                     path: DEF.ROUTE_HOLLOW_OCCUPY,
-                    component: () => container.get('Fl32_Dup_Front_Widget_Hollow_Occupy_Route$'),
+                    component: () => container.get('Fl32_Dup_Front_Ui_Hollow_Occupy_Route$'),
                     meta: {requiresAuth: false}
                 });
 

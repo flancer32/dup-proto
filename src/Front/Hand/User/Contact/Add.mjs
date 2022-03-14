@@ -14,8 +14,8 @@ export default class Fl32_Dup_Front_Hand_User_Contact_Add {
         const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */
         const esbContactAdd = spec['Fl32_Dup_Shared_Event_Back_User_Contact_Add$'];
-        /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
-        const uiHomeConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
+        /** @type {Fl32_Dup_Front_Widget_Home_Conversation} */
+        const uiHomeConv = spec['Fl32_Dup_Front_Widget_Home_Conversation$'];
 
         // VARS
         const I_CONTACT = idbContact.getIndexes();

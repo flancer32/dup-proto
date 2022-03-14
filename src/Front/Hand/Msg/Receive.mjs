@@ -32,12 +32,12 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         const dtoMsg = spec['Fl32_Dup_Front_Dto_Message$'];
         /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
         const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
-        /** @type {Fl32_Dup_Front_Ui_Home_Conversation} */
-        const uiHomeConv = spec['Fl32_Dup_Front_Ui_Home_Conversation$'];
+        /** @type {Fl32_Dup_Front_Widget_Home_Conversation} */
+        const uiHomeConv = spec['Fl32_Dup_Front_Widget_Home_Conversation$'];
         /** @type {Fl32_Dup_Front_Proc_Msg_Read.process|function} */
         const procRead = spec['Fl32_Dup_Front_Proc_Msg_Read$'];
-        /** @type {Fl32_Dup_Front_Ui_App} */
-        const uiApp = spec['Fl32_Dup_Front_Ui_App$'];
+        /** @type {Fl32_Dup_Front_Widget_App} */
+        const uiApp = spec['Fl32_Dup_Front_Widget_App$'];
 
         // VARS
         /** @type {typeof Fl32_Dup_Front_Store_Entity_Contact.INDEX} */

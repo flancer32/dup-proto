@@ -13,8 +13,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Report_Sending {
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
         const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
-        /** @type {Fl32_Dup_Front_Ui_Chat_Band} */
-        const uiBand = spec['Fl32_Dup_Front_Ui_Chat_Band$'];
+        /** @type {Fl32_Dup_Front_Widget_Chat_Band} */
+        const uiBand = spec['Fl32_Dup_Front_Widget_Chat_Band$'];
         /** @type {typeof Fl32_Dup_Front_Enum_Msg_State} */
         const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
@@ -56,7 +56,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Report_Sending {
              * @param uuid
              */
             function updateUi(uuid) {
-                /** @type {Fl32_Dup_Front_Widget_Chat_Msg_Band_Item.IUiComp} */
+                /** @type {Fl32_Dup_Front_Ui_Chat_Msg_Band_Item.IUiComp} */
                 const uiComp = uiBand.get(uuid);
                 if (uiComp) uiComp.setOnServer();
             }
