@@ -62,15 +62,16 @@ export default function Factory(spec) {
         await initDb();
         // TODO: just create processes
         // run initialization synchronously to prevent doubling of singletons
+        await container.get('Fl32_Dup_Back_Hand_Admin_Command$');
         await container.get('Fl32_Dup_Back_Proc_Contact_Add_Bridge$');
         await container.get('Fl32_Dup_Back_Proc_Hollow_State$');
-        await container.get('Fl32_Dup_Back_Proc_Msg_Read$');
         await container.get('Fl32_Dup_Back_Proc_Msg_Delivery$');
         await container.get('Fl32_Dup_Back_Proc_Msg_Post$');
-        await container.get('Fl32_Dup_Back_Proc_WebPush_Enable$');
+        await container.get('Fl32_Dup_Back_Proc_Msg_Read$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Create$');
         await container.get('Fl32_Dup_Back_Proc_User_Invite_Validate$');
         await container.get('Fl32_Dup_Back_Proc_User_SignUp$');
+        await container.get('Fl32_Dup_Back_Proc_WebPush_Enable$');
     }
 
     // MAIN

@@ -25,6 +25,8 @@ export default class Fl32_Dup_Front_App {
         const container = spec['TeqFw_Di_Shared_Container$'];
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
+        /** @type {TeqFw_Web_Front_Mod_Logger_Transport} */
+        const modLogTrn = spec['TeqFw_Core_Shared_Api_Logger_ITransport$']; // as interface
         /** @type {TeqFw_I18n_Front_Lib} */
         const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
@@ -53,6 +55,8 @@ export default class Fl32_Dup_Front_App {
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
         /** @type {TeqFw_Web_Front_Mod_App_Alive} */
         const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
+        /** @type {Fl32_Dup_Front_Mod_Log_Monitor} */
+        const modLogMonitor = spec['Fl32_Dup_Front_Mod_Log_Monitor$'];
         /** @type {Fl32_Dup_Front_Ui_App} */
         const uiApp = spec['Fl32_Dup_Front_Ui_App$'];
 
@@ -96,11 +100,12 @@ export default class Fl32_Dup_Front_App {
             async function initEventProcessors(container) {
                 // TODO: init from 'teqfw.json'
                 // Some processes (authentication) should be subscribed to events before Reverse Stream can be opened.
+                await container.get('Fl32_Dup_Front_Hand_Admin_Command$');
                 await container.get('Fl32_Dup_Front_Hand_Connect_Manager$');
                 await container.get('Fl32_Dup_Front_Hand_Msg_Receive$');
                 await container.get('Fl32_Dup_Front_Hand_Msg_Report_Delivery$');
-                await container.get('Fl32_Dup_Front_Hand_Msg_Report_Sending$');
                 await container.get('Fl32_Dup_Front_Hand_Msg_Report_Read$');
+                await container.get('Fl32_Dup_Front_Hand_Msg_Report_Sending$');
                 await container.get('Fl32_Dup_Front_Hand_User_Contact_Add$');
             }
 
@@ -163,6 +168,10 @@ export default class Fl32_Dup_Front_App {
                     routes: [],
                 });
                 // setup application routes (load es6-module on demand with DI-container)
+                router.addRoute({
+                    path: DEF.ROUTE_ADMIN,
+                    component: () => container.get('Fl32_Dup_Front_Widget_Admin_Route$')
+                });
                 router.addRoute({
                     path: DEF.ROUTE_CFG,
                     component: () => container.get('Fl32_Dup_Front_Widget_Cfg_Route$')
@@ -267,6 +276,10 @@ export default class Fl32_Dup_Front_App {
                     print(`Data sources are initialized.`);
                     initRouter(_root, DEF, container);
                     print(`Vue app is created and initialized.`);
+                    if (await modLogMonitor.get()) {
+                        modLogTrn.enableLogs();
+                        print(`Logs monitoring is enabled.`);
+                    }
                     _isInitialized = true;
                 } catch (e) {
                     // TODO: place IDB cleanup here for re-installs

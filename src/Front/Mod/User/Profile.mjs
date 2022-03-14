@@ -1,12 +1,6 @@
 /**
  * User profile for front app. There is no users on back, only front apps.
- *
- * @namespace Fl32_Dup_Front_Mod_User_Profile
  */
-// MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Mod_User_Profile';
-
-// MODULE'S CLASSES
 export default class Fl32_Dup_Front_Mod_User_Profile {
     constructor(spec) {
         // DEPS
@@ -20,13 +14,9 @@ export default class Fl32_Dup_Front_Mod_User_Profile {
         /** @type {Fl32_Dup_Front_Dto_User.Dto} */
         let _cache;
 
-        // MAIN
-
-        // FUNCS
-
         // INSTANCE METHODS
         /**
-         * Get user data from IDB or generate new one and sae to IDB.
+         * Get data from IDB or generate new one and save to IDB.
          * @return {Promise<Fl32_Dup_Front_Dto_User.Dto>}
          */
         this.get = async function () {
@@ -36,7 +26,7 @@ export default class Fl32_Dup_Front_Mod_User_Profile {
         }
 
         /**
-         * Save profile into IDB and refresh cache.
+         * Save data into IDB and refresh cache.
          * @param {Fl32_Dup_Front_Dto_User.Dto} data
          * @return {Promise<void>}
          */

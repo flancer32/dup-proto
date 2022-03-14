@@ -11,25 +11,34 @@
     "uninstall": "Uninstall"
   },
   "wg": {
+    "admin": {
+      "log": {
+        "title": "Backend logs monitor"
+      },
+      "title": "Admin"
+    },
     "cfg": {
+      "app": {
+        "btn": {
+          "clean": "Clean Cache",
+          "uninstall": "Uninstall SW"
+        },
+        "cache": "Cache enabled",
+        "log": "Front Logs Monitoring",
+        "swCache": "Service Worker Cache",
+        "title": "App Settings",
+        "wp": "Web Push Notification"
+      },
+      "info": {
+        "frontUuid": "front UUID",
+        "title": "App Info"
+      },
       "profile": {
         "nick": "Nickname",
         "threshold": "Messages Cleanup Threshold",
         "title": "User Profile"
       },
-      "sw": {
-        "cache": {
-          "title": "Cache"
-        },
-        "title": "Service Worker Configuration",
-        "worker": {
-          "title": "Worker"
-        }
-      },
-      "title": "Front Config",
-      "wp": {
-        "title": "Web Push Notification"
-      }
+      "title": "Front Config"
     },
     "contact": {
       "add": {

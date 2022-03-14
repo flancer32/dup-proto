@@ -4,7 +4,7 @@
  * @namespace Fl32_Dup_Front_Widget_Cfg_Route
  */
 // MODULE'S VARS
-const NS = 'Fl32_Dup_Front_Widget_Cfg_Route';
+const NS = 'Fl32_Dup_Front_Widget_Admin_Route';
 
 // MODULE'S FUNCTIONS
 /**
@@ -21,6 +21,10 @@ export default function (spec) {
     const profile = spec['Fl32_Dup_Front_Widget_Cfg_Profile$'];
     /** @type {Fl32_Dup_Front_Widget_Cfg_WebPush.vueCompTmpl} */
     const webPush = spec['Fl32_Dup_Front_Widget_Cfg_WebPush$'];
+    /** @type {Fl32_Dup_Front_Widget_Cfg_App} */
+    const uiApp = spec['Fl32_Dup_Front_Widget_Cfg_App$'];
+    /** @type {Fl32_Dup_Front_Widget_Cfg_Info.vueCompTmpl} */
+    const info = spec['Fl32_Dup_Front_Widget_Cfg_Info$'];
     /** @type {Fl32_Dup_Front_Rx_Title} */
     const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
 
@@ -28,8 +32,8 @@ export default function (spec) {
     const template = `
 <layout-base>
     <profile />
-    <web-push />
-    <sworker />
+    <ui-app/>
+    <info />
 </layout-base>
 `;
     /**
@@ -42,7 +46,7 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {profile, webPush, sworker},
+        components: {profile, uiApp, webPush, sworker, info},
         mounted() {
             rxTitle.set(this.$t('wg.cfg.title'));
         },

@@ -1,5 +1,5 @@
 /**
- * Store configuration widget.
+ * Store configuration UI component.
  *
  * @namespace Fl32_Dup_Front_Widget_Cfg_Profile
  */
@@ -20,7 +20,7 @@ export default function (spec) {
 
     // VARS
     const template = `
-<q-card class="q-mt-xs">
+<q-card class="q-mt-xs" style="min-width: 300px">
     <q-card-section class="q-gutter-sm">
         <div class="text-subtitle2">{{ $t('wg.cfg.profile.title') }}:</div>
         <q-input :label="$t('wg.cfg.profile.nick')"

@@ -3,6 +3,7 @@
  */
 export default class Fl32_Dup_Front_Defaults {
 
+    ROUTE_ADMIN = '/admin';
     ROUTE_CFG = '/cfg';
     ROUTE_CHAT = '/chat';
     ROUTE_CHAT_BAND = '/chat/band/:id';

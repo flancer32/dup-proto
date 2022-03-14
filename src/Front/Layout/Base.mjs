@@ -36,8 +36,7 @@ export default function Factory(spec) {
             <leds/>
         </q-toolbar>
     </q-header>
-
-    <q-page-container style="height: 100vh">
+    <q-page-container style="height: 100%">
         <div style="display: grid; height: 100%; align-items: center; justify-items: center;">
             <slot/>
         </div>

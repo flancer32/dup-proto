@@ -1,5 +1,5 @@
 /**
- * Service worker configuration widget.
+ * Service worker configuration UI component.
  *
  * @namespace Fl32_Dup_Front_Widget_Cfg_SWorker
  */
@@ -20,20 +20,25 @@ export default function (spec) {
 
     // VARS
     const template = `
-<q-card class="bg-white q-mt-xs">
+<q-card class="bg-white q-mt-xs" style="min-width: 300px">
     <q-card-section>
         <div class="text-subtitle2">{{$t('wg.cfg.sw.title')}}:</div> 
-        <div class="text-subtitle3">{{$t('wg.cfg.sw.cache.title')}}:</div>
+        <q-toggle
+            :disable="freezeToggle"
+            :label="$t('wg.cfg.sw.cache')"
+            color="green"
+            v-model="cacheEnabled"
+            v-on:click="processToggled"
+        />
         <div class="q-gutter-xs">
-            <q-btn :label="$t('btn.clean')" color="primary" v-on:click="cacheClean"></q-btn>
-            <q-btn :label="$t('btn.disable')" v-if="cacheEnabled" color="primary" v-on:click="cacheDisable"></q-btn>
-            <q-btn :label="$t('btn.enable')" v-if="!cacheEnabled" color="primary" v-on:click="cacheEnable"></q-btn>
-            <q-btn dense flat round icon="lens" size="8.5px" :color="color" />
+            <q-btn :label="$t('wg.cfg.sw.btn.clean')" color="primary" v-on:click="cacheClean"></q-btn>
+            <q-btn :label="$t('wg.cfg.sw.btn.uninstall')" color="primary" v-on:click="uninstall"></q-btn>
         </div>
-        <div class="text-subtitle3">{{$t('wg.cfg.sw.worker.title')}}:</div>
-        <div class="q-gutter-xs">
-            <q-btn :label="$t('btn.uninstall')" color="primary" v-on:click="uninstall"></q-btn>
-        </div>        
+<!--<div class="q-gutter-xs">
+    <q-btn :label="$t('btn.disable')" v-if="cacheEnabled" color="primary" v-on:click="cacheDisable"></q-btn>
+    <q-btn :label="$t('btn.enable')" v-if="!cacheEnabled" color="primary" v-on:click="cacheEnable"></q-btn>
+    <q-btn dense flat round icon="lens" size="8.5px" :color="color" />
+</div>        -->
     </q-card-section>
 </q-card>
 `;
@@ -47,16 +52,11 @@ export default function (spec) {
         teq: {package: DEF.SHARED.NAME},
         name: NS,
         template,
-        components: {},
         data() {
             return {
+                freezeToggle: false,
                 cacheEnabled: null
             };
-        },
-        computed: {
-            color() {
-                return (this.cacheEnabled) ? 'green' : 'grey';
-            }
         },
         methods: {
             async cacheDisable() {
@@ -69,6 +69,17 @@ export default function (spec) {
             },
             async cacheClean() {
                 await swControl.cacheClean();
+            },
+            async processToggled() {
+                this.freezeToggle = true;
+                const oldVal = !this.cacheEnabled;
+                if (oldVal) {
+                    await swControl.setCacheStatus(false);
+                } else {
+                    await swControl.setCacheStatus(true);
+                }
+                this.cacheEnabled = await swControl.getCacheStatus();
+                this.freezeToggle = false;
             },
             async uninstall() {
                 const sw = await navigator.serviceWorker.ready;

@@ -1,6 +1,6 @@
 /**
  * Logging transport implementation for back app.
- * Send logs to logs monitoring server.
+ * Send logs to log monitoring server.
  */
 // MODULE'S IMPORT
 import http from "https";
@@ -24,7 +24,7 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         const TYPE = spec['TeqFw_Web_Shared_Enum_Log_Type$'];
 
         // VARS
-        let canSendLogs;
+        let _canSendLogs;
 
         // MAIN
         /** @type {Fl32_Dup_Back_Dto_Config_Local} */
@@ -32,14 +32,14 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
         /** @type {TeqFw_Core_Back_Api_Dto_Config_Local} */
         const cfgCore = config.getLocal(DEF.MOD_CORE.SHARED.NAME);
         const HOSTNAME = cfg.logsMonitor;
-        canSendLogs = cfgCore.devMode;
+        _canSendLogs = cfgCore.devMode;
 
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Core_Shared_Dto_Log.Dto} dto
          */
         this.log = function (dto) {
-            if (canSendLogs)
+            if (_canSendLogs)
                 try {
                     // compose WAPI DTO to send data to logs monitor
                     const entry = dtoReq.createDto();
@@ -62,12 +62,13 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                         }
                     };
                     // just write out data w/o response processing
-                    const req = http.request(options, () => {
-                        // do nothing
+                    const req = http.request(options, (res) => {
+                        if (res.statusCode !== 200)
+                            _canSendLogs = false;
                     });
                     req.on('error', (e) => {
                         if (e.code === 'ECONNREFUSED') {
-                            canSendLogs = false;
+                            _canSendLogs = false;
                         } else {
                             console.error(`problem with request: ${e.message}`);
                         }
@@ -75,10 +76,16 @@ export default class Fl32_Dup_Back_Mod_Logger_Transport {
                     req.write(postData);
                     req.end();
                 } catch (e) {
-                    canSendLogs = false;
+                    _canSendLogs = false;
                 }
             // duplicate to console
             transConsole.log(dto);
         }
+
+        this.enableLogs = () => _canSendLogs = true;
+
+        this.disableLogs = () => _canSendLogs = false;
+
+        this.isLogsMonitorOn = () => _canSendLogs;
     }
 }

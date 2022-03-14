@@ -20,12 +20,15 @@ export default function (spec) {
 
     // VARS
     const template = `
-<q-card class="q-mt-xs" v-if="canSubscribe">
+<q-card class="q-mt-xs" style="min-width: 300px" v-if="canSubscribe">
     <q-card-section class="q-gutter-sm">
-        <div class="text-subtitle2">{{ $t('wg.cfg.wp.title') }}:</div>
-        <q-btn :label="$t('btn.disable')" v-if="wpEnabled" color="primary" v-on:click="wpDisable"></q-btn>
-        <q-btn :label="$t('btn.enable')" v-if="!wpEnabled" color="primary" v-on:click="wpEnable"></q-btn>
-        <q-btn dense flat round icon="lens" size="8.5px" :color="color"/>
+        <q-toggle
+            :disable="freezeToggle"
+            :label="$t('wg.cfg.wp.title')"
+            color="green"
+            v-model="wpEnabled"
+            v-on:click="processToggled"
+        />
     </q-card-section>
 </q-card>
 `;
@@ -42,26 +45,21 @@ export default function (spec) {
         data() {
             return {
                 canSubscribe: false,
-                freezeSubscribe: false,
+                freezeToggle: false,
                 wpEnabled: false,
             };
         },
-        computed: {
-            color() {
-                return (this.wpEnabled) ? 'green' : 'grey';
-            }
-        },
         methods: {
-            async wpDisable() {
-                this.freezeSubscribe = true;
-                await modSubscript.unsubscribe();
-                this.wpEnabled = await modSubscript.hasSubscription();
-                this.freezeSubscribe = false;
-            },
-            async wpEnable() {
-                this.freezeSubscribe = true;
-                this.wpEnabled = await modSubscript.subscribe();
-                this.freezeSubscribe = false;
+            async processToggled() {
+                this.freezeToggle = true;
+                const oldVal = !this.wpEnabled;
+                if (oldVal) {
+                    await modSubscript.unsubscribe();
+                    this.wpEnabled = await modSubscript.hasSubscription();
+                } else {
+                    this.wpEnabled = await modSubscript.subscribe();
+                }
+                this.freezeToggle = false;
             },
         },
         async mounted() {

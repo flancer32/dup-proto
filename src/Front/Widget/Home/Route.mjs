@@ -29,7 +29,7 @@ export default function (spec) {
     // WORKING VARS
     const template = `
 <layout-base>
-    <q-scroll-area style="width:100%; height: 100%;"
+    <q-scroll-area style="width:100%; height: calc(100vh - 50px - 50px);"
     >
         <div class="column q-pa-xs q-gutter-xs">
             <conversation v-for="(one) in bands" :item="one"/>
