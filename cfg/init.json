@@ -15,6 +15,7 @@
     "devMode": false
   },
   "@teqfw/web": {
+    "frontLogsMonitoring": true,
     "server": {
       "port": 9999
     },
