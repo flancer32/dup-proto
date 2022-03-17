@@ -66,6 +66,6 @@ export default function (spec) {
     }
 
     // MAIN
-    Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    Object.defineProperty(process, 'namespace', {value: NS});
     return process;
 }

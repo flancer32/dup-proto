@@ -52,7 +52,7 @@ export default function Factory(spec) {
         await conn.disconnect();
     }
 
-    Object.defineProperty(action, 'name', {value: `${NS}.action`});
+    Object.defineProperty(action, 'namespace', {value: NS});
 
     // COMPOSE RESULT
     const res = fCommand.create();

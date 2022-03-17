@@ -38,6 +38,6 @@ export default function (spec) {
 
     // MAIN
     logger.setNamespace(NS);
-    Object.defineProperty(process, 'namespace', {value: `${NS}.process`});
+    Object.defineProperty(process, 'namespace', {value: NS});
     return process;
 }

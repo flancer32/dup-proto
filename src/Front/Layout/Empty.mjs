@@ -44,4 +44,4 @@ export default function Factory(spec) {
 }
 
 // to get namespace on debug
-Object.defineProperty(Factory, 'name', {value: `${NS}.Factory`});
+Object.defineProperty(Factory, 'namespace', {value: NS});

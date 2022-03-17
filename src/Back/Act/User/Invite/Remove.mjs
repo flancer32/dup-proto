@@ -43,6 +43,6 @@ export default function (spec) {
     }
 
     // MAIN
-    Object.defineProperty(act, 'name', {value: `${NS}.act`});
+    Object.defineProperty(act, 'namespace', {value: NS});
     return act;
 }
