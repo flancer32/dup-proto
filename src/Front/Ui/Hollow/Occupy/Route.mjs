@@ -29,7 +29,7 @@ export default function (spec) {
     // VARS
     const template = `
 <layout-empty>
-    <q-card class="bg-white" style="min-width:245px">
+    <q-card class="bg-white q-ma-sm" style="min-width:245px;">
         <q-card-section v-if="displayIsOccupied">
             <div class="text-subtitle2">{{$t('wg.hollow.occupy.msg.occupied')}}</div>
         </q-card-section>

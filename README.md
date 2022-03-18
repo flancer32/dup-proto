@@ -25,6 +25,7 @@ QR-code for smartphones:
 
 * [Requirements](#requirements)
 * [Installation](#installation)
+* [Logs monitoring](#logs-monitoring)
 * [First user registration](#first-user-registration)
 * ['Homepage' panel](#homepage-panel)
 * ['Configuration' panel](#configuration-panel)
@@ -93,12 +94,14 @@ Change local configuration according your environment:
   "@flancer32/dup-proto": {
     "db": {
       "use": "'knex' configuration options here"
-    }
+    },
+    "logsMonitor": "dup.log.flancer64.com"
   },
   "@teqfw/core": {
     "devMode": false
   },
   "@teqfw/web": {
+    "frontLogsMonitoring": true,
     "server": {
       "port": 9999
     },
@@ -108,8 +111,22 @@ Change local configuration according your environment:
     "email": "dup@flancer64.com"
   }
 }
-
 ```
+
+* **@flancer32/dup-proto**:
+  * **db**: `knex` based configuration for DB connection on backend;
+  * **logsMonitor**: (optional) address of log monitoring service (
+    see [flancer64/pwa_log_agg](https://github.com/flancer64/pwa_log_agg));
+* **@teqfw/core**:
+  * **devMode**: `true` if application started in development mode (remove `i18n` cache, etc.);
+* **@teqfw/web**:
+  * **frontLogsMonitoring**: `true` if fronts should use log transmitting to back by default;
+  * **server**:
+    * **port**: port to use by application's web server;
+  * **urlBase**: `localhost` or any domain name that is used to connect to web-server;
+* **@teqfw/web-push**:
+  * **email**: used by [web-push](https://github.com/web-push-libs/web-push) package as admin contact to prepare Web
+    Push requests;
 
 ### Test backend
 
@@ -210,17 +227,17 @@ Start backend in HTTP/2 mode:
 $ ./bin/tequila.mjs web-server-start
 ```
 
+## Logs monitoring
+
+This project uses log monitoring service: [flancer64/pwa_log_agg](https://github.com/flancer64/pwa_log_agg)
+. `pwa_log_agg` is a standalone project created on the same platform.
+
+You can see backend and frontend logs at https://dup.log.flancer64.com/#/ . All fronts transmit own logs to back then
+back transmits its to this monitoring service. Logs transmitting can be disabled in [app config](#configuration-panel).
+
 ## First user registration
 
-Goto frontend then subscribe to Web Push notifications (if available):
-
-![First Screen](doc/img/readme/dup_first_screen.png)
-
-Accept Web Push notification if it is blocked:
-
-![Web Push Notification](doc/img/readme/dup_first_web_push_notification.png)
-
-then enter your nickname:
+Goto frontend then enter your nickname:
 
 ![](doc/img/readme/dup_first_nick.png)
 
@@ -241,10 +258,14 @@ That's all.
 * **User Profile**
   * **Nickname**: your own nickname in this front app.
   * **Messages Cleanup Threshold**: number of messages to store in IDB for one band (person-to-person chat).
-* **Service Worker Configuration**
-  * **Clean**: remove all files saved in Service Worker cache.
-  * **Disable**: don't use Service Worker cache (for developers).
-  * **Uninstall**: uninstall current Service Worker (for developers).
+* **App Settings**
+  * **Front Logs Monitoring**: enable/disable logs transmitting to backend for this front.
+  * **Web Push Notification**: enable/disable Web Push notifications for this front.
+  * **Service Worker Cache**: don't use Service Worker cache (helpful for developers).
+  * **Clean Cache**: remove all files saved in Service Worker cache.
+  * **Uninstall SW**: uninstall current Service Worker (for developers).
+* **App Info**:
+  * **front UUID**: UUID for current front (all front's logs are marked with this UUID).
 
 User profile and all other frontend data are stored in IndexedDBs:
 
@@ -278,11 +299,7 @@ This is typical invitation link: https://.../#/invite/validate/f8d30ab409fb50a1e
 
 ![Registration First Step](doc/img/readme/dup_reg_step_accept.png)
 
-Press 'Accept' button then allow Web Push subscription:
-
-![Registration Web Push](doc/img/readme/dup_reg_step_web_push.png)
-
-... and enter your nickname:
+Press 'Accept' button then enter your nickname:
 
 ![Registration Web Push](doc/img/readme/dup_reg_step_nick.png)
 

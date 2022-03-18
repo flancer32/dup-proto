@@ -9,7 +9,7 @@
         "user": "..."
       }
     },
-    "logsMonitor": "logs.local.teqfw.com"
+    "logsMonitor": "dup.log.flancer64.com"
   },
   "@teqfw/core": {
     "devMode": false
