@@ -38,7 +38,7 @@
     "@teqfw/ui-quasar": "github:teqfw/ui-quasar#ded90455f5d56b5e3ae6915222323d9b708f7de2",
     "@teqfw/vue": "github:teqfw/vue#0b93862cd7ab897f6241ca77281a5955be7d1b2f",
     "@teqfw/web": "github:teqfw/web#b6b07db0dbaaece9b86358845b68fc506173c87e",
-    "@teqfw/web-push": "github:teqfw/web-push#e288e2c34581c286faf9c839650d70030fa42533",
+    "@teqfw/web-push": "github:teqfw/web-push#fe59c81cc07a6928bc651ae201177b6a84bdbfa8",
     "@vscode/sqlite3": "*",
     "mysql2": "*",
     "pg": "*",
