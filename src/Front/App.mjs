@@ -14,6 +14,9 @@
 const NS = 'Fl32_Dup_Front_App';
 
 // MODULE'S CLASSES
+/**
+ * @implements TeqFw_Web_Front_Api_IApp
+ */
 export default class Fl32_Dup_Front_App {
     constructor(spec) {
         // DEPS
@@ -27,8 +30,8 @@ export default class Fl32_Dup_Front_App {
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Web_Front_Mod_Logger_Transport} */
         const modLogTrn = spec['TeqFw_Core_Shared_Api_Logger_ITransport$']; // as interface
-        /** @type {TeqFw_I18n_Front_Lib} */
-        const I18nLib = spec['TeqFw_I18n_Front_Lib$'];
+        /** @type {TeqFw_I18n_Front_Mod_I18n} */
+        const modI18n = spec['TeqFw_I18n_Front_Mod_I18n$'];
         /** @type {TeqFw_Ui_Quasar_Front_Lib} */
         const quasar = spec['TeqFw_Ui_Quasar_Front_Lib'];
         /** @type {Fl32_Dup_Front_Layout_Base} */
@@ -53,8 +56,6 @@ export default class Fl32_Dup_Front_App {
         const esbFailed = spec['TeqFw_Web_Shared_Event_Back_Stream_Reverse_Failed$'];
         /** @type {Fl32_Dup_Front_Mod_User_Profile} */
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
-        /** @type {TeqFw_Web_Front_Mod_App_Alive} */
-        const modAlive = spec['TeqFw_Web_Front_Mod_App_Alive$'];
         /** @type {Fl32_Dup_Front_Mod_Log_Monitor} */
         const modLogMonitor = spec['Fl32_Dup_Front_Mod_Log_Monitor$'];
         /** @type {Fl32_Dup_Front_Widget_App} */
@@ -70,26 +71,16 @@ export default class Fl32_Dup_Front_App {
 
         // INSTANCE METHODS
 
-        /**
-         * Initialize application.
-         *
-         * @param {string} cssSelector DIV to trace initialization process
-         * @return {Promise<void>}
-         */
-        this.init = async function (cssSelector) {
+        this.init = async function (fnPrintout) {
             // FUNCS
 
             /**
              * Create printout function to log application startup events (to page or to console).
-             * @param {string} css
-             * @return {(function(string))|*}
+             * @param {function(string)} fn
+             * @return {function(string)}
              */
-            function createPrintout(css) {
-                const elDisplay = document.querySelector(cssSelector);
-                return function (msg) {
-                    if (elDisplay) elDisplay.innerText = msg;
-                    else console.log(msg);
-                }
+            function createPrintout(fn) {
+                return (typeof fn === 'function') ? fn : (msg) => console.log(msg);
             }
 
             /**
@@ -136,15 +127,14 @@ export default class Fl32_Dup_Front_App {
              * Setup working languages and fallback language and add translation function to the Vue.
              *
              * @param {Object} app
-             * @param {TeqFw_I18n_Front_Lib} I18nLib
              * @return {Promise<void>}
              * @memberOf Fl32_Dup_Front_App.init
              */
-            async function initI18n(app, I18nLib) {
-                await I18nLib.init(['en', 'ru'], 'en');
-                const appProps = app.config.globalProperties;
-                const i18n = I18nLib.getI18n();
+            async function initI18n(app) {
+                await modI18n.init(['en'], 'en');
+                const i18n = modI18n.getI18n();
                 // add translation function to Vue
+                const appProps = app.config.globalProperties;
                 // noinspection JSPrimitiveTypeWrapperUsage
                 appProps.$t = function (key, options) {
                     // add package name if namespace is omitted in the key
@@ -218,7 +208,7 @@ export default class Fl32_Dup_Front_App {
             }
 
             // MAIN
-            const print = createPrintout(cssSelector);
+            const print = createPrintout(fnPrintout);
             print(`TeqFW App is initializing...`);
 
             // create root vue component
@@ -260,34 +250,34 @@ export default class Fl32_Dup_Front_App {
 
             // other initialization
             // logger.pause(false);
-            if (await modAlive.check()) {
-                await config.init({}); // this app has no separate 'doors' (entry points)
-                print(`Application config is loaded.`);
-                await initI18n(_root, I18nLib);
-                print(`i18n resources are loaded.`);
-                await frontIdentity.init();
-                print(`Front UUID: ${frontIdentity.getUuid()}.`);
-                try {
-                    await initEventProcessors(container);
-                    print(`Frontend processes are created.`);
-                    await initEventStream(container);
-                    print(`Backend events stream is opened.`);
-                    initQuasarUi(_root, quasar);
-                    print(`Data sources are initialized.`);
-                    initRouter(_root, DEF, container);
-                    print(`Vue app is created and initialized.`);
-                    if (await modLogMonitor.get()) {
-                        modLogTrn.enableLogs();
-                        print(`Logs monitoring is enabled.`);
-                    }
-                    _isInitialized = true;
-                } catch (e) {
-                    // TODO: place IDB cleanup here for re-installs
-                    print(e.message);
+            // if (await modAlive.check()) {
+            await config.init({}); // this app has no separate 'doors' (entry points)
+            print(`Application config is loaded.`);
+            await initI18n(_root);
+            print(`i18n resources are loaded.`);
+            await frontIdentity.init();
+            print(`Front UUID: ${frontIdentity.getUuid()}.`);
+            try {
+                await initEventProcessors(container);
+                print(`Frontend processes are created.`);
+                await initEventStream(container);
+                print(`Backend events stream is opened.`);
+                initQuasarUi(_root, quasar);
+                print(`Data sources are initialized.`);
+                initRouter(_root, DEF, container);
+                print(`Vue app is created and initialized.`);
+                if (await modLogMonitor.get()) {
+                    modLogTrn.enableLogs();
+                    print(`Logs monitoring is enabled.`);
                 }
-            } else {
-                print(`Backend server is not alive. Cannot continue.`);
+                _isInitialized = true;
+            } catch (e) {
+                // TODO: place IDB cleanup here for re-installs
+                print(e.message);
             }
+            // } else {
+            //     print(`Backend server is not alive. Cannot continue.`);
+            // }
         }
 
         /**
