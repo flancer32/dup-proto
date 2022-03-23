@@ -108,18 +108,20 @@ export default class Fl32_Dup_Front_App {
              */
             async function initEventStream(container) {
                 return new Promise((resolve, reject) => {
-                    streamBf.open();
-                    const subsSuccess = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
-                        eventBus.unsubscribe(subsSuccess);
-                        logger.info(`Events reverse stream is opened on the front and authenticated by back.`);
-                        resolve(evt);
-                    });
-                    const subsFailed = eventBus.subscribe(esbFailed.getEventName(), (evt) => {
-                        // TODO: this event is not published by back yet
-                        eventBus.unsubscribe(subsFailed);
-                        debugger
-                        reject(new Error(evt?.data?.reason));
-                    });
+                    if (navigator.onLine) {
+                        streamBf.open();
+                        const subsSuccess = eventBus.subscribe(esbAuthenticated.getEventName(), (evt) => {
+                            eventBus.unsubscribe(subsSuccess);
+                            logger.info(`Events reverse stream is opened on the front and authenticated by back.`);
+                            resolve(evt);
+                        });
+                        const subsFailed = eventBus.subscribe(esbFailed.getEventName(), (evt) => {
+                            // TODO: this event is not published by back yet
+                            eventBus.unsubscribe(subsFailed);
+                            debugger
+                            reject(new Error(evt?.data?.reason));
+                        });
+                    } else resolve();
                 });
             }
 
@@ -275,9 +277,6 @@ export default class Fl32_Dup_Front_App {
                 // TODO: place IDB cleanup here for re-installs
                 print(e.message);
             }
-            // } else {
-            //     print(`Backend server is not alive. Cannot continue.`);
-            // }
         }
 
         /**
