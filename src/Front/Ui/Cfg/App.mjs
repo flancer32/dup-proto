@@ -15,6 +15,8 @@ const NS = 'Fl32_Dup_Front_Ui_Cfg_App';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
+    /** @type {TeqFw_Core_Shared_Api_ILogger} */
+    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Web_Front_Mod_Sw_Control} */
     const modSwControl = spec['TeqFw_Web_Front_Mod_Sw_Control$'];
     /** @type {TeqFw_Web_Push_Front_Mod_Subscription} */
@@ -63,6 +65,9 @@ export default function (spec) {
     </q-card-section>
 </q-card>
 `;
+
+    // MAIN
+    logger.setNamespace(NS);
     /**
      * Template to create new component instances using Vue.
      *
@@ -89,8 +94,13 @@ export default function (spec) {
             },
             async processToggledLog() {
                 await modLogMonitor.set(this.enabledLog);
-                if (this.enabledLog) modLogTrn.enableLogs();
-                else modLogTrn.disableLogs();
+                if (this.enabledLog) {
+                    modLogTrn.enableLogs();
+                    logger.info(`Logs transfer to the server is enabled.`);
+                } else {
+                    modLogTrn.disableLogs();
+                    logger.info(`Logs transfer to the server is disabled.`);
+                }
             },
             async processToggledSw() {
                 this.freezeToggleSw = true;
