@@ -6,7 +6,7 @@
 // MODULE'S VARS
 const NS = 'Fl32_Dup_Front_Store_Entity_Contact';
 /**
- * Part of the entity key to store in Singletons IDB store.
+ * Entity name (unique among all other IDB entities of the app).
  * @type {string}
  */
 const ENTITY = '/contact';

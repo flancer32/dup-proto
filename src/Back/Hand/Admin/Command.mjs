@@ -67,6 +67,7 @@ export default class Fl32_Dup_Back_Hand_Admin_Command {
                     else if (cmd === COMMAND.LOG_STATE) cmdLogState(uuid);
                     logger.info(`Admin command ${cmd} is processed.`, meta);
                 } else logger.error(`The first user only can be an admin.`, meta);
+                await trx.commit();
             } catch (error) {
                 await trx.rollback();
                 logger.error(error);

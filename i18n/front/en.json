@@ -23,7 +23,6 @@
           "clean": "Clean Cache",
           "uninstall": "Uninstall SW"
         },
-        "cache": "Cache enabled",
         "log": "Front Logs Monitoring",
         "swCache": "Service Worker Cache",
         "title": "App Settings",

@@ -12,11 +12,11 @@ export default function (spec) {
     /** @type {TeqFw_Db_Back_Api_RDb_ICrudEngine} */
     const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree} */
-    const idbTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
+    const rdbTree = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Tree$'];
 
     // VARS
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Tree.ATTR} */
-    const A_TREE = idbTree.getAttributes();
+    const A_TREE = rdbTree.getAttributes();
 
     // FUNCS
     /**
@@ -36,16 +36,16 @@ export default function (spec) {
          * @return {Promise<void>}
          */
         async function addUserTree(trx, frontId, parentId) {
-            const found = await crud.readOne(trx, idbTree, {
+            const found = await crud.readOne(trx, rdbTree, {
                 [A_TREE.FRONT_REF]: frontId,
                 [A_TREE.PARENT_REF]: parentId
             });
             if (!found) {
                 /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Tree.Dto} */
-                const dto = idbTree.createDto();
+                const dto = rdbTree.createDto();
                 dto.front_ref = frontId;
                 dto.parent_ref = parentId;
-                await crud.create(trx, idbTree, dto);
+                await crud.create(trx, rdbTree, dto);
             }
         }
 
