@@ -40,8 +40,8 @@ export default class Fl32_Dup_Front_App {
         const layoutChat = spec['Fl32_Dup_Front_Layout_Chat$'];
         /** @type {Fl32_Dup_Front_Layout_Empty} */
         const layoutEmpty = spec['Fl32_Dup_Front_Layout_Empty$'];
-        /** @type {TeqFw_Web_Front_Mod_Config} */
-        const config = spec['TeqFw_Web_Front_Mod_Config$'];
+        /** @type {TeqFw_Web_Api_Front_Mod_Config} */
+        const config = spec['TeqFw_Web_Api_Front_Mod_Config$'];
         /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
         /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */

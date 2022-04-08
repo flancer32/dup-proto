@@ -48,6 +48,7 @@ processRepo "teqfw/test"
 processRepo "teqfw/ui-quasar"
 processRepo "teqfw/vue"
 processRepo "teqfw/web"
+processRepo "teqfw/web-api"
 processRepo "teqfw/web-push"
 
 echo ""

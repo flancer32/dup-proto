@@ -24,7 +24,6 @@
         "TeqFw_Web_Back_App_Server_Handler_Upload"
       ]
     },
-    "services": [],
     "statics": {
       "/tweetnacl-util/": "/tweetnacl-util/",
       "/tweetnacl/": "/tweetnacl/",
