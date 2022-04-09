@@ -18,8 +18,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
-    const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+    /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
+    const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */

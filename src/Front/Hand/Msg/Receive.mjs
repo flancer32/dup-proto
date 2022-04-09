@@ -18,8 +18,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         const esfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Delivery$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
         const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
-        /** @type {TeqFw_Web_Front_Mod_App_Front_Identity} */
-        const frontIdentity = spec['TeqFw_Web_Front_Mod_App_Front_Identity$'];
+        /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
+        const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
