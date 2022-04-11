@@ -42,7 +42,7 @@ export default class Fl32_Dup_Front_Dto_User_Subscription {
         /** @type {Fl32_Dup_Front_Dto_User_Subscription_Keys} */
         const dtoKeys = spec['Fl32_Dup_Front_Dto_User_Subscription_Keys$'];
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Fl32_Dup_Front_Dto_User_Subscription.Dto} data
          * @return {Fl32_Dup_Front_Dto_User_Subscription.Dto}

@@ -19,7 +19,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite} */
     const metaInvite = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Invite$'];
 
-    // DEFINE WORKING VARS / PROPS
+    // VARS
     const CODE_LENGTH = DEF.SHARED.DATA_INVITE_CODE_LENGTH;
     const CODE_LIFETIME_MIN = DEF.SHARED.DATA_INVITE_LIFETIME_MIN;
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */

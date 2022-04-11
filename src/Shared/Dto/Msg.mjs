@@ -70,7 +70,7 @@ export default class Fl32_Dup_Shared_Dto_Msg {
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Fl32_Dup_Shared_Dto_Msg.Dto} data
          * @return {Fl32_Dup_Shared_Dto_Msg.Dto}

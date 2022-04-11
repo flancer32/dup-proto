@@ -19,7 +19,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Front_Store_Entity_Msg} */
     const idbMsg = spec['Fl32_Dup_Front_Store_Entity_Msg$'];
 
-    // DEFINE WORKING VARS / PROPS
+    // VARS
     const E_BAND = idbBand.getEntityName();
     const E_CONTACT = idbContact.getEntityName();
     const E_MSG = idbMsg.getEntityName();

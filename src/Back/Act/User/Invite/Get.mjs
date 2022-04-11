@@ -16,7 +16,7 @@ export default function (spec) {
     /** @type {Fl32_Dup_Back_Act_User_Invite_Clean.act|function} */
     const actClean = spec['Fl32_Dup_Back_Act_User_Invite_Clean$'];
 
-    // DEFINE WORKING VARS / PROPS
+    // VARS
     /** @type {typeof Fl32_Dup_Back_Store_RDb_Schema_User_Invite.ATTR} */
     const ATTR = metaInvite.getAttributes();
 

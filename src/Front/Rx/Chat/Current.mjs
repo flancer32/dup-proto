@@ -8,7 +8,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
         // DEPS
         const {ref} = spec['TeqFw_Vue_Front_Lib_Vue'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         const _bandId = ref(null);
         const _messages = ref([]);
         const _messagesCount = ref(0);
@@ -18,7 +18,7 @@ export default class Fl32_Dup_Front_Rx_Chat_Current {
 
         // FUNCS
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Fl32_Dup_Front_Dto_Message.Dto} data
          * @return {*}

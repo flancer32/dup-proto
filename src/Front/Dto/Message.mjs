@@ -57,7 +57,7 @@ export default class Fl32_Dup_Front_Dto_Message {
         /** @type {Fl32_Dup_Front_Enum_Msg_State} */
         const STATE = spec['Fl32_Dup_Front_Enum_Msg_State$'];
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Fl32_Dup_Front_Dto_Message.Dto} [data]
          * @return {Fl32_Dup_Front_Dto_Message.Dto}
