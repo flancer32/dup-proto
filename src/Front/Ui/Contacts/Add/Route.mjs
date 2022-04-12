@@ -23,8 +23,8 @@ export default function (spec) {
     const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
-    /** @type {TeqFw_Web_Front_Dto_Config} */
-    const config = spec['TeqFw_Web_Front_Dto_Config$'];
+    /** @type {TeqFw_Web_Front_Mod_Config} */
+    const modCfg = spec['TeqFw_Web_Front_Mod_Config$'];
     /** @type {TeqFw_Web_Front_App_Event_Bus} */
     const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
     /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
@@ -174,10 +174,11 @@ export default function (spec) {
                  * @return {string}
                  */
                 function composeUrl(code) {
+                    const cfg = modCfg.get();
                     const protocol = location.protocol; // 'https:'
                     let port = location.port; // empty string for default ports (80 & 443)
                     if (port !== '') port = `:${port}`
-                    const host = `${protocol}//${config.urlBase}${port}`;
+                    const host = `${protocol}//${cfg.urlBase}${port}`;
                     const route = DEF.ROUTE_INVITE_VALIDATE.replace(':code', code);
                     return `${host}/#${route}`;
                 }
