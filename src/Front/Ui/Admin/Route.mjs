@@ -33,8 +33,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {Fl32_Dup_Front_Rx_Title} */
     const rxTitle = spec['Fl32_Dup_Front_Rx_Title$'];
-    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_Admin_Command} */
     const esfCmd = spec['Fl32_Dup_Shared_Event_Front_Admin_Command$'];
     /** @type {typeof Fl32_Dup_Shared_Event_Front_Admin_Command.COMMAND} */

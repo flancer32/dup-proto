@@ -7,10 +7,10 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
         // DEPS
         /** @type {Fl32_Dup_Front_Defaults} */
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
+        const eventsFront = spec['TeqFw_Web_Event_Front_Mod_Bus$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Hollow_State_Request} */
         const esfReq = spec['Fl32_Dup_Shared_Event_Front_Hollow_State_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Hollow_State_Response} */

@@ -10,8 +10,8 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
+        /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request} */
@@ -30,7 +30,7 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          * @return {Promise<void>}
          */
         async function onRequest({data, meta}) {

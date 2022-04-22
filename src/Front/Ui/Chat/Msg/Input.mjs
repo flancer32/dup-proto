@@ -29,8 +29,8 @@ export default function (spec) {
     const idbBand = spec['Fl32_Dup_Front_Store_Entity_Band$'];
     /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
     const idbContact = spec['Fl32_Dup_Front_Store_Entity_Contact$'];
-    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
     const esfPosted = spec['Fl32_Dup_Shared_Event_Front_Msg_Post$'];
     /** @type {Fl32_Dup_Front_Mod_Msg_Saver} */

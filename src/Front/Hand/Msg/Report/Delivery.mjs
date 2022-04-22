@@ -5,8 +5,8 @@
 export default class Fl32_Dup_Front_Hand_Msg_Report_Delivery {
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
+        const eventsFront = spec['TeqFw_Web_Event_Front_Mod_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
         const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
@@ -29,7 +29,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Report_Delivery {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_Msg_Delivery.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          */
         async function onDelivery({data, meta}) {
             // FUNCS

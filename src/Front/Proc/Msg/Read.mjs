@@ -12,8 +12,8 @@ export default function (spec) {
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
     /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
     const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
-    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_Msg_Read} */
     const esfRead = spec['Fl32_Dup_Shared_Event_Front_Msg_Read$'];
 

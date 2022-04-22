@@ -25,10 +25,10 @@ export default function (spec) {
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Front_Mod_Config} */
     const modCfg = spec['TeqFw_Web_Front_Mod_Config$'];
-    /** @type {TeqFw_Web_Front_App_Event_Bus} */
-    const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-    /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-    const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+    /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
+    const eventsFront = spec['TeqFw_Web_Event_Front_Mod_Bus$'];
+    /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+    const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request} */
     const esfCreateReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Create_Request$'];
     /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response} */
@@ -144,7 +144,7 @@ export default function (spec) {
                         // FUNCS
                         /**
                          * @param {Fl32_Dup_Shared_Event_Back_User_Invite_Create_Response.Dto} data
-                         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+                         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
                          */
                         function onResponse({data, meta}) {
                             clearTimeout(idFail);

@@ -14,15 +14,15 @@ export default class Fl32_Dup_Back_Proc_WebPush_Enable {
         const rdbSubscription = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Back_Event_Republish_Delayed} */
-        const ebWebPush = spec['TeqFw_Web_Back_Event_Republish_Delayed$'];
+        /** @type {TeqFw_Web_Event_Back_Event_Republish_Delayed} */
+        const ebWebPush = spec['TeqFw_Web_Event_Back_Event_Republish_Delayed$'];
 
         // MAIN
         logger.setNamespace(this.constructor.name);
         eventsBack.subscribe(ebWebPush.getEventName(), onRequest)
 
         /**
-         * @param {TeqFw_Web_Back_Event_Republish_Delayed.Dto} data
+         * @param {TeqFw_Web_Event_Back_Event_Republish_Delayed.Dto} data
          */
         async function onRequest({data}) {
             const trx = await rdb.startTransaction();

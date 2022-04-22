@@ -13,14 +13,14 @@ const INTERVAL_TO_SWITCH = 120000 // 2 min
 export default class Fl32_Dup_Front_Hand_Connect_Manager {
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Reverse} */
-        const stream = spec['TeqFw_Web_Front_App_Connect_Event_Reverse$'];
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed} */
-        const efClosed = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Closed$'];
-        /** @type {TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened} */
-        const efOpened = spec['TeqFw_Web_Front_Event_Connect_Event_Reverse_Opened$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Connect_Reverse} */
+        const stream = spec['TeqFw_Web_Event_Front_Mod_Connect_Reverse$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
+        const eventsFront = spec['TeqFw_Web_Event_Front_Mod_Bus$'];
+        /** @type {TeqFw_Web_Event_Front_Event_Connect_Reverse_Closed} */
+        const efClosed = spec['TeqFw_Web_Event_Front_Event_Connect_Reverse_Closed$'];
+        /** @type {TeqFw_Web_Event_Front_Event_Connect_Reverse_Opened} */
+        const efOpened = spec['TeqFw_Web_Event_Front_Event_Connect_Reverse_Opened$'];
 
         // VARS
         let _frequent = true; // retry every 5 sec or every 1 min

@@ -16,8 +16,8 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         const rdbFront = spec['TeqFw_Web_Back_Store_RDb_Schema_Front$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
+        /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request} */
         const esfValidateReq = spec['Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Invite_Validate_Response} */
@@ -36,7 +36,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          */
         async function onRequest({data, meta}) {
             // FUNCS

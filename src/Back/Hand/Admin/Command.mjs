@@ -12,8 +12,8 @@ export default class Fl32_Dup_Back_Hand_Admin_Command {
         const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
+        /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Admin_Command} */
         const esfCmd = spec['Fl32_Dup_Shared_Event_Front_Admin_Command$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Admin_Command_Log_State} */
@@ -32,7 +32,7 @@ export default class Fl32_Dup_Back_Hand_Admin_Command {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Admin_Command.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          * @return {Promise<void>}
          */
         async function onRequest({data, meta}) {

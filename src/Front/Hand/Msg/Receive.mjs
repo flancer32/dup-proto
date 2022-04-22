@@ -8,10 +8,10 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         const DEF = spec['Fl32_Dup_Front_Defaults$'];
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-        /** @type {TeqFw_Web_Front_App_Event_Bus} */
-        const eventsFront = spec['TeqFw_Web_Front_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Front_App_Connect_Event_Direct_Portal} */
-        const portalBack = spec['TeqFw_Web_Front_App_Connect_Event_Direct_Portal$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
+        const eventsFront = spec['TeqFw_Web_Event_Front_Mod_Bus$'];
+        /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
+        const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Post} */
         const esbPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Delivery} */
@@ -53,7 +53,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Back_Msg_Post.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          */
         async function onEvent({data, meta}) {
             // FUNCS

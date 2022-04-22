@@ -23,8 +23,8 @@ class Dto {
 export default class Fl32_Dup_Shared_Event_Front_Hollow_State_Request {
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Web_Shared_App_Event_Trans_Message} */
-        const dtoBase = spec['TeqFw_Web_Shared_App_Event_Trans_Message$'];
+        /** @type {TeqFw_Web_Event_Shared_Dto_Event} */
+        const dtoBase = spec['TeqFw_Web_Event_Shared_Dto_Event$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
         const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
 
@@ -44,8 +44,8 @@ export default class Fl32_Dup_Shared_Event_Front_Hollow_State_Request {
 
         // INSTANCE METHODS
         /**
-         * @param {{data: Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}} [data]
-         * @return {{data: Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto, meta: TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto}}
+         * @param {{data: Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto, meta: TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto}} [data]
+         * @return {{data: Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto, meta: TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto}}
          */
         this.createDto = function (data) {
             const res = dtoBase.createDto({[ATTR.META]: data?.[ATTR.META]});

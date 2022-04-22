@@ -14,8 +14,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript} */
         const rdbSubscript = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
+        /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Post} */
@@ -39,7 +39,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
 
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          * @return {Promise<void>}
          */
         async function onMessagePost({data, meta}) {
@@ -59,7 +59,7 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
             /**
              * Try to send chat message to recipient.
              * @param {Fl32_Dup_Shared_Event_Front_Msg_Post.Dto} data
-             * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+             * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
              */
             async function transferMessage(data, meta) {
                 // FUNCS

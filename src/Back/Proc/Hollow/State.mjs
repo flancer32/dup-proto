@@ -12,8 +12,8 @@ export default class Fl32_Dup_Back_Proc_Hollow_State {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {TeqFw_Core_Back_App_Event_Bus} */
         const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
-        /** @type {TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal} */
-        const portalFront = spec['TeqFw_Web_Back_App_Server_Handler_Event_Reverse_Portal$'];
+        /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
+        const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Hollow_State_Request} */
         const esfStateRequested = spec['Fl32_Dup_Shared_Event_Front_Hollow_State_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Hollow_State_Response} */
@@ -28,7 +28,7 @@ export default class Fl32_Dup_Back_Proc_Hollow_State {
         // FUNCS
         /**
          * @param {Fl32_Dup_Shared_Event_Front_Hollow_State_Request.Dto} data
-         * @param {TeqFw_Web_Shared_App_Event_Trans_Message_Meta.Dto} meta
+         * @param {TeqFw_Web_Event_Shared_Dto_Event_Meta.Dto} meta
          */
         async function handler({data, meta}) {
             const trx = await conn.startTransaction();
