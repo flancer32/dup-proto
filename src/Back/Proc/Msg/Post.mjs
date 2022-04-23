@@ -24,10 +24,10 @@ export default class Fl32_Dup_Back_Proc_Msg_Post {
         const esbConfirmPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Confirm_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Post} */
         const esbSendPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
-        const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
-        const actGetIdByUuid = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_GetUuidById.act|function} */
+        const actGetUuidById = spec['TeqFw_Web_Auth_Back_Act_Front_GetUuidById$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid.act|function} */
+        const actGetIdByUuid = spec['TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid$'];
         /** @type {TeqFw_Web_Push_Back_Act_Subscript_SendMsg.act|function} */
         const actPushSend = spec['TeqFw_Web_Push_Back_Act_Subscript_SendMsg$'];
 

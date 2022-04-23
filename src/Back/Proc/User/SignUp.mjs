@@ -26,8 +26,8 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const actGetInvite = spec['Fl32_Dup_Back_Act_User_Invite_Get$'];
         /** @type {Fl32_Dup_Back_Act_User_Invite_Remove.act|function} */
         const actRemove = spec['Fl32_Dup_Back_Act_User_Invite_Remove$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
-        const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid.act|function} */
+        const actGetId = spec['TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid$'];
         /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front} */
         const rdbFront = spec['TeqFw_Web_Auth_Back_RDb_Schema_Front$'];
 

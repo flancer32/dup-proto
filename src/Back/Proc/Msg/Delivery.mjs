@@ -16,8 +16,8 @@ export default class Fl32_Dup_Back_Proc_Msg_Delivery {
         const esfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Delivery$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Msg_Delivery} */
         const esbDelivery = spec['Fl32_Dup_Shared_Event_Back_Msg_Delivery$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetUuidById.act|function} */
-        const actGetUuidById = spec['TeqFw_Web_Back_Act_Front_GetUuidById$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_GetUuidById.act|function} */
+        const actGetUuidById = spec['TeqFw_Web_Auth_Back_Act_Front_GetUuidById$'];
 
         // MAIN
         logger.setNamespace(this.constructor.name);

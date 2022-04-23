@@ -18,8 +18,8 @@ export default class Fl32_Dup_Back_Hand_Admin_Command {
         const esfCmd = spec['Fl32_Dup_Shared_Event_Front_Admin_Command$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Admin_Command_Log_State} */
         const esbCmdLogState = spec['Fl32_Dup_Shared_Event_Back_Admin_Command_Log_State$'];
-        /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
-        const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid.act|function} */
+        const actGetId = spec['TeqFw_Web_Auth_Back_Act_Front_GetIdByUuid$'];
         /** @type {Fl32_Dup_Back_Mod_Logger_Transport} */
         const modLogTrn = spec['TeqFw_Core_Shared_Api_Logger_ITransport$']; // as interface
         /** @type {typeof Fl32_Dup_Shared_Event_Front_Admin_Command.COMMAND} */

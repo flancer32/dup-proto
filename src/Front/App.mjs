@@ -44,8 +44,8 @@ export default class Fl32_Dup_Front_App {
         const modCfg = spec['TeqFw_Web_Front_Mod_Config$'];
         /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
-        /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
-        const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
+        /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
+        const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
         /** @type {TeqFw_Web_Event_Front_Mod_Connect_Reverse} */
         const streamBf = spec['TeqFw_Web_Event_Front_Mod_Connect_Reverse$'];
         /** @type {TeqFw_Web_Event_Front_Mod_Bus} */

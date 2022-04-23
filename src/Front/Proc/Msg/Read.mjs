@@ -10,8 +10,8 @@ export default function (spec) {
     // DEPS
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
-    const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
+    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
     /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
     const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_Msg_Read} */

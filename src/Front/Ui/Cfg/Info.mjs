@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Ui_Cfg_Info';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Api_Front_Mod_App_Front_Identity} */
-    const frontIdentity = spec['TeqFw_Web_Api_Front_Mod_App_Front_Identity$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
+    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
 
     // VARS
     const template = `
