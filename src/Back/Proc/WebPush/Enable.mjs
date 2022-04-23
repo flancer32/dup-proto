@@ -12,8 +12,8 @@ export default class Fl32_Dup_Back_Proc_WebPush_Enable {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript} */
         const rdbSubscription = spec['TeqFw_Web_Push_Back_Store_RDb_Schema_Subscript$'];
-        /** @type {TeqFw_Core_Back_App_Event_Bus} */
-        const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Core_Back_Mod_Event_Bus} */
+        const eventsBack = spec['TeqFw_Core_Back_Mod_Event_Bus$'];
         /** @type {TeqFw_Web_Event_Back_Event_Republish_Delayed} */
         const ebWebPush = spec['TeqFw_Web_Event_Back_Event_Republish_Delayed$'];
 

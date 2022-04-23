@@ -12,10 +12,10 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {Fl32_Dup_Back_Store_RDb_Schema_User_Invite} */
         const rdbInvite = spec['Fl32_Dup_Back_Store_RDb_Schema_User_Invite$'];
-        /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front} */
-        const rdbFront = spec['TeqFw_Web_Back_Store_RDb_Schema_Front$'];
-        /** @type {TeqFw_Core_Back_App_Event_Bus} */
-        const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front} */
+        const rdbFront = spec['TeqFw_Web_Auth_Back_RDb_Schema_Front$'];
+        /** @type {TeqFw_Core_Back_Mod_Event_Bus} */
+        const eventsBack = spec['TeqFw_Core_Back_Mod_Event_Bus$'];
         /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
         /** @type {Fl32_Dup_Shared_Event_Front_User_Invite_Validate_Request} */
@@ -60,7 +60,7 @@ export default class Fl32_Dup_Back_Proc_User_Invite_Validate {
                 if (invite) {
                     msg.data.parentId = invite.front_ref;
                     msg.data.parentNick = invite.user_nick;
-                    /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front.Dto} */
+                    /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front.Dto} */
                     const front = await crud.readOne(trx, rdbFront, invite.front_ref);
                     msg.data.parentPubKey = front.key_pub;
                 }

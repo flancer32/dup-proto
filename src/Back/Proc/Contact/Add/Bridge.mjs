@@ -12,8 +12,8 @@ export default class Fl32_Dup_Back_Proc_Contact_Add_Bridge {
         const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
-        /** @type {TeqFw_Core_Back_App_Event_Bus} */
-        const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Core_Back_Mod_Event_Bus} */
+        const eventsBack = spec['TeqFw_Core_Back_Mod_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request} */
         const esfAddReq = spec['Fl32_Dup_Shared_Event_Front_Contact_Card_Add_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_Contact_Add} */

@@ -12,8 +12,8 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const crud = spec['TeqFw_Db_Back_Api_RDb_ICrudEngine$'];
         /** @type {TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal} */
         const portalFront = spec['TeqFw_Web_Event_Back_Mod_Server_Handler_Reverse_Portal$'];
-        /** @type {TeqFw_Core_Back_App_Event_Bus} */
-        const eventsBack = spec['TeqFw_Core_Back_App_Event_Bus$'];
+        /** @type {TeqFw_Core_Back_Mod_Event_Bus} */
+        const eventsBack = spec['TeqFw_Core_Back_Mod_Event_Bus$'];
         /** @type {Fl32_Dup_Shared_Event_Front_User_SignUp_Request} */
         const esfSignUpReq = spec['Fl32_Dup_Shared_Event_Front_User_SignUp_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_User_SignUp_Response} */
@@ -28,8 +28,8 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
         const actRemove = spec['Fl32_Dup_Back_Act_User_Invite_Remove$'];
         /** @type {TeqFw_Web_Back_Act_Front_GetIdByUuid.act|function} */
         const actGetId = spec['TeqFw_Web_Back_Act_Front_GetIdByUuid$'];
-        /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front} */
-        const rdbFront = spec['TeqFw_Web_Back_Store_RDb_Schema_Front$'];
+        /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front} */
+        const rdbFront = spec['TeqFw_Web_Auth_Back_RDb_Schema_Front$'];
 
         // MAIN
         logger.setNamespace(this.constructor.name);
@@ -51,7 +51,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
              * @return {Promise<boolean>}
              */
             async function isHollowFree(trx, frontUUID) {
-                /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front.Dto[]} */
+                /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front.Dto[]} */
                 const items = await crud.readSet(trx, rdbFront, null, null, null, 1);
                 return ((items.length === 1) && (items[0].uuid === frontUUID));
 
@@ -125,7 +125,7 @@ export default class Fl32_Dup_Back_Proc_User_SignUp {
                     const parentId = inviteData.front_ref;
                     await actCreate({trx, frontId, parentId});
                     await actRemove({trx, code: inviteData.code});
-                    /** @type {TeqFw_Web_Back_Store_RDb_Schema_Front.Dto} */
+                    /** @type {TeqFw_Web_Auth_Back_RDb_Schema_Front.Dto} */
                     const found = await crud.readOne(trx, rdbFront, parentId);
                     parentUUID = found?.uuid;
                 }

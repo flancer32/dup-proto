@@ -40,7 +40,7 @@
               "relation": {
                 "front": {
                   "attrs": ["front_ref"],
-                  "ref": {"path": "/web/front", "attrs": ["id"]},
+                  "ref": {"path": "/web/auth/front", "attrs": ["id"]},
                   "action": {"delete": "cascade", "update": "cascade"}
                 }
               }
@@ -57,7 +57,7 @@
               "relation": {
                 "front": {
                   "attrs": ["front_ref"],
-                  "ref": {"path": "/web/front", "attrs": ["id"]},
+                  "ref": {"path": "/web/auth/front", "attrs": ["id"]},
                   "action": {"delete": "cascade", "update": "cascade"}
                 },
                 "parent": {
@@ -73,6 +73,6 @@
     }
   },
   "refs": {
-    "/web/front": ["id"]
+    "/web/auth/front": ["id"]
   }
 }
