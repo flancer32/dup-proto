@@ -15,8 +15,8 @@ const NS = 'Fl32_Dup_Front_Ui_Cfg_Info';
 export default function (spec) {
     /** @type {Fl32_Dup_Front_Defaults} */
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
 
     // VARS
     const template = `
@@ -46,7 +46,7 @@ export default function (spec) {
         },
         methods: {},
         async mounted() {
-            this.frontUuid = frontIdentity.getUuid();
+            this.frontUuid = modIdentity.getFrontUuid();
         }
     };
 }

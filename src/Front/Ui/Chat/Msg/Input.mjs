@@ -17,8 +17,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
     /** @type {Fl32_Dup_Front_Rx_Chat_Current} */
     const rxChat = spec['Fl32_Dup_Front_Rx_Chat_Current$'];
     /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
@@ -143,7 +143,7 @@ export default function (spec) {
                      */
                     async function postMessage(uuid, payload, recipientId) {
                         const event = esfPosted.createDto();
-                        event.meta.frontUUID = frontIdentity.getUuid();
+                        event.meta.frontUUID = modIdentity.getFrontUuid();
                         event.data.message.payload = payload;
                         event.data.message.recipientId = recipientId;
                         event.data.message.dateSent = new Date();
@@ -155,7 +155,7 @@ export default function (spec) {
                     // MAIN
                     // retrieve keys and encrypt text body
                     const pub = contact.keyPub;
-                    const sec = frontIdentity.getSecretKey();
+                    const sec = modIdentity.getSecretKey();
                     scrambler.setKeys(pub, sec);
                     const encrypted = scrambler.encryptAndSign(body);
                     logger.info(`Chat message #${uuid} is encrypted.`, {msgUuid: uuid});

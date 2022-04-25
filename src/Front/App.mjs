@@ -44,8 +44,8 @@ export default class Fl32_Dup_Front_App {
         const modCfg = spec['TeqFw_Web_Front_Mod_Config$'];
         /** @type {Fl32_Dup_Front_Mod_Hollow_IsFree} */
         const modHollowIsFree = spec['Fl32_Dup_Front_Mod_Hollow_IsFree$'];
-        /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-        const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+        /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+        const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
         /** @type {TeqFw_Web_Event_Front_Mod_Connect_Reverse} */
         const streamBf = spec['TeqFw_Web_Event_Front_Mod_Connect_Reverse$'];
         /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
@@ -257,8 +257,8 @@ export default class Fl32_Dup_Front_App {
             print(`Application config is loaded.`);
             await initI18n(_root);
             print(`i18n resources are loaded.`);
-            await frontIdentity.init();
-            print(`Front UUID: ${frontIdentity.getUuid()}.`);
+            await modIdentity.init();
+            print(`Front UUID: ${modIdentity.getFrontUuid()}.`);
             try {
                 await initEventProcessors(container);
                 print(`Frontend processes are created.`);

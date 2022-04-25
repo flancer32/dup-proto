@@ -18,8 +18,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Event_Front_Mod_Bus} */
@@ -111,9 +111,9 @@ export default function (spec) {
                     const event = esfContactAddReq.createDto();
                     event.data.inviteCode = this.code;
                     event.data.nick = profile.nick;
-                    event.data.publicKey = frontIdentity.getPublicKey();
+                    event.data.publicKey = modIdentity.getPublicKey();
                     event.data.recipientId = this.senderUserId;
-                    event.data.userId = frontIdentity.getFrontId();
+                    event.data.userId = modIdentity.getFrontBid();
                     portalBack.publish(event);
                     this.$router.push(DEF.ROUTE_HOME);
                 } else {

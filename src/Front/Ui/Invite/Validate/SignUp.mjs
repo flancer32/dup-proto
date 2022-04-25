@@ -18,8 +18,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {Fl32_Dup_Front_Dto_User} */
@@ -82,7 +82,7 @@ export default function (spec) {
                 const {success} = await procReg({
                     nick: this.fldNick,
                     invite: this.inviteCode,
-                    pubKey: frontIdentity.getPublicKey(),
+                    pubKey: modIdentity.getPublicKey(),
                 });
 
                 // save user id into IDB

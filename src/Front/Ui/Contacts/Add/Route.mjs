@@ -19,8 +19,8 @@ export default function (spec) {
     const DEF = spec['Fl32_Dup_Front_Defaults$'];
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
     /** @type {Fl32_Dup_Front_Mod_User_Profile} */
     const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
     /** @type {TeqFw_Web_Front_Mod_Config} */
@@ -184,7 +184,7 @@ export default function (spec) {
                 }
 
                 // MAIN
-                const userId = frontIdentity.getFrontId();
+                const frontBid = modIdentity.getFrontBid();
                 const date = new Date();
                 if (this.lifeTime === LIFE_TIME.HOUR) {
                     date.setHours(date.getHours() + 1);
@@ -194,7 +194,7 @@ export default function (spec) {
                     date.setMinutes(date.getMinutes() + 5); // 5 min by default
                 }
                 const onetime = (this.lifeCount === LIFE_COUNT.ONE);
-                const code = await createInvite(userId, date, onetime);
+                const code = await createInvite(frontBid, date, onetime);
                 if (code) {
                     // compose URL to add new friend
                     const url = composeUrl(code);

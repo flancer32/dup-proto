@@ -18,8 +18,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         const esfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Delivery$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
         const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
-        /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-        const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+        /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+        const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
         const idb = spec['Fl32_Dup_Front_Store_Db$'];
         /** @type {Fl32_Dup_Front_Store_Entity_Contact} */
@@ -118,7 +118,7 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
             logger.info(`Chat message #${msgUuid} is received from front #${senderId}.`, {msgUuid});
             const encrypted = message.payload;
             const publicKey = await getPublicKey(senderId);
-            const secretKey = frontIdentity.getSecretKey();
+            const secretKey = modIdentity.getSecretKey();
             scrambler.setKeys(publicKey, secretKey);
             const body = scrambler.decryptAndVerify(encrypted);
             // save message to IDB and push to current band (if required)

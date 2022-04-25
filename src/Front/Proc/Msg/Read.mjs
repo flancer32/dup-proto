@@ -10,8 +10,8 @@ export default function (spec) {
     // DEPS
     /** @type {TeqFw_Core_Shared_Api_ILogger} */
     const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
-    /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-    const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+    /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+    const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
     /** @type {TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal} */
     const portalBack = spec['TeqFw_Web_Event_Front_Mod_Connect_Direct_Portal$'];
     /** @type {Fl32_Dup_Shared_Event_Front_Msg_Read} */
@@ -31,7 +31,7 @@ export default function (spec) {
     async function process({msgUuid, date, authorId} = {}) {
         // create event message and publish it to back
         const event = esfRead.createDto();
-        event.meta.frontUUID = frontIdentity.getUuid();
+        event.meta.frontUUID = modIdentity.getFrontUuid();
         event.data.messageUuid = msgUuid;
         event.data.dateRead = date;
         event.data.authorId = authorId;

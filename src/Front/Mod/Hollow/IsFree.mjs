@@ -15,8 +15,8 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
         const esfReq = spec['Fl32_Dup_Shared_Event_Front_Hollow_State_Request$'];
         /** @type {Fl32_Dup_Shared_Event_Back_Hollow_State_Response} */
         const esbRes = spec['Fl32_Dup_Shared_Event_Back_Hollow_State_Response$'];
-        /** @type {TeqFw_Web_Auth_Front_Mod_Identity_Front} */
-        const frontIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity_Front$'];
+        /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
+        const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
         /** @type {Fl32_Dup_Front_Mod_User_Profile} */
         const modProfile = spec['Fl32_Dup_Front_Mod_User_Profile$'];
 
@@ -54,7 +54,7 @@ export default class Fl32_Dup_Front_Mod_Hollow_IsFree {
 
                 // create event message and publish it to back
                 const event = esfReq.createDto();
-                event.data.frontId = frontIdentity.getFrontId();
+                event.data.frontId = modIdentity.getFrontBid();
                 portalBack.publish(event);
             });
 
