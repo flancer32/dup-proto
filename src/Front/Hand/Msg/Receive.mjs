@@ -16,8 +16,8 @@ export default class Fl32_Dup_Front_Hand_Msg_Receive {
         const esbPost = spec['Fl32_Dup_Shared_Event_Back_Msg_Post$'];
         /** @type {Fl32_Dup_Shared_Event_Front_Msg_Delivery} */
         const esfDelivery = spec['Fl32_Dup_Shared_Event_Front_Msg_Delivery$'];
-        /** @type {TeqFw_Web_Shared_Api_Crypto_IScrambler} */
-        const scrambler = spec['TeqFw_Web_Shared_Api_Crypto_IScrambler$'];
+        /** @type {TeqFw_Web_Auth_Shared_Api_Crypto_IScrambler} */
+        const scrambler = spec['TeqFw_Web_Auth_Shared_Api_Crypto_IScrambler$'];
         /** @type {TeqFw_Web_Auth_Front_Mod_Identity} */
         const modIdentity = spec['TeqFw_Web_Auth_Front_Mod_Identity$'];
         /** @type {TeqFw_Web_Front_App_Store_IDB} */
